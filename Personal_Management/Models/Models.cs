@@ -49,6 +49,7 @@ namespace Personal_Management.Models
         [Range(typeof(int), "1", "365", ErrorMessage = "Испытательный срок может быть от 1 дня до года")]
         [Required(ErrorMessage = "Поле заполнено не верно")]
         public int Kol_Vo_On_Isp { get; set; }
+        public virtual Departments Departments { get; set; }
         public Positions()
         {
             this.Sotrs = new HashSet<Sotrs>();
@@ -56,7 +57,7 @@ namespace Personal_Management.Models
         public ICollection<Sotrs> Sotrs { get; set; }
     }
 
-    public class Isp_Sroki : IValidatableObject
+    public class Isp_Sroki
     {
         [Key]
         public int ID_Isp { get; set; }
@@ -76,22 +77,6 @@ namespace Personal_Management.Models
         public int Status_ID { get; set; }
         public virtual Sotrs Sotrs { get; set; }
         public virtual status_isp_sroka status_isp_sroka { get; set; }
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            List<ValidationResult> results = new List<ValidationResult>();
-
-            if (Convert.ToDateTime(Date_Start) < DateTime.Now)
-            {
-                results.Add(new ValidationResult("Дата начала не может быть меньше, чем сегодня", new[] { "Date_Start" }));
-            }
-
-            if (Convert.ToDateTime(Date_Finish) <= Convert.ToDateTime(Date_Start))
-            {
-                results.Add(new ValidationResult("Дата окончания не может быть меньше, чем дата начала", new[] { "Date_Finish" }));
-            }
-
-            return results;
-        }
     }
     
 
@@ -157,7 +142,7 @@ namespace Personal_Management.Models
         [Display(Name = "ФИО сотрудника")]
         public int Sotr_ID { get; set; }
         [Display(Name = "Результат (Сдан / Не сдан)")]
-        public int Itog { get; set; }
+        public bool Itog { get; set; }
         [Display(Name = "Загрузить документ...")]
         [Required(ErrorMessage = "Если документа нет, укажите прочерк (-)")]
         public string Photo_Doc { get; set; }
@@ -196,7 +181,7 @@ namespace Personal_Management.Models
         public ICollection<Sotrs> Sotrs { get; set; }
     }
 
-    public class Account
+    public class Accounts
     {
         [Key]
         [Display(Name = "Логин аккаунта")]
@@ -230,18 +215,19 @@ namespace Personal_Management.Models
         [Required(ErrorMessage = "Данное поле обязательно для заполнения")]
         public string Role_Naim { get; set; }
         [Display(Name = "Разрешить права доступа для администратора")]
-        public int Manip_Roles { get; set; }
+
+        public bool Manip_Roles { get; set; }
         [Display(Name = "Разрешить просматривать данные сотрудников")]
-        public int Manip_Sotrs { get; set; }
+        public bool Manip_Sotrs { get; set; }
         [Display(Name = "Разрешить просматривать данные структуры организации")]
-        public int Manip_Department { get; set; }
+        public bool Manip_Department { get; set; }
         [Display(Name = "Разрешить просматривать данные бухгалтерского учета")]
-        public int Buh_Ych { get; set; }
+        public bool Buh_Ych { get; set; }
         public Roles()
         {
-            this.Account = new HashSet<Account>();
+            this.Accounts = new HashSet<Accounts>();
         }
-        public ICollection<Account> Account { get; set; }
+        public ICollection<Accounts> Accounts { get; set; }
 
     }
 
@@ -280,7 +266,7 @@ namespace Personal_Management.Models
         }
     }
 
-    public class Sotrs : IValidatableObject
+    public class Sotrs
     {
         [Key]
         public int ID_Sotr { get; set; }
@@ -312,7 +298,7 @@ namespace Personal_Management.Models
         [EmailAddress(ErrorMessage = "Адрес эл. почы введен неверно")]
         [Required(ErrorMessage = "Данное поле неверно заполнено")]
         public string Email { get; set; }
-        [Display(Name = "Загрузить документ...")]
+        [Display(Name = "Фото")]
         [Required(ErrorMessage = "Если документа нет, укажите прочерк (-)")]
         public string Photo { get; set; }
         [ForeignKey("Positions")]
@@ -332,15 +318,51 @@ namespace Personal_Management.Models
         public virtual Positions Positions { get; set; }
         public virtual Rates Rates { get; set; }
         public virtual Work_Schedule Work_Schedule { get; set; }
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        public string FullName
         {
-            List<ValidationResult> results = new List<ValidationResult>();
-
-            if (Convert.ToDateTime(Day_Of_Birth) < DateTime.Now.AddYears(-18))
-            {
-                results.Add(new ValidationResult("Сотрудник должен быть старше 18 лет", new[] { "Day_Of_Birth" }));
-            }
-            return results;
+            get { return Surname_Sot + " " + Name_Sot + " " + Petronumic_Sot + " (" + Positions.Naim_Posit + ")"; }
         }
+        public string Full
+        {
+            get { return Surname_Sot + " " + Name_Sot + " " + Petronumic_Sot; }
+        }
+    }
+
+    public class LoginModel
+    {
+        [Display(Name = "Логин аккаунта")]
+        [RegularExpression("^([a-zA-Z0-9 .&'-]+)$", ErrorMessage = "Логин должен иметь заглавные (A-Z), прописные (a-z) буквы и цифры (0-9)")]
+        [StringLength(20, MinimumLength = 6, ErrorMessage = "Длина Логина должна быть от 6 до 20 символов")]
+        [Required(ErrorMessage = "Данное поле неверно заполнено")]
+        public string Login { get; set; }
+        [Display(Name = "Пароль аккаунта")]
+        [RegularExpression("^([a-zA-Z0-9 .&'-]+)$", ErrorMessage = "Пароль должен иметь заглавные (A-Z), прописные (a-z) буквы и цифры (0-9)")]
+        [StringLength(20, MinimumLength = 6, ErrorMessage = "Длина Пароля должна быть от 6 до 20 символов")]
+        [Required(ErrorMessage = "Данное поле неверно заполнено")]
+        public string Password { get; set; }
+    }
+
+    public class RegisterModel
+    {
+        [Display(Name = "Логин аккаунта")]
+        [RegularExpression("^([a-zA-Z0-9 .&'-]+)$", ErrorMessage = "Логин должен иметь заглавные (A-Z), прописные (a-z) буквы и цифры (0-9)")]
+        [StringLength(20, MinimumLength = 6, ErrorMessage = "Длина Логина должна быть от 6 до 20 символов")]
+        [Required(ErrorMessage = "Данное поле неверно заполнено")]
+        public string Login { get; set; }
+        [Display(Name = "Пароль аккаунта")]
+        [RegularExpression("^([a-zA-Z0-9 .&'-]+)$", ErrorMessage = "Пароль должен иметь заглавные (A-Z), прописные (a-z) буквы и цифры (0-9)")]
+        [StringLength(20, MinimumLength = 6, ErrorMessage = "Длина Пароля должна быть от 6 до 20 символов")]
+        [Required(ErrorMessage = "Данное поле неверно заполнено")]
+        public string Password { get; set; }
+        [ForeignKey("Roles")]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Display(Name = "Роль")]
+        public int Role_ID { get; set; }
+        [ForeignKey("Sotrs")]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Display(Name = "ФИО сотрудника")]
+        public int Sotr_ID { get; set; }
+        public virtual Roles Roles { get; set; }
+        public virtual Sotrs Sotrs { get; set; }
     }
 }

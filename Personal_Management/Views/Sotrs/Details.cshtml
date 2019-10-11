@@ -1,0 +1,122 @@
+﻿@model Personal_Management.Models.Sotrs
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Детали</h2>
+
+<div>
+    <h4>Сотрудник</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Positions.Naim_Posit)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Positions.Naim_Posit)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Rates.Rate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Rates.Rate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Work_Schedule.Naim_Sche)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Work_Schedule.Naim_Sche)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Surname_Sot)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Surname_Sot)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name_Sot)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name_Sot)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Petronumic_Sot)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Petronumic_Sot)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Day_Of_Birth)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Day_Of_Birth)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Num_Phone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Num_Phone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Photo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Photo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date_of_adoption)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date_of_adoption)
+        </dd>
+
+        <dt>
+            Описание
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Opisanie)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Изменить данные", "Edit", new { id = Model.ID_Sotr }) |
+    @Html.ActionLink("Вернуться к списку сотрудников", "Index")
+</p>

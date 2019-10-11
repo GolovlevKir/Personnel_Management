@@ -1,38 +1,70 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
-    @Styles.Render("~/Content/css")
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/Photo/fav.ico" rel="icon">
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Имя приложения", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Домашняя страница", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Информация", "About", "Home")</li>
-                    <li>@Html.ActionLink("Связаться", "Contact", "Home")</li>
-                </ul>
-            </div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div id="logo" class="pull-left">
+            <a href="#intro"><img src="~/Content/Photo/60.png" style="width: 200px; height:auto;" alt="" title="" /></a>
         </div>
-    </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse text-right" id="navbarColor01">
+            <form class="form-inline my-2 my-lg-0">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Pricing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </nav>
+    
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - мое приложение ASP.NET</p>
+        <footer id="footer">
+            <div class="footer-top">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-6 col-lg-4 footer-info">
+                            <h3>IT Liga</h3>
+                            <p>Служба технической поддержки. Разработка и поддержка информационных систем.</p>
+                            <br><br>
+                        </div>
+                        <div class="col-12 col-lg-4 footer-contact">
+                            <h4>Наши контакты</h4>
+                            <p>
+                                127254 г. Москва, <br>
+                                пр. Огородный, 9ас1<br>
+                                <strong>Телефон:</strong><a href="tel: +74953692434"> +7 (495) 369-24-34</a><br>
+                                <strong>Email:</strong><a href="mailto:info@itliga.ru"> info@itliga.ru</a><br>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="credits">
+                        &copy; 2019 <strong>IT Liga</strong> Все права защищены<br>
+                    </div>
+                </div>
+            </div>
         </footer>
     </div>
 

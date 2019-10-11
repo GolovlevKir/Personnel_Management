@@ -1,0 +1,112 @@
+﻿@model Personal_Management.Models.Sotrs
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Удаление записи</h2>
+
+<h3>Вы действительно хотите удалить?</h3>
+<div>
+    <h4>Сотрудник</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Positions.Naim_Posit)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Positions.Naim_Posit)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Rates.ID_Rate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Rates.ID_Rate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Work_Schedule.Naim_Sche)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Work_Schedule.Naim_Sche)
+        </dd>
+
+        <dt>
+            ФИО Сотрудника (Должность)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Full)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Day_Of_Birth)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Day_Of_Birth)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Num_Phone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Num_Phone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Photo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Photo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date_of_adoption)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date_of_adoption)
+        </dd>
+
+        <dt>
+            Описание
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Opisanie)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Удалить" class="btn btn-default" /> |
+            @Html.ActionLink("Вернуться к списку сотрудников", "Index")
+        </div>
+    }
+</div>

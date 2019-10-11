@@ -1,0 +1,56 @@
+﻿@model Personal_Management.Models.Sbor_Docum
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Удаление</h2>
+
+<h3>Вы уверены что хотите удалить?</h3>
+<div>
+    <h4>Сбор данных документов сотрудников</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Documents.Doc_Naim)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Documents.Doc_Naim)
+        </dd>
+
+        <dt>
+            ФИО Сотрудника (Должность)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sotrs.FullName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Itog)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Itog)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Photo_Doc)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Photo_Doc)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Удалить" class="btn btn-default" /> |
+            @Html.ActionLink("Вернуться к списку собранных документов", "Index")
+        </div>
+    }
+</div>

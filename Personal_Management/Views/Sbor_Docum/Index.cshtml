@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Personal_Management.Models.Sbor_Docum>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Сбор данных документов сотрудников</h2>
+
+<p>
+    @Html.ActionLink("Добавить", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Documents.Doc_Naim)
+        </th>
+        <th>
+            ФИО Сотрудника
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Itog)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Photo_Doc)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Documents.Doc_Naim)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Sotrs.FullName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Itog)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Photo_Doc)
+        </td>
+        <td>
+            @Html.ActionLink("Изменить", "Edit", new { id=item.ID_Sbora }) |
+            @Html.ActionLink("Удалить", "Delete", new { id=item.ID_Sbora })
+        </td>
+    </tr>
+}
+
+</table>

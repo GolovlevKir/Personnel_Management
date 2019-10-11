@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Personal_Management.Models.Rates>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Ставки</h2>
+
+<p>
+    @Html.ActionLink("Добавить", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Rate)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Rate)
+        </td>
+        <td>
+            @Html.ActionLink("Изменить", "Edit", new { id=item.ID_Rate }) |
+            @Html.ActionLink("Удалить", "Delete", new { id=item.ID_Rate })
+        </td>
+    </tr>
+}
+
+</table>

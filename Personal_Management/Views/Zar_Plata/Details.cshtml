@@ -1,0 +1,58 @@
+﻿@model Personal_Management.Models.Zar_Plata
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Zar_Plata</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Sotrs.Surname_Sot)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sotrs.Surname_Sot)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Data_Viplati)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Data_Viplati)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Vremya_Viplati)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Vremya_Viplati)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NDS)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NDS)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Itog)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Itog)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID_Zar }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

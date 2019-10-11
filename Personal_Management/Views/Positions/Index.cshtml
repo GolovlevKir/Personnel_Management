@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Personal_Management.Models.Positions>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Должности</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Departments.Naim_Depart)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Naim_Posit)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Departments.Naim_Depart)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Naim_Posit)
+        </td>
+        <td>
+            @Html.ActionLink("Изменить", "Edit", new { id=item.ID_Positions }) |
+            @Html.ActionLink("Детали", "Details", new { id=item.ID_Positions }) |
+            @Html.ActionLink("Удалить", "Delete", new { id=item.ID_Positions })
+        </td>
+    </tr>
+}
+
+</table>

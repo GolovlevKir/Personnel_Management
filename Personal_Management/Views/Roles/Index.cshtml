@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Personal_Management.Models.Roles>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Права доступа</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Role_Naim)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Role_Naim)
+        </td>
+        <td>
+            @Html.ActionLink("Изменить", "Edit", new { id=item.ID_Role }) |
+            @Html.ActionLink("Удалить", "Delete", new { id=item.ID_Role })
+        </td>
+    </tr>
+}
+
+</table>

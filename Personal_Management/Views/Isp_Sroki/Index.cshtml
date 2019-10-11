@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Personal_Management.Models.Isp_Sroki>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Испытательные сроки</h2>
+
+<p>
+    @Html.ActionLink("Добавить новый испытательный срок", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            ФИО сотрудника (отдел)
+        </th>
+        <th>
+            Статус
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Sotrs.FullName)
+    </td>
+    @switch (item.status_isp_sroka.ID_St)
+    {
+        case (3):
+
+            <td class="align-content-center badge badge-pill badge-danger">
+                @Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St)
+            </td>
+            break;
+        case (2):
+            <td class="align-content-center badge badge-pill badge-warning">
+                @Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St)
+            </td>
+            break;
+
+        case (1):
+            <td class="align-content-center badge badge-pill badge-success">
+                @Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St)
+            </td>
+            break;
+    }
+
+    <td>
+        @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Isp }) |
+        @Html.ActionLink("Подробности", "Details", new { id = item.ID_Isp }) |
+        @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Isp })
+    </td>
+
+</tr>
+}
+
+</table>

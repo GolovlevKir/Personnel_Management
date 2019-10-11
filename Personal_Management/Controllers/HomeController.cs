@@ -10,9 +10,18 @@ namespace Personal_Management.Controllers
     {
         public ActionResult Index()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewBag.log = "Ваш логин: " + User.Identity.Name;
+            }
+            else
+            {
+                RedirectToAction("Login", "Account");
+            }
             return View();
         }
 
+        //[Authorize]
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -20,6 +29,7 @@ namespace Personal_Management.Controllers
             return View();
         }
 
+        //[Authorize]
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";

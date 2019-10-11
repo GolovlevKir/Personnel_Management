@@ -1,0 +1,32 @@
+﻿@model Personal_Management.Models.Documents
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Удаление</h2>
+
+<h3>Вы действительно хотите удалить запись??</h3>
+<div>
+    <h4>Документы</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Doc_Naim)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Doc_Naim)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Удалить" class="btn btn-default" /> |
+            @Html.ActionLink("Вернуться к списку документов", "Index")
+        </div>
+    }
+</div>

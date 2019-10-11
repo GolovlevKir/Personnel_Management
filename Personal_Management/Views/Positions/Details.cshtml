@@ -1,0 +1,58 @@
+﻿@model Personal_Management.Models.Positions
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Подробные данные</h2>
+
+<div>
+    <h4>Должность</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Departments.Naim_Depart)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Departments.Naim_Depart)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Naim_Posit)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Naim_Posit)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Salary)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Salary)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Kol_Vo_Pers)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Kol_Vo_Pers)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Kol_Vo_On_Isp)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Kol_Vo_On_Isp)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Изменить", "Edit", new { id = Model.ID_Positions }) |
+    @Html.ActionLink("Вернуться к списку должностей", "Index")
+</p>

@@ -9,7 +9,7 @@ namespace Personal_Management.Models
     //использует EntityFramework для доступа к БД на основе некоторой модели
     public class PersonalContext : DbContext
     {
-        public DbSet<Account> Account { get; set; }
+        public DbSet<Accounts> Accounts { get; set; }
         public DbSet<Departments> Departments { get; set; }
         public DbSet<Documents> Documents { get; set; }
         public DbSet<Isp_Sroki> Isp_Sroki { get; set; }

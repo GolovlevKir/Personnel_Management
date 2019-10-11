@@ -1,0 +1,64 @@
+﻿@model Personal_Management.Models.Isp_Sroki
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Добавление записи</h2>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Испытательные сроки</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Sotr_ID, "ФИО сотрудника", htmlAttributes: new { @class = "control-label col-md-5" })
+            <div class="col-md-10">
+                @Html.DropDownList("Sotr_ID", ViewBag.Sotrs as SelectList, htmlAttributes: new { @class = "form-control custom-select" })
+                @Html.ValidationMessageFor(model => model.Sotr_ID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Date_Start, htmlAttributes: new { @class = "control-label col-md-5" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Date_Start, new { htmlAttributes = new { @class = "form-control" , @type = "date"} })
+                @Html.ValidationMessageFor(model => model.Date_Start, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Date_Finish, htmlAttributes: new { @class = "control-label col-md-5" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Date_Finish, new { htmlAttributes = new { @class = "form-control", @type = "date" } })
+                @Html.ValidationMessageFor(model => model.Date_Finish, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Status_ID, "Статус прохождения", htmlAttributes: new { @class = "control-label col-md-5" })
+            <div class="col-md-10">
+                @Html.DropDownList("Status_ID", null, htmlAttributes: new { @class = "form-control custom-select" })
+                @Html.ValidationMessageFor(model => model.Status_ID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Создать" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Вернуться к списку испытательных сроков", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

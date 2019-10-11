@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Personal_Management.Models.Documents>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Виды документов</h2>
+
+<p>
+    @Html.ActionLink("Добавить новый документ", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Doc_Naim)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Doc_Naim)
+        </td>
+        <td>
+            @Html.ActionLink("Изменить", "Edit", new { id=item.ID_Doc }) |
+            @Html.ActionLink("Удалить", "Delete", new { id=item.ID_Doc })
+        </td>
+    </tr>
+}
+
+</table>
