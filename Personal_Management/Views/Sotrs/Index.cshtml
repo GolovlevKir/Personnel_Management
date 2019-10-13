@@ -14,13 +14,13 @@
     <div class="row">
         @foreach (var item in Model)
         {
-        <div class="card mb-3 col-md-offset-2" style="width: 360px;">
+        <div class="card mb-3 col-md-offset-2" style="margin: 0 auto; width: 300px;">
             <h4 class="card-header">@item.Full</h4>
             <div class="card-body">
                 <h6 class="card-title">Должность</h6>
                 <h7 class="card-subtitle text-muted">@item.Positions.Naim_Posit</h7>
             </div>
-            <img style="height: 400px; width: 360px; display: block;" src="~/Content/Photo/Sotrs/@item.Photo" alt="Card image">
+            <img style="margin: 0 auto; height: 340px; width: 260px; display: block;" src="~/Content/Photo/Sotrs/@item.Photo" alt="Card image">
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">Номер телефона: @Html.DisplayFor(modelItem => item.Num_Phone)</li>
                 <li class="list-group-item">Эл. почта: @Html.DisplayFor(modelItem => item.Email)</li>

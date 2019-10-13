@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
 using System.Data.Entity;
+using System.Net;
 
 namespace Personal_Management.Controllers
 {
@@ -46,7 +47,6 @@ namespace Personal_Management.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult Register(RegisterModel model)
         {
             if (ModelState.IsValid)
@@ -73,10 +73,11 @@ namespace Personal_Management.Controllers
             return View(model);
         }
 
-        public ActionResult Logoff()
+        public ActionResult LogOut()
         {
+            Session.Abandon();
             FormsAuthentication.SignOut();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
     }
 }

@@ -301,6 +301,8 @@ namespace Personal_Management.Models
         [Display(Name = "Фото")]
         [Required(ErrorMessage = "Если документа нет, укажите прочерк (-)")]
         public string Photo { get; set; }
+        
+
         [ForeignKey("Positions")]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Display(Name = "Должность")]
@@ -326,6 +328,8 @@ namespace Personal_Management.Models
         {
             get { return Surname_Sot + " " + Name_Sot + " " + Petronumic_Sot; }
         }
+
+        
     }
 
     public class LoginModel
