@@ -61,6 +61,7 @@ namespace Personal_Management.Controllers
                     if (user != null)
                     {
                         FormsAuthentication.SetAuthCookie(model.Login, true);
+                        
                         return RedirectToAction("Index", "Home");
                     }
                 }

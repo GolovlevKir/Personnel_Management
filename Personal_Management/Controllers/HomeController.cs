@@ -10,6 +10,7 @@ namespace Personal_Management.Controllers
     {
         public ActionResult Index()
         {
+            //Response.Write("<script>alert('Добро пожаловать!'); </script>");
             if (User.Identity.IsAuthenticated)
             {
                 ViewBag.log = "Ваш логин: " + User.Identity.Name;

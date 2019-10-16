@@ -1,123 +1,125 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Web;
 using System.Web.Mvc;
 using Personal_Management.Models;
 
 namespace Personal_Management.Controllers
 {
-    public class Isp_SrokiController : Controller
+    public class AccountsController : Controller
     {
         private PersonalContext db = new PersonalContext();
 
-        // GET: Isp_Sroki
+        // GET: Accounts
         public ActionResult Index()
         {
-            var isp_Sroki = db.Isp_Sroki.Include(i => i.Sotrs).Include(i => i.status_isp_sroka);
-            return View(isp_Sroki.ToList());
+            var accounts = db.Accounts.Include(a => a.Roles).Include(a => a.Sotrs);
+            return View(accounts.ToList());
         }
 
-        // GET: Isp_Sroki/Details/5
-        public ActionResult Details(int? id)
+        // GET: Accounts/Details/5
+        public ActionResult Details(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Isp_Sroki isp_Sroki = db.Isp_Sroki.Find(id);
-            if (isp_Sroki == null)
+            Accounts accounts = db.Accounts.Find(id);
+            if (accounts == null)
             {
                 return HttpNotFound();
             }
-            return View(isp_Sroki);
+            return View(accounts);
         }
 
-        // GET: Isp_Sroki/Create
+        // GET: Accounts/Create
         public ActionResult Create()
         {
-            SelectList sot = new SelectList(db.Sotrs, "ID_Sotr", "Full");
-            ViewBag.Sotrs = sot;
-            ViewBag.Status_ID = new SelectList(db.status_isp_sroka, "ID_St", "Name_St");
+            ViewBag.Role_ID = new SelectList(db.Roles, "ID_Role", "Role_Naim");
+            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Surname_Sot");
             return View();
         }
 
-        // POST: Isp_Sroki/Create
+        // POST: Accounts/Create
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID_Isp,Sotr_ID,Date_Start,Date_Finish,Status_ID")] Isp_Sroki isp_Sroki)
+        public ActionResult Create([Bind(Include = "Login,Password,Role_ID,Sotr_ID")] Accounts accounts)
         {
             if (ModelState.IsValid)
             {
-                db.Isp_Sroki.Add(isp_Sroki);
+                db.Accounts.Add(accounts);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.Status_ID = new SelectList(db.status_isp_sroka, "ID_St", "Name_St", isp_Sroki.Status_ID);
-            return View(isp_Sroki);
+            ViewBag.Role_ID = new SelectList(db.Roles, "ID_Role", "Role_Naim", accounts.Role_ID);
+            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Surname_Sot", accounts.Sotr_ID);
+            return View(accounts);
         }
 
-        // GET: Isp_Sroki/Edit/5
-        public ActionResult Edit(int? id)
+        // GET: Accounts/Edit/5
+        public ActionResult Edit(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Isp_Sroki isp_Sroki = db.Isp_Sroki.Find(id);
-            if (isp_Sroki == null)
+            Accounts accounts = db.Accounts.Find(id);
+            if (accounts == null)
             {
                 return HttpNotFound();
             }
-            SelectList sot = new SelectList(db.Sotrs, "ID_Sotr", "Full", isp_Sroki.Sotr_ID);
-            ViewBag.Sotrs = sot;
-            ViewBag.Status_ID = new SelectList(db.status_isp_sroka, "ID_St", "Name_St", isp_Sroki.Status_ID);
-            return View(isp_Sroki);
+            ViewBag.Role_ID = new SelectList(db.Roles, "ID_Role", "Role_Naim", accounts.Role_ID);
+            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Surname_Sot", accounts.Sotr_ID);
+            return View(accounts);
         }
 
-        // POST: Isp_Sroki/Edit/5
+        // POST: Accounts/Edit/5
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID_Isp,Sotr_ID,Date_Start,Date_Finish,Status_ID")] Isp_Sroki isp_Sroki)
+        public ActionResult Edit([Bind(Include = "Login,Password,Role_ID,Sotr_ID")] Accounts accounts)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(isp_Sroki).State = EntityState.Modified;
+                db.Entry(accounts).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Surname_Sot", isp_Sroki.Sotr_ID);
-            ViewBag.Status_ID = new SelectList(db.status_isp_sroka, "ID_St", "Name_St", isp_Sroki.Status_ID);
-            return View(isp_Sroki);
+            ViewBag.Role_ID = new SelectList(db.Roles, "ID_Role", "Role_Naim", accounts.Role_ID);
+            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Surname_Sot", accounts.Sotr_ID);
+            return View(accounts);
         }
 
-        // GET: Isp_Sroki/Delete/5
-        public ActionResult Delete(int? id)
+        // GET: Accounts/Delete/5
+        public ActionResult Delete(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Isp_Sroki isp_Sroki = db.Isp_Sroki.Find(id);
-            if (isp_Sroki == null)
+            Accounts accounts = db.Accounts.Find(id);
+            if (accounts == null)
             {
                 return HttpNotFound();
             }
-            return View(isp_Sroki);
+            return View(accounts);
         }
 
-        // POST: Isp_Sroki/Delete/5
+        // POST: Accounts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(string id)
         {
-            Isp_Sroki isp_Sroki = db.Isp_Sroki.Find(id);
-            db.Isp_Sroki.Remove(isp_Sroki);
+            Accounts accounts = db.Accounts.Find(id);
+            db.Accounts.Remove(accounts);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

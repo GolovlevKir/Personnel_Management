@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace Personal_Management.Models
 {
@@ -185,8 +186,7 @@ namespace Personal_Management.Models
     {
         [Key]
         [Display(Name = "Логин аккаунта")]
-        [RegularExpression("^([a-zA-Z0-9 .&'-]+)$", ErrorMessage = "Логин должен иметь заглавные (A-Z), прописные (a-z) буквы и цифры (0-9)")]
-        [StringLength(20, MinimumLength = 6, ErrorMessage = "Длина Логина должна быть от 6 до 20 символов")]
+        [RegularExpression("^([a-zA-Z .&'-]+)$", ErrorMessage = "Логин должен иметь заглавные (A-Z), прописные (a-z) буквы и цифры (0-9)")]
         [Required(ErrorMessage = "Данное поле неверно заполнено")]
         public string Login { get; set; }
         [Display(Name = "Пароль аккаунта")]
@@ -368,5 +368,11 @@ namespace Personal_Management.Models
         public int Sotr_ID { get; set; }
         public virtual Roles Roles { get; set; }
         public virtual Sotrs Sotrs { get; set; }
+    }
+
+    public class SotrsListViewModel
+    {
+        public IEnumerable<Sotrs> Sotrs { get; set; }
+        public SelectList Positions { get; set; }
     }
 }

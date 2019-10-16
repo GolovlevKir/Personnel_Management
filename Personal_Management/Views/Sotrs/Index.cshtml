@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Personal_Management.Models.Sotrs>
+﻿@model Personal_Management.Models.SotrsListViewModel
 
 @{
     ViewBag.Title = "Index";
@@ -7,31 +7,41 @@
 <h2>Сотрудники</h2>
 
 <p>
-    @Html.ActionLink("Добавить", "Create")
+    @Html.ActionLink("Добавить", "addnewrecord")
 </p>
 
 <div class="container">
-    <div class="row">
-        @foreach (var item in Model)
-        {
-        <div class="card mb-3 col-md-offset-2" style="margin: 0 auto; width: 300px;">
-            <h4 class="card-header">@item.Full</h4>
-            <div class="card-body">
-                <h6 class="card-title">Должность</h6>
-                <h7 class="card-subtitle text-muted">@item.Positions.Naim_Posit</h7>
-            </div>
-            <img style="margin: 0 auto; height: 340px; width: 260px; display: block;" src="~/Content/Photo/Sotrs/@item.Photo" alt="Card image">
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">Номер телефона: @Html.DisplayFor(modelItem => item.Num_Phone)</li>
-                <li class="list-group-item">Эл. почта: @Html.DisplayFor(modelItem => item.Email)</li>
-                <li class="list-group-item">Дата принятия: @Html.DisplayFor(modelItem => item.Date_of_adoption)</li>
-            </ul>
-            <div class="card-footer text-center">
-                @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sotr }) |
-                @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }) |
-                @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Sotr })
-            </div>
+    <form method="get">
+        <div class="form-inline mb-3">
+            <label class="control-label">Команда: </label>
+            @Html.DropDownList("pos", Model.Positions as SelectList,
+                        htmlAttributes: new { @class = "form-control" })
+
+            <input type="submit" value="Фильтр" class="btn btn-default" />
         </div>
+    </form>
+    <div class="row">
+        @foreach (var item in Model.Sotrs)
+        {
+            <div class="card mb-3 col-md-offset-2" style="margin: 0 auto; width: 300px;">
+                <h4 class="card-header">@item.Full</h4>
+                <div class="card-body">
+                    <h6 class="card-title">Должность</h6>
+                    <h7 class="card-subtitle text-muted">@item.Positions.Naim_Posit</h7>
+                </div>
+                <img style="margin: 0 auto; height: 340px; width: 260px; display: block;" src="~/Content/Photo/Sotrs/@item.Photo" alt="Card image">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Номер телефона: @Html.DisplayFor(modelItem => item.Num_Phone)</li>
+                    <li class="list-group-item">Эл. почта: @Html.DisplayFor(modelItem => item.Email)</li>
+                    <li class="list-group-item">Дата принятия: @Html.DisplayFor(modelItem => item.Date_of_adoption)</li>
+                </ul>
+                <div class="card-footer text-center">
+                    @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sotr }) |
+                    @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }) |
+                    @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Sotr })
+                </div>
+            </div>
         }
     </div>
 </div>
+

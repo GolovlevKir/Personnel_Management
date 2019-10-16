@@ -1,0 +1,19 @@
+﻿@model Personal_Management.Models.Accounts
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Удаление аккаунта</h2>
+
+<h3>Вы действительно хотите удалить аккаунт сотрудника @Html.DisplayFor(model => model.Sotrs.FullName)?</h3>
+<div>
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Удалить" class="btn btn-default" /> |
+            @Html.ActionLink("вернуться к списку аккаунтов", "Index")
+        </div>
+    }
+</div>

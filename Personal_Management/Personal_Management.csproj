@@ -170,8 +170,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\DepartmentsController.cs" />
     <Compile Include="Controllers\DocumentsController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Isp_SrokiController.cs" />
     <Compile Include="Controllers\Pass_DannieController.cs" />
@@ -191,6 +193,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="404.html" />
+    <Content Include="Content\app.css" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-reboot.css" />
@@ -302,7 +306,6 @@
     <Content Include="Views\Sbor_Docum\Delete.cshtml" />
     <Content Include="Views\Sbor_Docum\Edit.cshtml" />
     <Content Include="Views\Sbor_Docum\Index.cshtml" />
-    <Content Include="Views\Sotrs\Create.cshtml" />
     <Content Include="Views\Sotrs\Delete.cshtml" />
     <Content Include="Views\Sotrs\Details.cshtml" />
     <Content Include="Views\Sotrs\Edit.cshtml" />
@@ -321,6 +324,10 @@
     <Content Include="Views\Roles\Edit.cshtml" />
     <Content Include="Views\Roles\Index.cshtml" />
     <Content Include="Views\Sotrs\addnewrecord.cshtml" />
+    <Content Include="Views\Error\NotFound.cshtml" />
+    <Content Include="Views\Accounts\Index.cshtml" />
+    <Content Include="Views\Accounts\Edit.cshtml" />
+    <Content Include="Views\Accounts\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

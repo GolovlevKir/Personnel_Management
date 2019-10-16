@@ -9,6 +9,7 @@ namespace Personal_Management
 {
     public class Program
     {
+        public static int colIsp = 0;
         public static int id;
         public static int admin;
         public static SqlConnection SqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["PersonalContext"].ToString());

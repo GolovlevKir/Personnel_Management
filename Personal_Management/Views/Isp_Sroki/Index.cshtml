@@ -15,6 +15,9 @@
             ФИО сотрудника (отдел)
         </th>
         <th>
+            Дата окончания
+        </th>
+        <th>
             Статус
         </th>
         <th></th>
@@ -22,8 +25,20 @@
 
 @foreach (var item in Model) {
 <tr>
+    @if (item.Date_Finish == DateTime.Now.ToString("d"))
+    {
+        <td style="background: #FA8072">
+            @Html.DisplayFor(modelItem => item.Sotrs.FullName, new { @class="text-danger"})
+        </td>
+    }
+    else
+    {
+        <td >
+            @Html.DisplayFor(modelItem => item.Sotrs.FullName)
+        </td>
+    }
     <td>
-        @Html.DisplayFor(modelItem => item.Sotrs.FullName)
+        @Html.DisplayFor(modelItem => item.Date_Finish)
     </td>
     @switch (item.status_isp_sroka.ID_St)
     {

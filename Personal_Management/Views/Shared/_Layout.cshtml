@@ -33,14 +33,34 @@
             
             <form class="form-inline my-2 my-lg-0">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Index","Home")">Домашняя страница</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Данные сотрудников</a>
+                        <div class="dropdown-menu" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            @Html.ActionLink("Отделы организации", "Index", "Departments", null, new { @class = "dropdown-item" })
+                            @Html.ActionLink("Сотрудники", "Index", "Sotrs", null, new { @class = "dropdown-item" })
+                            @Html.ActionLink("Сбор документов", "Index", "Sbor_Docum", null, new { @class = "dropdown-item" })
+                            @Html.ActionLink("Графики работы", "Index", "Work_Schedule", null, new { @class = "dropdown-item" })
+                        </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Features</a>
+                        <a class="nav-link" href="@Url.Action("Index","Isp_Sroki")">Испытательные сроки <span class="badge badge-success badge-pill">@Program.colIsp</span></a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Pricing</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Бухгалтерия</a>
+                        <div class="dropdown-menu" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            @Html.ActionLink("Имеющиеся ставки", "Index", "Rates", null, new { @class = "dropdown-item" })
+                            @Html.ActionLink("Выплаты заработных плат", "Index", "Zar_Plata", null, new { @class = "dropdown-item" })
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Натсройка прав доступа</a>
+                        <div class="dropdown-menu" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            @Html.ActionLink("Права доступа", "Index", "Roles", null, new { @class = "dropdown-item" })
+                            @Html.ActionLink("Аккаунты", "Index", "Accounts", null, new { @class = "dropdown-item" })
+                        </div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="@Url.Action("LogOut","Account")">Выйти</a>

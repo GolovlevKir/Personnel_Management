@@ -1,5 +1,6 @@
 ﻿using Personal_Management.Models;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.IO;
@@ -15,10 +16,22 @@ namespace Personal_Management.Controllers
         private PersonalContext db = new PersonalContext();
 
         // GET: Sotrs
-        public ActionResult Index()
+        public ActionResult Index(int? pos)
         {
-            var sotrs = db.Sotrs.Include(s => s.Positions).Include(s => s.Rates).Include(s => s.Work_Schedule);
-            return View(sotrs.ToList());
+            IQueryable<Sotrs> sotrs = db.Sotrs.Include(s => s.Positions).Include(s => s.Rates).Include(s => s.Work_Schedule);
+            if (pos != null && pos != 0)
+            {
+                sotrs = sotrs.Where(p => p.Positions_ID == pos);
+            }
+            List<Positions> posit = db.Positions.ToList();
+            posit.Insert(0, new Positions { Naim_Posit = "Все", ID_Positions = 0 });
+            SotrsListViewModel plvm = new SotrsListViewModel {
+                Sotrs = sotrs.ToList(),
+                Positions = new SelectList(posit, "ID_Positions", "Naim_Posit")
+            };
+
+
+            return View(plvm);
         }
 
         // GET: Sotrs/Details/5
