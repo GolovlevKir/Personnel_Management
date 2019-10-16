@@ -17,6 +17,7 @@ namespace Personal_Management.Controllers
         // GET: Accounts
         public ActionResult Index()
         {
+            Program.update();
             var accounts = db.Accounts.Include(a => a.Roles).Include(a => a.Sotrs);
             return View(accounts.ToList());
         }

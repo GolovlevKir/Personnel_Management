@@ -39,6 +39,7 @@ namespace Personal_Management.Controllers
         // GET: Pass_Dannie/Create
         public ActionResult Create()
         {
+            Program.update();
             ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full");
             return View();
         }

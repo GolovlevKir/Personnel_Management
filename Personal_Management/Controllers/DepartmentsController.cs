@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -13,10 +14,12 @@ namespace Personal_Management.Controllers
     public class DepartmentsController : Controller
     {
         private PersonalContext db = new PersonalContext();
+        
 
         // GET: Departments
         public ActionResult Index()
         {
+            Program.update();
             return View(db.Departments.ToList());
         }
 
@@ -123,5 +126,6 @@ namespace Personal_Management.Controllers
             }
             base.Dispose(disposing);
         }
+
     }
 }

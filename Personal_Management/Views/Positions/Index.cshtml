@@ -7,13 +7,16 @@
 <h2>Должности</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Добавить", "Create") |  @Html.ActionLink("Список отделов", "Index", "Departments")
 </p>
 <table class="table">
     <tr>
+        @if (Personal_Management.Controllers.PositionsController.idpos == 0)
+        {
         <th>
             @Html.DisplayNameFor(model => model.Departments.Naim_Depart)
         </th>
+        }
         <th>
             @Html.DisplayNameFor(model => model.Naim_Posit)
         </th>
@@ -21,17 +24,20 @@
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
+<tr>
+    @if (Personal_Management.Controllers.PositionsController.idpos == 0)
+    {
         <td>
             @Html.DisplayFor(modelItem => item.Departments.Naim_Depart)
         </td>
+    }
         <td>
             @Html.DisplayFor(modelItem => item.Naim_Posit)
         </td>
         <td>
-            @Html.ActionLink("Изменить", "Edit", new { id=item.ID_Positions }) |
-            @Html.ActionLink("Детали", "Details", new { id=item.ID_Positions }) |
-            @Html.ActionLink("Удалить", "Delete", new { id=item.ID_Positions })
+            @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Positions }) |
+            @Html.ActionLink("Детали", "Details", new { id = item.ID_Positions }) |
+            @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Positions })
         </td>
     </tr>
 }

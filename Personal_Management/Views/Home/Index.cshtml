@@ -2,31 +2,98 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    <h1>@ViewBag.log</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
+<div class="container bootstrap snippet ">
+    <div class="row ">
+        <div class="mb-3" style="margin: 0 auto; width: auto;"><h2>@ViewBag.log</h2></div>
+    </div>
+    <div class="row">
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+        <div class="col-sm-3">
+            <!--left col-->
 
-    </div>
-</div>
+            <div class="text-center">
+                <img src="~/Content/Photo/Sotrs/@ViewBag.photo" class="avatar img-circle img-thumbnail" alt="avatar">
+            </div>
+            
+
+            </div><!--/col-3-->
+        <div class="col-sm-8">
+            <div class="tab-content">
+                <div class="tab-pane active" id="home">
+                    <form class="form" action="##">
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <h4>ФИО: @ViewBag.FIO</h4>
+                            </div>
+                        </div>
+                        @using (Html.BeginForm("Edit", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <h4>Сменить фото...</h4>
+                                    <input type="file" id="imgfile" name="imgfile" class="btn">  <input type="submit" value="Сменить фото" class="btn btn-success" />
+                                </div>
+                            </div>
+                        }
+
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <h4>Должность: @ViewBag.Pos</h4>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <h4>Номер телефона: @ViewBag.Phone</h4>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <h4>Email: <a href="mailto:@ViewBag.Em">@ViewBag.Em</a></h4>
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <h4>Описание:</h4>
+                                <p>@ViewBag.Opis</p>
+                            </div>
+                        </div>
+                        @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+                        {
+                            <div class="form-group">
+
+                                <div class="col-xs-6">
+                                    <h4>Старый пароль</h4>
+                                    <input type="password" class="form-control" name="password" id="password" placeholder="Введите старый пароль">
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <div class="col-xs-6">
+                                    <h4>Новый пароль</h4>
+                                    <input type="password" class="form-control" name="password1" id="password1" placeholder="Введите новый пароль">
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <div class="col-xs-6">
+                                    <h4>Повтор нового пароля</h4>
+                                    <input type="password" class="form-control" name="password2" id="password2" placeholder="Повторите ввод пароля">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <input type="submit" value="Сменить пароль" class="btn btn-success" />
+                                    <a class="nav-link" href="@Url.Action("LogOut","Account")">Выйти</a>
+                                </div>
+                            </div>
+                        }
+                    </form>
+                </div>
+            </div><!--/tab-pane-->
+        </div><!--/tab-content-->
+    </div><!--/col-9-->
+</div><!--/row-->

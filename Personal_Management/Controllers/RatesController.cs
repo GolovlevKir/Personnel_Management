@@ -17,6 +17,7 @@ namespace Personal_Management.Controllers
         // GET: Rates
         public ActionResult Index()
         {
+            Program.update();
             return View(db.Rates.ToList());
         }
 

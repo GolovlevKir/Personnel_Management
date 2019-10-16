@@ -17,6 +17,7 @@ namespace Personal_Management.Controllers
         // GET: Work_Schedule
         public ActionResult Index()
         {
+            Program.update();
             return View(db.Work_Schedule.ToList());
         }
 

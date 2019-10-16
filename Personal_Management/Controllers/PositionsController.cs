@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -13,12 +14,30 @@ namespace Personal_Management.Controllers
     public class PositionsController : Controller
     {
         private PersonalContext db = new PersonalContext();
+        public static int idpos = 0;
 
         // GET: Positions
-        public ActionResult Index()
+        public ActionResult Index(int id = 0)
         {
-            var positions = db.Positions.Include(p => p.Departments);
-            return View(positions.ToList());
+            Program.update();
+            if (id != 0)
+            {
+                idpos = id;
+                Program.id = id;
+                var model = db.Positions.Include(x => x.Departments).ToList();
+                model = model.Where(p => p.Depart_ID == id).ToList();
+                SqlCommand command = new SqlCommand("SELECT Naim_Depart FROM Departments where ID_Depart = " + idpos.ToString(), Program.SqlConnection);
+                Program.SqlConnection.Open();
+                ViewBag.d = command.ExecuteScalar();
+                Program.SqlConnection.Close();
+                return View(model);
+            }
+            else
+            {
+                idpos = 0;
+                var model = db.Positions.Include(x => x.Departments).ToList();
+                return View(model);
+            }
         }
 
         // GET: Positions/Details/5

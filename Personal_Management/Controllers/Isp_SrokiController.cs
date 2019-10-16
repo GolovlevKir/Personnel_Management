@@ -14,6 +14,7 @@ namespace Personal_Management.Controllers
         // GET: Isp_Sroki
         public ActionResult Index()
         {
+            Program.update();
             var isp_Sroki = db.Isp_Sroki.Include(i => i.Sotrs).Include(i => i.status_isp_sroka);
             return View(isp_Sroki.ToList());
         }

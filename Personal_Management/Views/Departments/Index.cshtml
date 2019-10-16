@@ -7,8 +7,9 @@
 <h2>Отделы организации</h2>
 
 <p>
-    @Html.ActionLink("Создать отдел", "Create")
+    @Html.ActionLink("Создать отдел", "Create") | @Html.ActionLink("Просмотреть все должности", "Index", "Positions")
 </p>
+
 <table class="table">
     <tr>
         <th>
@@ -23,8 +24,9 @@
             @Html.DisplayFor(modelItem => item.Naim_Depart)
         </td>
         <td>
-            @Html.ActionLink("Изменить", "Edit", new { id=item.ID_Depart }) |
-            @Html.ActionLink("Удалить", "Delete", new { id=item.ID_Depart })
+            @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Depart }) |
+            @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Depart })|
+            <a href="~/Positions/Index/@item.ID_Depart">Должности, входящие в отдел</a>
         </td>
     </tr>
 }

@@ -17,6 +17,7 @@ namespace Personal_Management.Controllers
         // GET: Zar_Plata
         public ActionResult Index()
         {
+            Program.update();
             var zar_Plata = db.Zar_Plata.Include(z => z.Sotrs);
             return View(zar_Plata.ToList());
         }

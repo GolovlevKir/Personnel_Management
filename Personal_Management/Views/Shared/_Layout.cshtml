@@ -40,13 +40,16 @@
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Данные сотрудников</a>
                         <div class="dropdown-menu" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
                             @Html.ActionLink("Отделы организации", "Index", "Departments", null, new { @class = "dropdown-item" })
-                            @Html.ActionLink("Сотрудники", "Index", "Sotrs", null, new { @class = "dropdown-item" })
+                            <div class="dropdown-divider"></div>
+                            @Html.ActionLink("Документы для сдачи", "Index", "Documents", null, new { @class = "dropdown-item" })
                             @Html.ActionLink("Сбор документов", "Index", "Sbor_Docum", null, new { @class = "dropdown-item" })
+                            <div class="dropdown-divider"></div>
                             @Html.ActionLink("Графики работы", "Index", "Work_Schedule", null, new { @class = "dropdown-item" })
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="@Url.Action("Index","Isp_Sroki")">Испытательные сроки <span class="badge badge-success badge-pill">@Program.colIsp</span></a>
+                            <div class="dropdown-divider"></div>
+                            @Html.ActionLink("Данные сотрудников", "Index", "Sotrs", null, new { @class = "dropdown-item" })
                         </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("Index","Isp_Sroki")">Испытательные сроки <span class="badge badge-success badge-pill">@Program.colIsp</span></a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Бухгалтерия</a>
@@ -65,12 +68,10 @@
                     <li class="nav-item">
                         <a class="nav-link" href="@Url.Action("LogOut","Account")">Выйти</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="~/Content/Files/1.docx" download>скачать</a>
-                    </li>
                 </ul>
 
             </form>
+
         </div>
     </nav>
     

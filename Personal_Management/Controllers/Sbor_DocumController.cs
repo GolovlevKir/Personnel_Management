@@ -17,6 +17,7 @@ namespace Personal_Management.Controllers
         // GET: Sbor_Docum
         public ActionResult Index()
         {
+            Program.update();
             var sbor_Docum = db.Sbor_Docum.Include(s => s.Documents).Include(s => s.Sotrs);
             return View(sbor_Docum.ToList());
         }

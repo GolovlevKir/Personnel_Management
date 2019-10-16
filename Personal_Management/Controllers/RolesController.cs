@@ -17,6 +17,7 @@ namespace Personal_Management.Controllers
         // GET: Roles
         public ActionResult Index()
         {
+            Program.update();
             return View(db.Roles.ToList());
         }
 

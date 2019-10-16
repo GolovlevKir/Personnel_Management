@@ -7,13 +7,13 @@
 <h2>Сотрудники</h2>
 
 <p>
-    @Html.ActionLink("Добавить", "addnewrecord")
+    @Html.ActionLink("Добавить нового сотрудника", "addnewrecord") | @Html.ActionLink("Данные ставок", "Index", "Rates") | @Html.ActionLink("Список рабочих графиков", "Index", "Work_Schedule")
 </p>
 
 <div class="container">
     <form method="get">
         <div class="form-inline mb-3">
-            <label class="control-label">Команда: </label>
+            <label class="control-label">Команда: </label> 
             @Html.DropDownList("pos", Model.Positions as SelectList,
                         htmlAttributes: new { @class = "form-control" })
 
@@ -23,7 +23,7 @@
     <div class="row">
         @foreach (var item in Model.Sotrs)
         {
-            <div class="card mb-3 col-md-offset-2" style="margin: 0 auto; width: 300px;">
+            <div class="card mb-3 col-md-offset-2" style="margin: 0 auto; width: auto;">
                 <h4 class="card-header">@item.Full</h4>
                 <div class="card-body">
                     <h6 class="card-title">Должность</h6>

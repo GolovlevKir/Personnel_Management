@@ -18,6 +18,7 @@ namespace Personal_Management.Controllers
         // GET: Sotrs
         public ActionResult Index(int? pos)
         {
+            Program.update();
             IQueryable<Sotrs> sotrs = db.Sotrs.Include(s => s.Positions).Include(s => s.Rates).Include(s => s.Work_Schedule);
             if (pos != null && pos != 0)
             {

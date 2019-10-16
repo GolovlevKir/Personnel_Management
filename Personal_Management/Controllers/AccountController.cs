@@ -4,6 +4,8 @@ using System.Web.Mvc;
 using System.Web.Security;
 using System.Data.Entity;
 using System.Net;
+using System.Data.SqlClient;
+using System;
 
 namespace Personal_Management.Controllers
 {
@@ -27,6 +29,7 @@ namespace Personal_Management.Controllers
                 if (user != null)
                 {
                     FormsAuthentication.SetAuthCookie(model.Login, true);
+                    Program.update();
                     return RedirectToAction("Index", "Home");
                 }
                 else

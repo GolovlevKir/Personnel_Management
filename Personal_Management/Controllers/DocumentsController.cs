@@ -17,6 +17,7 @@ namespace Personal_Management.Controllers
         // GET: Documents
         public ActionResult Index()
         {
+            Program.update();
             return View(db.Documents.ToList());
         }
 
