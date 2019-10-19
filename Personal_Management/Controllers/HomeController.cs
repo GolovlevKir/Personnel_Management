@@ -39,6 +39,20 @@ namespace Personal_Management.Controllers
                 Program.Otdeli = Convert.ToInt32(command.ExecuteScalar());
                 command.CommandText = "SELECT dbo.Roles.Buh_Ych FROM dbo.Accounts INNER JOIN dbo.Roles ON dbo.Accounts.Role_ID = dbo.Roles.ID_Role where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
                 Program.Buh = Convert.ToInt32(command.ExecuteScalar());
+                
+                command.CommandText = "SELECT dbo.Steps.AddSotrInIS FROM dbo.Accounts JOIN dbo.Sotrs ON dbo.Accounts.Sotr_ID = dbo.Sotrs.ID_Sotr JOIN dbo.Steps ON dbo.Sotrs.ID_Sotr = dbo.Steps.Sotr_ID where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
+                Program.step1 = Convert.ToBoolean(command.ExecuteScalar());
+                command.CommandText = "SELECT dbo.Steps.AddRezume FROM dbo.Accounts JOIN dbo.Sotrs ON dbo.Accounts.Sotr_ID = dbo.Sotrs.ID_Sotr JOIN dbo.Steps ON dbo.Sotrs.ID_Sotr = dbo.Steps.Sotr_ID where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
+                Program.step2 = Convert.ToBoolean(command.ExecuteScalar());
+                command.CommandText = "SELECT dbo.Steps.AddSobesedovanie FROM dbo.Accounts JOIN dbo.Sotrs ON dbo.Accounts.Sotr_ID = dbo.Sotrs.ID_Sotr JOIN dbo.Steps ON dbo.Sotrs.ID_Sotr = dbo.Steps.Sotr_ID where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
+                Program.step3 = Convert.ToBoolean(command.ExecuteScalar());
+                command.CommandText = "SELECT dbo.Steps.AddIspSrok FROM dbo.Accounts JOIN dbo.Sotrs ON dbo.Accounts.Sotr_ID = dbo.Sotrs.ID_Sotr JOIN dbo.Steps ON dbo.Sotrs.ID_Sotr = dbo.Steps.Sotr_ID where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
+                Program.step4 = Convert.ToBoolean(command.ExecuteScalar());
+                command.CommandText = "SELECT dbo.Steps.RezimOzidaniya FROM dbo.Accounts JOIN dbo.Sotrs ON dbo.Accounts.Sotr_ID = dbo.Sotrs.ID_Sotr JOIN dbo.Steps ON dbo.Sotrs.ID_Sotr = dbo.Steps.Sotr_ID where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
+                Program.step5 = Convert.ToBoolean(command.ExecuteScalar());
+                command.CommandText = "SELECT dbo.Steps.Reshenie FROM dbo.Accounts JOIN dbo.Sotrs ON dbo.Accounts.Sotr_ID = dbo.Sotrs.ID_Sotr JOIN dbo.Steps ON dbo.Sotrs.ID_Sotr = dbo.Steps.Sotr_ID where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
+                Program.step6 = Convert.ToBoolean(command.ExecuteScalar());
+
                 Program.SqlConnection.Close();
             }
             else
@@ -63,6 +77,9 @@ namespace Personal_Management.Controllers
                 {
                     if (password1 == password2)
                     {
+                        ViewBag.New = "";
+                        ViewBag.NewPass = "";
+                        ViewBag.OldPass = "";
                         command.CommandText = "update Accounts " +
                         "set " +
                         "Password = '" + password1 + "' " +
@@ -75,21 +92,20 @@ namespace Personal_Management.Controllers
                     else
                     {
                         Response.Write("<script>alert('Введенные новые пароли не совпадают!'); </script>");
-                        return View("Index");
+                        return RedirectToAction("Index");
                     }
                 }
                 else
                 {
                     Response.Write("<script>alert('Старый пароль введен неверно!'); </script>");
-                    return View("Index");
+                    return RedirectToAction("Index");
                 }
             }
             else
             {
                 Response.Write("<script>alert('Заполните поля паролей!'); </script>");
-                return View("Index");
+                return RedirectToAction("Index");
             }
-            return View("Index");
         }
 
         //[Authorize]

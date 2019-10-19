@@ -1,5 +1,46 @@
-﻿@{
+﻿@using System;
+@using System.Data.SqlClient;
+@using System.Web.Mvc;
+@{
     ViewBag.Title = "Home Page";
+
+    void pass(string password, string password1, string password2)
+    {
+        SqlCommand command = new SqlCommand("", Program.SqlConnection);
+        if (password != null || password1 != null || password2 != null)
+        {
+            command.CommandText = "SELECT count(*) FROM dbo.Accounts where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "' and [dbo].[Accounts].[Password] = '" + password + "'";
+            Program.SqlConnection.Open();
+            int co = Convert.ToInt32(command.ExecuteScalar());
+            Program.SqlConnection.Close();
+            if (co > 0)
+            {
+                if (password1 == password2)
+                {
+                    command.CommandText = "update Accounts " +
+                    "set " +
+                    "Password = '" + password1 + "' " +
+                    "where Login = '" + User.Identity.Name + "'";
+                    Program.SqlConnection.Open();
+                    command.ExecuteScalar();
+                    Program.SqlConnection.Close();
+                    Response.Write("<script>alert('Пароль успешно изменен!'); </script>");
+                }
+                else
+                {
+                    Response.Write("<script>alert('Введенные новые пароли не совпадают!'); </script>");
+                }
+            }
+            else
+            {
+                Response.Write("<script>alert('Старый пароль введен неверно!'); </script>");
+            }
+        }
+        else
+        {
+            Response.Write("<script>alert('Заполните поля паролей!'); </script>");
+        }
+    }
 }
 @using (Html.BeginForm("Index", "Home", FormMethod.Post))
 {
@@ -81,24 +122,64 @@
         </div><!--/col-9-->
 
     </div><!--/row-->
-    <div class="wrapper">
-        <div class="container">
-            <h2 >Этапы приема</h2>
-
-            <div class="container clear clear-fix">
+<div class="row ">
+    <div class="mb-3" style="margin: 0 auto; width: auto;"><h2>Этапы приема</h2></div>
+</div>
+            
+            <div class="clear clear-fix">
                 <div class="progressbar-wrapper clearfix">
                     <ul class="progressbar">
-                        <li class="active">Level 1</li>
-                        <li class="active">Level 2</li>
-                        <li>Level 3</li>
-                        <li>Level 4</li>
-                        <li>Level 5</li>
-                        <li>Level 6</li>
+                        @if (Program.step1)
+                        {
+                            <li class="active" ><a data-placement="top" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Sotrs/Index">Этап 1</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="~/Sotrs/Index">Этап 1</a></li>
+                        }
+                        @if (Program.step2)
+                        {
+                            <li class="active">Этап 2</li>
+                        }
+                        else
+                        {
+                            <li>Этап 2</li>
+                        }
+                        @if (Program.step3)
+                        {
+                            <li class="active">Этап 3</li>
+                        }
+                        else
+                        {
+                            <li>Этап 3</li>
+                        }
+                        @if (Program.step4)
+                        {
+                            <li class="active">Этап 4</li>
+                        }
+                        else
+                        {
+                            <li>Этап 4</li>
+                        }
+                        @if (Program.step5)
+                        {
+                            <li class="active">Этап 5</li>
+                        }
+                        else
+                        {
+                            <li>Этап 5</li>
+                        }
+                        @if (Program.step6)
+                        {
+                            <li class="active">Этап 6</li>
+                        }
+                        else
+                        {
+                            <li>Этап 6</li>
+                        }
                     </ul>
                 </div>
             </div>
-        </div>
-    </div>
 }
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

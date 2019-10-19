@@ -230,6 +230,30 @@ namespace Personal_Management.Models
 
     }
 
+    public class Steps
+    {
+        [Key]
+        public int ID_Step { get; set; }
+        [ForeignKey("Sotrs")]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Display(Name = "ФИО сотрудника")]
+        public int Sotr_ID { get; set; }
+        [Display(Name = "Этап 1 \"Добавление данных сотрудника\"")]
+        public bool AddSotrInIS { get; set; }
+        [Display(Name = "Этап 2 \"Загрузка резюме\"")]
+        public bool AddRezume { get; set; }
+        [Display(Name = "Этап 3 \"Запись данных, полученных на собеседовании, сотрудника в поле описания\"")]
+        public bool AddSobesedovanie { get; set; }
+        [Display(Name = "Этап 4 \"Назначение испытательного срока\"")]
+        public bool AddIspSrok { get; set; }
+        [Display(Name = "Этап 5 \"Ожидание решения о принятии\"")]
+        public bool RezimOzidaniya { get; set; }
+        [Display(Name = "Этап 6 \"Итог\"")]
+        public bool Reshenie { get; set; }
+        public virtual Sotrs Sotrs { get; set; }
+
+    }
+
     public class Zar_Plata : IValidatableObject
     {
         [Key]
@@ -316,6 +340,7 @@ namespace Personal_Management.Models
         public int Schedule_ID { get; set; }
         public string Date_of_adoption { get; set; }
         public string Opisanie { get; set; }
+        public string rezume { get; set; }
         public virtual Positions Positions { get; set; }
         public virtual Rates Rates { get; set; }
         public virtual Work_Schedule Work_Schedule { get; set; }

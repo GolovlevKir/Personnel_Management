@@ -70,10 +70,11 @@ namespace Personal_Management.Controllers
         }
 
         [HttpPost]
-        public ActionResult addnewrecord(Sotrs sotrs, HttpPostedFileBase imgfile)
+        public ActionResult addnewrecord(Sotrs sotrs, HttpPostedFileBase imgfile, HttpPostedFileBase doc)
         {
             Sotrs sot = new Sotrs();
             string path = uploadimage(imgfile);
+            string pathrez = uploaddoc(doc);
             if (path.Equals("-1"))
             {
 
@@ -93,6 +94,7 @@ namespace Personal_Management.Controllers
                 sot.Schedule_ID = sotrs.Schedule_ID;
                 sot.Date_of_adoption = sotrs.Date_of_adoption;
                 sot.Opisanie = sotrs.Opisanie;
+                sot.rezume = pathrez;
                 db.Sotrs.Add(sot);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -135,6 +137,41 @@ namespace Personal_Management.Controllers
             return path;
         }
 
+        public string uploaddoc(HttpPostedFileBase file)
+        {
+            Random r = new Random();
+            string path = "-1";
+            int random = r.Next();
+            if (file != null && file.ContentLength > 0)
+            {
+                string extension = Path.GetExtension(file.FileName);
+                if (extension.ToLower().Equals(".doc") || extension.ToLower().Equals(".docx") || extension.ToLower().Equals(".pdf"))
+                {
+                    try
+                    {
+                        path = Path.Combine(Server.MapPath("~/Content/Files/"), DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName));
+                        file.SaveAs(path);
+                        path = DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName);
+                        //    ViewBag.Message = "File uploaded successfully";
+                    }
+                    catch (Exception ex)
+                    {
+                        path = "-1";
+                    }
+                }
+                else
+                {
+                    Response.Write("<script>alert('Форматы только doc ,docx или pdf ...'); </script>");
+                }
+            }
+            else
+            {
+                Response.Write("<script>alert('Укажите файл'); </script>");
+                path = "-1";
+            }
+            return path;
+        }
+
         [HttpGet]
         public ActionResult Edit(int? id)
         {
@@ -157,20 +194,135 @@ namespace Personal_Management.Controllers
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Edit(Sotrs sotrs, HttpPostedFileBase imgfile)
+        public ActionResult Edit(Sotrs sotrs, HttpPostedFileBase imgfile, HttpPostedFileBase doc)
         {
+            SqlCommand command;
             string path = uploadimage(imgfile);
-            Response.Write("<script>alert('"+ path + "'); </script>");
+            string pathrez = uploaddoc(doc);
+
+            if (imgfile == null )
+            {
+                if (doc == null)
+                {
+                    command = new SqlCommand(
+                        "update Sotrs " +
+                        "set " +
+                        "Surname_Sot = '" + sotrs.Surname_Sot + "', " +
+                        "Name_Sot = '" + sotrs.Name_Sot + "', " +
+                        "Petronumic_Sot = '" + sotrs.Petronumic_Sot + "', " +
+                        "Day_Of_Birth = '" + sotrs.Day_Of_Birth + "', " +
+                        "Address = '" + sotrs.Address + "'," +
+                        "Num_Phone = '" + sotrs.Num_Phone + "', " +
+                        "Email = '" + sotrs.Email + "', " +
+                        "Positions_ID = " + sotrs.Positions_ID + ", " +
+                        "Rate_ID = " + sotrs.Rate_ID + "," +
+                        "Schedule_ID = " + sotrs.Schedule_ID + ", " +
+                        "Date_of_adoption = '" + sotrs.Date_of_adoption + "', " +
+                        "Opisanie = '" + sotrs.Opisanie + "'," +
+                        "Photo = '" + sotrs.Photo + "', " +
+                        "rezume = '" + sotrs.rezume + "' " +
+                        "where ID_Sotr = " + sotrs.ID_Sotr,
+                        Program.SqlConnection);
+                    Program.SqlConnection.Open();
+                    command.ExecuteScalar();
+                    Program.SqlConnection.Close();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    command = new SqlCommand(
+                        "update Sotrs " +
+                        "set " +
+                        "Surname_Sot = '" + sotrs.Surname_Sot + "', " +
+                        "Name_Sot = '" + sotrs.Name_Sot + "', " +
+                        "Petronumic_Sot = '" + sotrs.Petronumic_Sot + "', " +
+                        "Day_Of_Birth = '" + sotrs.Day_Of_Birth + "', " +
+                        "Address = '" + sotrs.Address + "'," +
+                        "Num_Phone = '" + sotrs.Num_Phone + "', " +
+                        "Email = '" + sotrs.Email + "', " +
+                        "Positions_ID = " + sotrs.Positions_ID + ", " +
+                        "Rate_ID = " + sotrs.Rate_ID + "," +
+                        "Schedule_ID = " + sotrs.Schedule_ID + ", " +
+                        "Date_of_adoption = '" + sotrs.Date_of_adoption + "', " +
+                        "Opisanie = '" + sotrs.Opisanie + "'," +
+                        "Photo = '" + path + "', " +
+                        "rezume = '" + sotrs.rezume + "' " +
+                        "where ID_Sotr = " + sotrs.ID_Sotr,
+                        Program.SqlConnection);
+                    Program.SqlConnection.Open();
+                    command.ExecuteScalar();
+                    Program.SqlConnection.Close();
+                    return RedirectToAction("Index");
+                }
+            }
+
+            if (doc == null)
+            {
+                if (imgfile == null)
+                {
+                    command = new SqlCommand(
+                        "update Sotrs " +
+                        "set " +
+                        "Surname_Sot = '" + sotrs.Surname_Sot + "', " +
+                        "Name_Sot = '" + sotrs.Name_Sot + "', " +
+                        "Petronumic_Sot = '" + sotrs.Petronumic_Sot + "', " +
+                        "Day_Of_Birth = '" + sotrs.Day_Of_Birth + "', " +
+                        "Address = '" + sotrs.Address + "'," +
+                        "Num_Phone = '" + sotrs.Num_Phone + "', " +
+                        "Email = '" + sotrs.Email + "', " +
+                        "Positions_ID = " + sotrs.Positions_ID + ", " +
+                        "Rate_ID = " + sotrs.Rate_ID + "," +
+                        "Schedule_ID = " + sotrs.Schedule_ID + ", " +
+                        "Date_of_adoption = '" + sotrs.Date_of_adoption + "', " +
+                        "Opisanie = '" + sotrs.Opisanie + "'," +
+                        "Photo = '" + sotrs.Photo + "', " +
+                        "rezume = '" + sotrs.rezume + "' " +
+                        "where ID_Sotr = " + sotrs.ID_Sotr,
+                        Program.SqlConnection);
+                    Program.SqlConnection.Open();
+                    command.ExecuteScalar();
+                    Program.SqlConnection.Close();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    command = new SqlCommand(
+                        "update Sotrs " +
+                        "set " +
+                        "Surname_Sot = '" + sotrs.Surname_Sot + "', " +
+                        "Name_Sot = '" + sotrs.Name_Sot + "', " +
+                        "Petronumic_Sot = '" + sotrs.Petronumic_Sot + "', " +
+                        "Day_Of_Birth = '" + sotrs.Day_Of_Birth + "', " +
+                        "Address = '" + sotrs.Address + "'," +
+                        "Num_Phone = '" + sotrs.Num_Phone + "', " +
+                        "Email = '" + sotrs.Email + "', " +
+                        "Positions_ID = " + sotrs.Positions_ID + ", " +
+                        "Rate_ID = " + sotrs.Rate_ID + "," +
+                        "Schedule_ID = " + sotrs.Schedule_ID + ", " +
+                        "Date_of_adoption = '" + sotrs.Date_of_adoption + "', " +
+                        "Opisanie = '" + sotrs.Opisanie + "'," +
+                        "Photo = '" + sotrs.Photo + "', " +
+                        "rezume = '" + pathrez + "' " +
+                        "where ID_Sotr = " + sotrs.ID_Sotr,
+                        Program.SqlConnection);
+                    Program.SqlConnection.Open();
+                    command.ExecuteScalar();
+                    Program.SqlConnection.Close();
+                    return RedirectToAction("Index");
+                }
+            }
+
             if (path.Equals("-1"))
             {
 
             }
             else
             {
-                SqlCommand command = new SqlCommand(
+                
+                    command = new SqlCommand(
                     "update Sotrs " +
                     "set " +
-                    "Surname_Sot = '" + sotrs.Surname_Sot + "', "+
+                    "Surname_Sot = '" + sotrs.Surname_Sot + "', " +
                     "Name_Sot = '" + sotrs.Name_Sot + "', " +
                     "Petronumic_Sot = '" + sotrs.Petronumic_Sot + "', " +
                     "Day_Of_Birth = '" + sotrs.Day_Of_Birth + "', " +
@@ -182,16 +334,13 @@ namespace Personal_Management.Controllers
                     "Schedule_ID = " + sotrs.Schedule_ID + ", " +
                     "Date_of_adoption = '" + sotrs.Date_of_adoption + "', " +
                     "Opisanie = '" + sotrs.Opisanie + "'," +
-                    "Photo = '" + path + "' " +
+                    "Photo = '" + path + "', " +
+                    "rezume = '" + pathrez + "' " +
                     "where ID_Sotr = " + sotrs.ID_Sotr,
                     Program.SqlConnection);
                 Program.SqlConnection.Open();
                 command.ExecuteScalar();
                 Program.SqlConnection.Close();
-                //var model = db.Sotrs.Find(sotrs.Positions_ID);
-                //string path = uploadimage(imgfile);
-                //sotrs.Photo = path;
-                //db.SaveChanges();
                 return RedirectToAction("Index");
 
             }
@@ -222,6 +371,7 @@ namespace Personal_Management.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Sotrs sotrs = db.Sotrs.Find(id);
+            
             db.Sotrs.Remove(sotrs);
             db.SaveChanges();
             return RedirectToAction("Index");

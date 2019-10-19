@@ -34,11 +34,20 @@
                     <li class="list-group-item">Номер телефона: @Html.DisplayFor(modelItem => item.Num_Phone)</li>
                     <li class="list-group-item">Эл. почта: @Html.DisplayFor(modelItem => item.Email)</li>
                     <li class="list-group-item">Дата принятия: @Html.DisplayFor(modelItem => item.Date_of_adoption)</li>
+                    @if (item.rezume != "-")
+                    {
+                        <li class="list-group-item"><a href="~/Content/Files/@item.rezume" download>Скачать резюме</a></li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item">Резюме отсутствует</li>
+                    }
                 </ul>
                 <div class="card-footer text-center">
                     @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sotr }) |
                     @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }) |
-                    @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Sotr })
+                    @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Sotr }) |
+                    
                 </div>
             </div>
         }
