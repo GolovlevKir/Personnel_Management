@@ -112,7 +112,7 @@ namespace Personal_Management.Controllers
                 {
                     try
                     {
-                        path = Path.Combine(Server.MapPath("~/Content/Photo/Sotrs/"), DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName));
+                        path = Path.Combine(Server.MapPath("~/Content/Photo/st/"), DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName));
                         file.SaveAs(path);
                         path = DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName);
                         //    ViewBag.Message = "File uploaded successfully";

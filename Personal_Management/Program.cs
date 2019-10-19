@@ -13,6 +13,7 @@ namespace Personal_Management
         public static int id;
         public static int admin;
         public static SqlConnection SqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["PersonalContext"].ToString());
+        public static int Admin = 0, Kadri = 0, Otdeli = 0, Buh = 0;
         public static void update()
         {
             SqlCommand command = new SqlCommand("select count(*) from Isp_Sroki where DATEDIFF(day, Convert(datetime, Date_Finish,104), GETDATE())=0", Program.SqlConnection);

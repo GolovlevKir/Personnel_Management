@@ -1,68 +1,52 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
-
-<div class="container bootstrap snippet ">
-    <div class="row ">
-        <div class="mb-3" style="margin: 0 auto; width: auto;"><h2>@ViewBag.log</h2></div>
-    </div>
-    <div class="row">
-
-        <div class="col-sm-3">
-            <!--left col-->
-
-            <div class="text-center">
-                <img src="~/Content/Photo/Sotrs/@ViewBag.photo" class="avatar img-circle img-thumbnail" alt="avatar">
-            </div>
-            
-
+@using (Html.BeginForm("Index", "Home", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="container bootstrap snippet ">
+        <div class="row ">
+            <div class="mb-3" style="margin: 0 auto; width: auto;"><h2>@ViewBag.log</h2></div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <!--left col-->
+                <div class="text-center">
+                    <img src="~/Content/Photo/st/@ViewBag.photo" class="avatar img-circle img-thumbnail" alt="avatar">
+                </div>
             </div><!--/col-3-->
-        <div class="col-sm-8">
-            <div class="tab-content">
-                <div class="tab-pane active" id="home">
-                    <form class="form" action="##">
-                        <div class="form-group">
-                            <div class="col-xs-6">
-                                <h4>ФИО: @ViewBag.FIO</h4>
-                            </div>
-                        </div>
-                        @using (Html.BeginForm("Edit", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                        {
+            <div class="col-sm-8">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="home">
+                        <form class="form" action="##">
                             <div class="form-group">
                                 <div class="col-xs-6">
-                                    <h4>Сменить фото...</h4>
-                                    <input type="file" id="imgfile" name="imgfile" class="btn">  <input type="submit" value="Сменить фото" class="btn btn-success" />
+                                    <h4>ФИО: @ViewBag.FIO</h4>
                                 </div>
                             </div>
-                        }
-
-                        <div class="form-group">
-                            <div class="col-xs-6">
-                                <h4>Должность: @ViewBag.Pos</h4>
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <h4>Должность: @ViewBag.Pos</h4>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="form-group">
-
-                            <div class="col-xs-6">
-                                <h4>Номер телефона: @ViewBag.Phone</h4>
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <h4>Номер телефона: @ViewBag.Phone</h4>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-xs-6">
-                                <h4>Email: <a href="mailto:@ViewBag.Em">@ViewBag.Em</a></h4>
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <h4>Email: <a href="mailto:@ViewBag.Em">@ViewBag.Em</a></h4>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
+                            <div class="form-group">
 
-                            <div class="col-xs-6">
-                                <h4>Описание:</h4>
-                                <p>@ViewBag.Opis</p>
+                                <div class="col-xs-6">
+                                    <h4>Описание:</h4>
+                                    <p>@ViewBag.Opis</p>
+                                </div>
                             </div>
-                        </div>
-                        @using (Html.BeginForm("Index", "Home", FormMethod.Post))
-                        {
+
                             <div class="form-group">
 
                                 <div class="col-xs-6">
@@ -87,13 +71,35 @@
                             <div class="form-group">
                                 <div class="col-xs-12">
                                     <input type="submit" value="Сменить пароль" class="btn btn-success" />
-                                    <a class="nav-link" href="@Url.Action("LogOut","Account")">Выйти</a>
                                 </div>
                             </div>
-                        }
-                    </form>
+
+                        </form>
+                    </div>
+                </div><!--/tab-pane-->
+            </div><!--/tab-content-->
+        </div><!--/col-9-->
+
+    </div><!--/row-->
+    <div class="wrapper">
+        <div class="container">
+            <h2 >Этапы приема</h2>
+
+            <div class="container clear clear-fix">
+                <div class="progressbar-wrapper clearfix">
+                    <ul class="progressbar">
+                        <li class="active">Level 1</li>
+                        <li class="active">Level 2</li>
+                        <li>Level 3</li>
+                        <li>Level 4</li>
+                        <li>Level 5</li>
+                        <li>Level 6</li>
+                    </ul>
                 </div>
-            </div><!--/tab-pane-->
-        </div><!--/tab-content-->
-    </div><!--/col-9-->
-</div><!--/row-->
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

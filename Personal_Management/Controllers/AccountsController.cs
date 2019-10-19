@@ -41,7 +41,7 @@ namespace Personal_Management.Controllers
         public ActionResult Create()
         {
             ViewBag.Role_ID = new SelectList(db.Roles, "ID_Role", "Role_Naim");
-            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Surname_Sot");
+            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full");
             return View();
         }
 

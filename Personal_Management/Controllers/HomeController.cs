@@ -9,6 +9,7 @@ namespace Personal_Management.Controllers
 {
     public class HomeController : Controller
     {
+        [HttpGet]
         public ActionResult Index()
         {
             Program.update();
@@ -30,7 +31,14 @@ namespace Personal_Management.Controllers
                 ViewBag.Opis = command.ExecuteScalar().ToString();
                 command.CommandText = "SELECT Photo FROM dbo.Accounts JOIN dbo.Sotrs ON dbo.Accounts.Sotr_ID = dbo.Sotrs.ID_Sotr where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
                 ViewBag.photo = command.ExecuteScalar().ToString();
-
+                command.CommandText = "SELECT dbo.Roles.Manip_Roles FROM dbo.Accounts INNER JOIN dbo.Roles ON dbo.Accounts.Role_ID = dbo.Roles.ID_Role where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
+                Program.admin = Convert.ToInt32(command.ExecuteScalar());
+                command.CommandText = "SELECT dbo.Roles.Manip_Sotrs FROM dbo.Accounts INNER JOIN dbo.Roles ON dbo.Accounts.Role_ID = dbo.Roles.ID_Role where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
+                Program.Kadri = Convert.ToInt32(command.ExecuteScalar());
+                command.CommandText = "SELECT dbo.Roles.Manip_Department FROM dbo.Accounts INNER JOIN dbo.Roles ON dbo.Accounts.Role_ID = dbo.Roles.ID_Role where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
+                Program.Otdeli = Convert.ToInt32(command.ExecuteScalar());
+                command.CommandText = "SELECT dbo.Roles.Buh_Ych FROM dbo.Accounts INNER JOIN dbo.Roles ON dbo.Accounts.Role_ID = dbo.Roles.ID_Role where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
+                Program.Buh = Convert.ToInt32(command.ExecuteScalar());
                 Program.SqlConnection.Close();
             }
             else
@@ -40,38 +48,7 @@ namespace Personal_Management.Controllers
             return View();
         }
 
-        [HttpPost]
-        public ActionResult Edit(Sotrs sotrs, HttpPostedFileBase imgfile)
-        {
-            string path = uploadimage(imgfile);
-            Response.Write("<script>alert('" + path + "'); </script>");
-            if (path.Equals("-1"))
-            {
-
-            }
-            else
-            {
-                SqlCommand command = new SqlCommand("", Program.SqlConnection);
-
-                Program.SqlConnection.Open();
-                command.CommandText = "SELECT ID_Sotr FROM dbo.Accounts JOIN dbo.Sotrs ON dbo.Accounts.Sotr_ID = dbo.Sotrs.ID_Sotr where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
-                int id = Convert.ToInt32(command.ExecuteScalar());
-                command.CommandText = "update Sotrs " +
-                    "set " +
-                    "Photo = '" + path + "' " +
-                    "where ID_Sotr = " + id.ToString();
-                command.ExecuteScalar();
-                Program.SqlConnection.Close();
-                //var model = db.Sotrs.Find(sotrs.Positions_ID);
-                //string path = uploadimage(imgfile);
-                //sotrs.Photo = path;
-                //db.SaveChanges();
-                return RedirectToAction("Index");
-
-            }
-            return View(sotrs);
-        }
-
+        
         [HttpPost]
         public ActionResult Index(string password, string password1, string password2)
         {
@@ -98,53 +75,21 @@ namespace Personal_Management.Controllers
                     else
                     {
                         Response.Write("<script>alert('Введенные новые пароли не совпадают!'); </script>");
+                        return View("Index");
                     }
                 }
                 else
                 {
                     Response.Write("<script>alert('Старый пароль введен неверно!'); </script>");
+                    return View("Index");
                 }
             }
             else
             {
                 Response.Write("<script>alert('Заполните поля паролей!'); </script>");
+                return View("Index");
             }
             return View("Index");
-        }
-
-        public string uploadimage(HttpPostedFileBase file)
-        {
-            Random r = new Random();
-            string path = "-1";
-            int random = r.Next();
-            if (file != null && file.ContentLength > 0)
-            {
-                string extension = Path.GetExtension(file.FileName);
-                if (extension.ToLower().Equals(".jpg") || extension.ToLower().Equals(".jpeg") || extension.ToLower().Equals(".png"))
-                {
-                    try
-                    {
-                        path = Path.Combine(Server.MapPath("~/Content/Photo/Sotrs/"), DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName));
-                        file.SaveAs(path);
-                        path = DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName);
-                        //    ViewBag.Message = "File uploaded successfully";
-                    }
-                    catch (Exception ex)
-                    {
-                        path = "-1";
-                    }
-                }
-                else
-                {
-                    Response.Write("<script>alert('Only jpg ,jpeg or png formats are acceptable....'); </script>");
-                }
-            }
-            else
-            {
-                Response.Write("<script>alert('Please select a file'); </script>");
-                path = "-1";
-            }
-            return path;
         }
 
         //[Authorize]

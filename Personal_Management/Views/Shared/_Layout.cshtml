@@ -9,6 +9,12 @@
     @Scripts.Render("~/bundles/modernizr")
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="~/Scripts/jquery.maskedinput.min.js"></script>
+    <script src="~/Content/sweetalert-master/docs/assets/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert-master/src/sweetalert.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css" />
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+    <link href="~/Content/StyleSite2.css" rel="stylesheet" />
     <script type="text/javascript">
 
         jQuery(function ($) {
@@ -39,36 +45,59 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Данные сотрудников</a>
                         <div class="dropdown-menu" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
-                            @Html.ActionLink("Отделы организации", "Index", "Departments", null, new { @class = "dropdown-item" })
-                            <div class="dropdown-divider"></div>
-                            @Html.ActionLink("Документы для сдачи", "Index", "Documents", null, new { @class = "dropdown-item" })
-                            @Html.ActionLink("Сбор документов", "Index", "Sbor_Docum", null, new { @class = "dropdown-item" })
-                            <div class="dropdown-divider"></div>
-                            @Html.ActionLink("Графики работы", "Index", "Work_Schedule", null, new { @class = "dropdown-item" })
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="@Url.Action("Index","Isp_Sroki")">Испытательные сроки <span class="badge badge-success badge-pill">@Program.colIsp</span></a>
-                            <div class="dropdown-divider"></div>
-                            @Html.ActionLink("Данные сотрудников", "Index", "Sotrs", null, new { @class = "dropdown-item" })
+                            @if (Program.Otdeli != 0)
+                            {
+                                @Html.ActionLink("Отделы организации", "Index", "Departments", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Должности организации", "Index", "Positions", null, new { @class = "dropdown-item" })
+                                <div class="dropdown-divider"></div>
+                            }
+                            @if (Program.Otdeli != 0)
+                            {
+                                @Html.ActionLink("Документы для сдачи", "Index", "Documents", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Сбор документов", "Index", "Sbor_Docum", null, new { @class = "dropdown-item" })
+                                <div class="dropdown-divider"></div>
+                            }
+                            @if (Program.admin != 0 && Program.Buh != 0 && Program.Kadri != 0 && Program.Otdeli != 0)
+                            {
+                                @Html.ActionLink("Графики работы", "Index", "Work_Schedule", null, new { @class = "dropdown-item" })
+                                <div class="dropdown-divider"></div>
+                            }
+                            @if (Program.Otdeli != 0)
+                            {
+                                <a class="dropdown-item" href="@Url.Action("Index", "Isp_Sroki")">Испытательные сроки <span class="badge badge-success badge-pill">@Program.colIsp</span></a>
+                                <div class="dropdown-divider"></div>
+                            }
+                            @if (Program.admin != 0 && Program.Buh != 0 && Program.Kadri != 0 && Program.Otdeli != 0)
+                            {
+                                @Html.ActionLink("Данные сотрудников", "Index", "Sotrs", null, new { @class = "dropdown-item" })
+                            }
+
                         </div>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Бухгалтерия</a>
-                        <div class="dropdown-menu" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
-                            @Html.ActionLink("Имеющиеся ставки", "Index", "Rates", null, new { @class = "dropdown-item" })
-                            @Html.ActionLink("Выплаты заработных плат", "Index", "Zar_Plata", null, new { @class = "dropdown-item" })
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Натсройка прав доступа</a>
-                        <div class="dropdown-menu" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
-                            @Html.ActionLink("Права доступа", "Index", "Roles", null, new { @class = "dropdown-item" })
-                            @Html.ActionLink("Аккаунты", "Index", "Accounts", null, new { @class = "dropdown-item" })
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("LogOut","Account")">Выйти</a>
-                    </li>
-                </ul>
+                    @if (Program.Buh != 0)
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Бухгалтерия</a>
+                            <div class="dropdown-menu" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                @Html.ActionLink("Имеющиеся ставки", "Index", "Rates", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Выплаты заработных плат", "Index", "Zar_Plata", null, new { @class = "dropdown-item" })
+                            </div>
+                        </li>
+                    }
+                        @if (Program.admin != 0)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Наcтройка прав доступа</a>
+                                <div class="dropdown-menu" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                    @Html.ActionLink("Права доступа", "Index", "Roles", null, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Аккаунты", "Index", "Accounts", null, new { @class = "dropdown-item" })
+                                </div>
+                            </li>
+                        }
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("LogOut","Account")">Выйти</a>
+                        </li>
+                    </ul>
 
             </form>
 
@@ -93,7 +122,7 @@
                             <p>
                                 127254 г. Москва, <br>
                                 пр. Огородный, 9ас1<br>
-                                <strong>Телефон:</strong><a href="tel: +74953692434"> +7 (495) 369-24-34</a><br>
+                                <strong>Телефон:</strong><a href="tel:+74953692434"> +7 (495) 369-24-34</a><br>
                                 <strong>Email:</strong><a href="mailto:info@itliga.ru"> info@itliga.ru</a><br>
                             </p>
                         </div>

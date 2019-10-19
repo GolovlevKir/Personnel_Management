@@ -45,6 +45,24 @@
             @Html.ActionLink("Удалить", "Delete", new { id=item.ID_Sbora })
         </td>
     </tr>
+
 }
 
 </table>
+
+<ul>
+    @foreach (var group in Model.GroupBy(item => item.Sotrs.FullName))
+    {
+
+    <li>
+        @Html.Encode(group.Key) 
+        <ul>
+            @foreach (var item in group)
+            {
+            <li>@Html.Encode(item.Documents.Doc_Naim) | @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sbora }) </li>
+            }
+        </ul>
+    </li>
+    }
+</ul>
+

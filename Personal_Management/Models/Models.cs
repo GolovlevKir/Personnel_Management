@@ -186,7 +186,6 @@ namespace Personal_Management.Models
     {
         [Key]
         [Display(Name = "Логин аккаунта")]
-        [RegularExpression("^([a-zA-Z .&'-]+)$", ErrorMessage = "Логин должен иметь заглавные (A-Z), прописные (a-z) буквы и цифры (0-9)")]
         [Required(ErrorMessage = "Данное поле неверно заполнено")]
         public string Login { get; set; }
         [Display(Name = "Пароль аккаунта")]
