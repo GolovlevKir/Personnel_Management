@@ -5,7 +5,10 @@
 }
 
 <h2>Графики работы</h2>
-
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"> @Html.ActionLink("Данные сотрудников", "Index", "Sotrs")</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Список ставок", "Index", "Rates")</li>
+</ol>
 <p>
     @Html.ActionLink("Добавить график работы", "Create")
 </p>

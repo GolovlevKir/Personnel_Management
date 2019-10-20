@@ -1,67 +1,31 @@
 ﻿@model IEnumerable<Personal_Management.Models.Sbor_Docum>
-
+@using System.Data.SqlClient;
 @{
     ViewBag.Title = "Index";
 }
 
 <h2>Сбор данных документов сотрудников</h2>
 
-<p>
-    @Html.ActionLink("Добавить", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Documents.Doc_Naim)
-        </th>
-        <th>
-            ФИО Сотрудника
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Itog)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Photo_Doc)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Documents.Doc_Naim)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Sotrs.FullName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Itog)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Photo_Doc)
-        </td>
-        <td>
-            @Html.ActionLink("Изменить", "Edit", new { id=item.ID_Sbora }) |
-            @Html.ActionLink("Удалить", "Delete", new { id=item.ID_Sbora })
-        </td>
-    </tr>
+@foreach (var group in Model.GroupBy(item => item.Sotrs.FullName))
+{
 
+    <h4>@Html.Encode(group.Key)</h4>
+    <div class="row">
+        @foreach (var item in group)
+        {
+        <div class="card mb-3 col-md-offset-2" style="margin: 0 auto; width: 350px;">
+            <h4 class="card-header">@Html.Encode(item.Documents.Doc_Naim)</h4>
+            <img style="margin: 0 auto; height: 340px; width: 260px; display: block;" src="~/Content/Photo/dok/@Html.Encode(item.Photo_Doc)" alt="Card image">
+            
+            <div class="card-footer text-center">
+                @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sbora }) |
+                <a href="~/Content/Photo/dok/@Html.Encode(item.Photo_Doc)" download>Скачать</a> |
+                    @Html.ActionLink("Очистить", "Delete", new { id = item.ID_Sbora }) 
+            </div></div>
+            
+        }
+    </div>
+            
 }
-
-</table>
-
-<ul>
-    @foreach (var group in Model.GroupBy(item => item.Sotrs.FullName))
-    {
-    <li>
-        @Html.Encode(group.Key) 
-        <ul>
-            @foreach (var item in group)
-            {
-            <li>@Html.Encode(item.Documents.Doc_Naim) | @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sbora }) </li>
-            }
-        </ul>
-    </li>
-    }
-</ul>
 

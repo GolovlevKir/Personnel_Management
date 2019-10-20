@@ -1,0 +1,73 @@
+﻿@model IEnumerable<Personal_Management.Models.Steps>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Этапы принятия сотрудников</h2>
+
+
+@foreach (var item in Model)
+{
+<div class="container bootstrap snippet ">
+    <div class="row ">
+        <div class="mb-3" ><h4>@item.Sotrs.FullName | @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Step }) </h4> </div>
+    </div>
+</div>
+<div class="clear clear-fix">
+    <div class="progressbar-wrapper clearfix">
+        <ul class="progressbar">
+            @if (item.AddSotrInIS)
+            {
+                <li class="active"><a data-placement="top" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Sotrs/Index">Этап 1</a></li>
+            }
+            else
+            {
+                <li><a href="~/Sotrs/Index">Этап 1</a></li>
+            }
+            @if (item.AddRezume)
+            {
+                <li class="active">Этап 2</li>
+            }
+            else
+            {
+                <li>Этап 2</li>
+            }
+            @if (item.AddSobesedovanie)
+            {
+                <li class="active">Этап 3</li>
+            }
+            else
+            {
+                <li>Этап 3</li>
+            }
+            @if (item.AddIspSrok)
+            {
+                <li class="active">Этап 4</li>
+            }
+            else
+            {
+                <li>Этап 4</li>
+            }
+            @if (item.RezimOzidaniya)
+            {
+                <li class="active">Этап 5</li>
+            }
+            else
+            {
+                <li>Этап 5</li>
+            }
+            @if (item.Reshenie)
+            {
+                <li class="active">Этап 6</li>
+            }
+            else
+            {
+                <li>Этап 6</li>
+            }
+        </ul>
+    </div>
+</div>
+<hr />
+   
+}

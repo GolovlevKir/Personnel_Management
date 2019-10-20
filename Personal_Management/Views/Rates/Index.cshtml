@@ -5,7 +5,10 @@
 }
 
 <h2>Ставки</h2>
-
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"> @Html.ActionLink("Данные сотрудников", "Index", "Sotrs")</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Список рабочих графиков", "Index", "Work_Schedule")</li>
+</ol>
 <p>
     @Html.ActionLink("Добавить", "Create")
 </p>

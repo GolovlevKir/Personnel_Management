@@ -23,6 +23,7 @@
             $.mask.definitions['~'] = '[+-]';
 
             $('#date').mask('99.99.9999');
+            $('#date2').mask('99.99.9999');
 
             $('#phone').mask('+7(999)999-99-99');
 
@@ -43,38 +44,41 @@
                     <li class="nav-item">
                         <a class="nav-link" href="@Url.Action("Index","Home")">Домашняя страница</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Данные сотрудников</a>
-                        <div class="dropdown-menu" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
-                            @if (Program.Otdeli != 0)
-                            {
-                                @Html.ActionLink("Отделы организации", "Index", "Departments", null, new { @class = "dropdown-item" })
-                                @Html.ActionLink("Должности организации", "Index", "Positions", null, new { @class = "dropdown-item" })
-                                <div class="dropdown-divider"></div>
-                            }
-                            @if (Program.Otdeli != 0)
-                            {
-                                @Html.ActionLink("Документы для сдачи", "Index", "Documents", null, new { @class = "dropdown-item" })
-                                @Html.ActionLink("Сбор документов", "Index", "Sbor_Docum", null, new { @class = "dropdown-item" })
-                                <div class="dropdown-divider"></div>
-                            }
-                            @if (Program.admin != 0 && Program.Buh != 0 && Program.Kadri != 0 && Program.Otdeli != 0)
-                            {
-                                @Html.ActionLink("Графики работы", "Index", "Work_Schedule", null, new { @class = "dropdown-item" })
-                                <div class="dropdown-divider"></div>
-                            }
-                            @if (Program.Otdeli != 0)
-                            {
-                                <a class="dropdown-item" href="@Url.Action("Index", "Isp_Sroki")">Испытательные сроки <span class="badge badge-success badge-pill">@Program.colIsp</span></a>
-                                <div class="dropdown-divider"></div>
-                            }
-                            @if (Program.admin != 0 && Program.Buh != 0 && Program.Kadri != 0 && Program.Otdeli != 0)
-                            {
-                                @Html.ActionLink("Данные сотрудников", "Index", "Sotrs", null, new { @class = "dropdown-item" })
-                            }
+                    @if (Program.admin != 0 || Program.Buh != 0 || Program.Kadri != 0 || Program.Otdeli != 0)
+                    { 
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Данные сотрудников</a>
+                            <div class="dropdown-menu" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                @if (Program.Otdeli != 0)
+                                {
+                                    @Html.ActionLink("Отделы организации", "Index", "Departments", null, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Должности организации", "Index", "Positions", null, new { @class = "dropdown-item" })
+                                    <div class="dropdown-divider"></div>
+                                }
+                                @if (Program.Otdeli != 0)
+                                {
+                                    @Html.ActionLink("Документы для сдачи", "Index", "Documents", null, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Сбор документов", "Index", "Sbor_Docum", null, new { @class = "dropdown-item" })
+                                    <div class="dropdown-divider"></div>
+                                }
+                                @if (Program.admin != 0 || Program.Buh != 0 || Program.Kadri != 0 || Program.Otdeli != 0)
+                                {
+                                    @Html.ActionLink("Графики работы", "Index", "Work_Schedule", null, new { @class = "dropdown-item" })
+                                    <div class="dropdown-divider"></div>
+                                }
+                                @if (Program.Otdeli != 0)
+                                {
+                                    <a class="dropdown-item" href="@Url.Action("Index", "Isp_Sroki")">Испытательные сроки <span class="badge badge-success badge-pill">@Program.colIsp</span></a>
+                                    <div class="dropdown-divider"></div>
+                                }
+                                @if (Program.admin != 0 || Program.Buh != 0 || Program.Kadri != 0 || Program.Otdeli != 0)
+                                {
+                                    @Html.ActionLink("Данные сотрудников", "Index", "Sotrs", null, new { @class = "dropdown-item" })
+                                }
 
-                        </div>
-                    </li>
+                            </div>
+                        </li>
+                        }
                     @if (Program.Buh != 0)
                     {
                         <li class="nav-item dropdown">
@@ -85,20 +89,20 @@
                             </div>
                         </li>
                     }
-                        @if (Program.admin != 0)
-                        {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Наcтройка прав доступа</a>
-                                <div class="dropdown-menu" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                    @Html.ActionLink("Права доступа", "Index", "Roles", null, new { @class = "dropdown-item" })
-                                    @Html.ActionLink("Аккаунты", "Index", "Accounts", null, new { @class = "dropdown-item" })
-                                </div>
-                            </li>
-                        }
-                        <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("LogOut","Account")">Выйти</a>
+                    @if (Program.admin != 0)
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Наcтройка прав доступа</a>
+                            <div class="dropdown-menu" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                @Html.ActionLink("Права доступа", "Index", "Roles", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Аккаунты", "Index", "Accounts", null, new { @class = "dropdown-item" })
+                            </div>
                         </li>
-                    </ul>
+                    }
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("LogOut","Account")">Выйти</a>
+                    </li>
+                </ul>
 
             </form>
 

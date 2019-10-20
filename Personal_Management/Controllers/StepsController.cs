@@ -10,109 +10,112 @@ using Personal_Management.Models;
 
 namespace Personal_Management.Controllers
 {
-    public class DocumentsController : Controller
+    public class StepsController : Controller
     {
         private PersonalContext db = new PersonalContext();
 
-        // GET: Documents
+        // GET: Steps
         public ActionResult Index()
         {
-            Program.update();
-
-            return View(db.Documents.ToList());
+            var steps = db.Steps.Include(s => s.Sotrs);
+            return View(steps.ToList());
         }
 
-        // GET: Documents/Details/5
+        // GET: Steps/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Documents documents = db.Documents.Find(id);
-            if (documents == null)
+            Steps steps = db.Steps.Find(id);
+            if (steps == null)
             {
                 return HttpNotFound();
             }
-            return View(documents);
+            return View(steps);
         }
 
-        // GET: Documents/Create
+        // GET: Steps/Create
         public ActionResult Create()
         {
+            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Surname_Sot");
             return View();
         }
 
-        // POST: Documents/Create
+        // POST: Steps/Create
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID_Doc,Doc_Naim")] Documents documents)
+        public ActionResult Create([Bind(Include = "ID_Step,Sotr_ID,AddSotrInIS,AddRezume,AddSobesedovanie,AddIspSrok,RezimOzidaniya,Reshenie")] Steps steps)
         {
             if (ModelState.IsValid)
             {
-                db.Documents.Add(documents);
+                db.Steps.Add(steps);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(documents);
+            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full", steps.Sotr_ID);
+            return View(steps);
         }
 
-        // GET: Documents/Edit/5
+        // GET: Steps/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Documents documents = db.Documents.Find(id);
-            if (documents == null)
+            Steps steps = db.Steps.Find(id);
+            if (steps == null)
             {
                 return HttpNotFound();
             }
-            return View(documents);
+            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Surname_Sot", steps.Sotr_ID);
+            return View(steps);
         }
 
-        // POST: Documents/Edit/5
+        // POST: Steps/Edit/5
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID_Doc,Doc_Naim")] Documents documents)
+        public ActionResult Edit([Bind(Include = "ID_Step,Sotr_ID,AddSotrInIS,AddRezume,AddSobesedovanie,AddIspSrok,RezimOzidaniya,Reshenie")] Steps steps)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(documents).State = EntityState.Modified;
+                db.Entry(steps).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(documents);
+            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Surname_Sot", steps.Sotr_ID);
+            return View(steps);
         }
 
-        // GET: Documents/Delete/5
+        // GET: Steps/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Documents documents = db.Documents.Find(id);
-            if (documents == null)
+            Steps steps = db.Steps.Find(id);
+            if (steps == null)
             {
                 return HttpNotFound();
             }
-            return View(documents);
+            return View(steps);
         }
 
-        // POST: Documents/Delete/5
+        // POST: Steps/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Documents documents = db.Documents.Find(id);
-            db.Documents.Remove(documents);
+            Steps steps = db.Steps.Find(id);
+            db.Steps.Remove(steps);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

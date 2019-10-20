@@ -6,51 +6,97 @@
 
 <h2>Сотрудники</h2>
 
-<p>
-    @if (Program.Kadri != 0) { @Html.ActionLink("Добавить нового сотрудника", "addnewrecord")}   @Html.ActionLink("Данные ставок", "Index", "Rates") | @Html.ActionLink("Список рабочих графиков", "Index", "Work_Schedule")
-</p>
+<ol class="breadcrumb">
+    @if (Program.Kadri != 0)
+    {
+        <li class="breadcrumb-item">@Html.ActionLink("Посмотреть этапы принятия", "Index", "Steps")</li>
+    }
+    <li class="breadcrumb-item"> @Html.ActionLink("Данные ставок", "Index", "Rates")</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Список рабочих графиков", "Index", "Work_Schedule")</li>
+</ol>
+
 
 <div class="container">
     <form method="get">
-        <div class="form-inline mb-3">
-            <label class="control-label">Команда: </label> 
-            @Html.DropDownList("pos", Model.Positions as SelectList,
-                        htmlAttributes: new { @class = "form-control" })
-
-            <input type="submit" value="Фильтр" class="btn btn-default" />
-        </div>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="mb-3" style="margin: 0 auto; width: auto;"><h3>Фильтрация данных</h3></div>
+            <div class="collapse navbar-collapse" id="navbarColor02">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <label class="control-label">Должность: </label>
+                        @Html.DropDownList("pos", Model.Positions as SelectList,
+                                    htmlAttributes: new { @class = "form-control" })
+                    </li>
+                    <li class="nav-item">
+                        <label class="control-label">Ставка: </label>
+                        @Html.DropDownList("rate", Model.Rates as SelectList,
+                                    htmlAttributes: new { @class = "form-control" })
+                    </li>
+                    <li class="nav-item">
+                        <label class="control-label" style="white-space:nowrap">График работы: </label>
+                        @Html.DropDownList("sche", Model.Work_Schedule as SelectList,
+                                    htmlAttributes: new { @class = "form-control" })
+                    </li>
+                    <li class="nav-item">
+                        <label class="control-label">Поиск: </label>
+                        <input type="text" name="search" value="@ViewBag.seo" class="form-control" />
+                    </li>
+                    <li class="nav-item">
+                        <input type="submit" value="Фильтр" class="btn btn-default" />
+                    </li>
+                </ul>
+            </div>
+        </nav>
     </form>
-    <div class="row">
-        @foreach (var item in Model.Sotrs)
-        {
-            <div class="card mb-3 col-md-offset-2" style="margin: 0 auto; width: 350px;">
-                <h4 class="card-header">@item.Full</h4>
-                <div class="card-body">
-                    <h6 class="card-title">Должность</h6>
-                    <h7 class="card-subtitle text-muted ">@item.Positions.Naim_Posit</h7>
-                </div>
-                <img style="margin: 0 auto; height: 340px; width: 260px; display: block;" src="~/Content/Photo/st/@item.Photo" alt="Card image">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Номер телефона: @Html.DisplayFor(modelItem => item.Num_Phone)</li>
-                    <li class="list-group-item">Эл. почта: @Html.DisplayFor(modelItem => item.Email)</li>
-                    <li class="list-group-item">Дата принятия: @Html.DisplayFor(modelItem => item.Date_of_adoption)</li>
-                    @if (item.rezume != "-")
+    <hr />
+    @if (Program.Kadri != 0)
+    {
+        @Html.ActionLink("Добавить нового сотрудника", "addnewrecord")
+    }
+        <hr />
+        <div class="row">
+            @foreach (var item in Model.Sotrs)
+            {
+                <div class="card mb-3 col-md-offset-2" style="margin: 0 auto; width: 350px;">
+                    <h4 class="card-header">@item.Full</h4>
+                    <div class="card-body">
+                        <h6 class="card-title">Должность</h6>
+                        <h7 class="card-subtitle text-muted ">@item.Positions.Naim_Posit</h7>
+                    </div>
+                    <img style="margin: 0 auto; height: 340px; width: 260px; display: block;" src="~/Content/Photo/st/@item.Photo" alt="Card image">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Номер телефона: @Html.DisplayFor(modelItem => item.Num_Phone)</li>
+                        <li class="list-group-item">Эл. почта: @Html.DisplayFor(modelItem => item.Email)</li>
+                        <li class="list-group-item">Дата принятия: @Html.DisplayFor(modelItem => item.Date_of_adoption)</li>
+                        @if (item.rezume != "-")
+                        {
+                            <li class="list-group-item"><a href="~/Content/Files/@item.rezume" download>Скачать резюме</a></li>
+                        }
+                        else
+                        {
+                            <li class="list-group-item">Резюме отсутствует</li>
+                        }
+                    </ul>
+                    @if (Program.Kadri != 0)
                     {
-                        <li class="list-group-item"><a href="~/Content/Files/@item.rezume" download>Скачать резюме</a></li>
+                        <div class="card-footer text-center">
+                            @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sotr }) |
+                            @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }) |
+                            @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Sotr }) |
+
+                        </div>
                     }
                     else
                     {
-                        <li class="list-group-item">Резюме отсутствует</li>
+                        <div class="card-footer text-center">
+                            @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr })
+                        </div>
                     }
-                </ul>
-                <div class="card-footer text-center">
-                    @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sotr }) |
-                    @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }) |
-                    @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Sotr }) |
-                    
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
-</div>
 

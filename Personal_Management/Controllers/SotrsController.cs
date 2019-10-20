@@ -16,22 +16,39 @@ namespace Personal_Management.Controllers
         private PersonalContext db = new PersonalContext();
 
         // GET: Sotrs
-        public ActionResult Index(int? pos)
+        public ActionResult Index(int? pos, int? rate, int? sche, string search)
         {
             Program.update();
             IQueryable<Sotrs> sotrs = db.Sotrs.Include(s => s.Positions).Include(s => s.Rates).Include(s => s.Work_Schedule);
             if (pos != null && pos != 0)
             {
-                sotrs = sotrs.Where(p => p.Positions_ID == pos);
+                sotrs = sotrs.Where(s => s.Positions_ID == pos);
+            }
+            if (rate != null && rate != 0)
+            {
+                sotrs = sotrs.Where(s => s.Rate_ID == rate);
+            }
+            if (sche != null && sche != 0)
+            {
+                sotrs = sotrs.Where(s => s.Schedule_ID == sche);
+            }
+            ViewBag.seo = search;
+            if (search != null && search != "")
+            {
+                sotrs = sotrs.Where(s => (s.Surname_Sot.Contains(search)) || (s.Name_Sot.Contains(search)) || (s.Petronumic_Sot.Contains(search)) || (s.Positions.Naim_Posit.Contains(search)) || (s.Num_Phone.Contains(search)) || (s.Opisanie.Contains(search)) || (s.Email.Contains(search)) || (s.Day_Of_Birth.Contains(search)) || (s.Date_of_adoption.Contains(search)));
             }
             List<Positions> posit = db.Positions.ToList();
             posit.Insert(0, new Positions { Naim_Posit = "Все", ID_Positions = 0 });
+            List<Rates> rates = db.Rates.ToList();
+            rates.Insert(0, new Rates { Rate = 0, ID_Rate = 0 });
+            List<Work_Schedule> sch = db.Work_Schedule.ToList();
+            sch.Insert(0, new Work_Schedule { Naim_Sche = "Все", ID_Schedule = 0 });
             SotrsListViewModel plvm = new SotrsListViewModel {
                 Sotrs = sotrs.ToList(),
-                Positions = new SelectList(posit, "ID_Positions", "Naim_Posit")
+                Positions = new SelectList(posit, "ID_Positions", "Naim_Posit"),
+                Rates = new SelectList(rates, "ID_Rate", "Rate"),
+                Work_Schedule = new SelectList(sch, "ID_Schedule", "Naim_Sche"),
             };
-
-
             return View(plvm);
         }
 

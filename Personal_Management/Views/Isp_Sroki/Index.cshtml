@@ -12,60 +12,52 @@
 <table class="table">
     <tr>
         <th>
-            ФИО сотрудника (отдел)
+            ФИО сотрудника (Должность)
         </th>
         <th>
-            Дата окончания
+            Период
         </th>
         <th>
             Статус
         </th>
-        <th></th>
     </tr>
 
 @foreach (var item in Model) {
 <tr>
-    @if (item.Date_Finish == DateTime.Now.ToString("d"))
-    {
-        <td style="background: #FA8072">
-            @Html.DisplayFor(modelItem => item.Sotrs.FullName, new { @class="text-danger"})
-        </td>
-    }
-    else
-    {
-        <td >
-            @Html.DisplayFor(modelItem => item.Sotrs.FullName)
-        </td>
-    }
     <td>
-        @Html.DisplayFor(modelItem => item.Date_Finish)
+        @Html.ActionLink(item.Sotrs.FullName, "Details", new { id = item.ID_Isp })
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Date_Start) - @Html.DisplayFor(modelItem => item.Date_Finish)
     </td>
     @switch (item.status_isp_sroka.ID_St)
     {
-        case (3):
+        case (4):
 
             <td class="align-content-center badge badge-pill badge-danger">
-                @Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St)
+                @Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St, new { @class="col-md-2"})
+            </td>
+            break;
+        case (3):
+
+            <td class="align-content-center badge badge-pill badge-info">
+                @Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St, new { @class="col-md-2"})
             </td>
             break;
         case (2):
             <td class="align-content-center badge badge-pill badge-warning">
-                @Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St)
+                @Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St, new { @class="col-md-2"})
             </td>
             break;
 
         case (1):
             <td class="align-content-center badge badge-pill badge-success">
-                @Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St)
+                @Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St, new { @class="col-md-2"})
             </td>
             break;
     }
 
-    <td>
-        @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Isp }) |
-        @Html.ActionLink("Подробности", "Details", new { id = item.ID_Isp }) |
-        @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Isp })
-    </td>
+    
 
 </tr>
 }

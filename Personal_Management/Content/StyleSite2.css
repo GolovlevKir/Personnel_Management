@@ -1,7 +1,4 @@
-.container {
-    width: 100%;
-    max-width: 100%;
-}
+
 
 .wrapper {
     width: 100%;
@@ -19,13 +16,6 @@ h2 {
 .center {
     text-align: center;
 }
-
-.col-md-6 {
-    float: left;
-    padding-bottom: 100px;
-}
-
-
 .progressbar-wrapper {
     width: 100%;
     padding-top: 10px;

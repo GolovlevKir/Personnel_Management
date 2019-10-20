@@ -22,5 +22,7 @@ namespace Personal_Management.Models
         public DbSet<status_isp_sroka> status_isp_sroka { get; set; }
         public DbSet<Work_Schedule> Work_Schedule { get; set; }
         public DbSet<Zar_Plata> Zar_Plata { get; set; }
+
+        public System.Data.Entity.DbSet<Personal_Management.Models.Steps> Steps { get; set; }
     }
 }

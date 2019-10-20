@@ -34,8 +34,8 @@ namespace Personal_Management.Models
         [Required(ErrorMessage = "Наименование не может быть пустым")]
         public string Naim_Posit { get; set; }
         [Display(Name = "Оклад")]
-        [RegularExpression(@"^([0-9 .&'-]+)$", ErrorMessage = "Поле может содержать только следующие символы: 0-9 и .")]
-        [Range(typeof(decimal), "0.0", "999999999999.9", ErrorMessage = "Наименьшая цена - 0.0 рублей")]
+        [RegularExpression(@"^([0-9 ,&'-]+)$", ErrorMessage = "Поле может содержать только следующие символы: 0-9 и ,")]
+        [Range(typeof(decimal), "0,0", "999999999999,9", ErrorMessage = "Наименьшая цена - 0.0 рублей")]
         [Required(ErrorMessage = "Указанный оклад введен неправильно (Должны содержаться числа и(или) .)")]
         public decimal Salary { get; set; }
         [ForeignKey("Departments")]
@@ -103,7 +103,6 @@ namespace Personal_Management.Models
         public int ID_Doc { get; set; }
         [Display(Name = "Наименование документа")]
         [StringLength(100, MinimumLength = 0, ErrorMessage = "Длина наименования документа от 0 до 100 символов")]
-        [RegularExpression(@"^([а-яА-Я .&'-]+)$", ErrorMessage = "Поле наименования должно содержать только русские буквы")]
         [Required(ErrorMessage = "Наименование не может быть пустым")]
         public string Doc_Naim { get; set; }
         public Documents()
@@ -398,5 +397,7 @@ namespace Personal_Management.Models
     {
         public IEnumerable<Sotrs> Sotrs { get; set; }
         public SelectList Positions { get; set; }
+        public SelectList Rates { get; set; }
+        public SelectList Work_Schedule { get; set; }
     }
 }

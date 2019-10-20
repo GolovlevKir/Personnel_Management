@@ -3,44 +3,6 @@
 @using System.Web.Mvc;
 @{
     ViewBag.Title = "Home Page";
-
-    void pass(string password, string password1, string password2)
-    {
-        SqlCommand command = new SqlCommand("", Program.SqlConnection);
-        if (password != null || password1 != null || password2 != null)
-        {
-            command.CommandText = "SELECT count(*) FROM dbo.Accounts where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "' and [dbo].[Accounts].[Password] = '" + password + "'";
-            Program.SqlConnection.Open();
-            int co = Convert.ToInt32(command.ExecuteScalar());
-            Program.SqlConnection.Close();
-            if (co > 0)
-            {
-                if (password1 == password2)
-                {
-                    command.CommandText = "update Accounts " +
-                    "set " +
-                    "Password = '" + password1 + "' " +
-                    "where Login = '" + User.Identity.Name + "'";
-                    Program.SqlConnection.Open();
-                    command.ExecuteScalar();
-                    Program.SqlConnection.Close();
-                    Response.Write("<script>alert('Пароль успешно изменен!'); </script>");
-                }
-                else
-                {
-                    Response.Write("<script>alert('Введенные новые пароли не совпадают!'); </script>");
-                }
-            }
-            else
-            {
-                Response.Write("<script>alert('Старый пароль введен неверно!'); </script>");
-            }
-        }
-        else
-        {
-            Response.Write("<script>alert('Заполните поля паролей!'); </script>");
-        }
-    }
 }
 @using (Html.BeginForm("Index", "Home", FormMethod.Post))
 {

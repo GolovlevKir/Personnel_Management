@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -21,6 +23,7 @@ namespace Personal_Management.Controllers
             var sbor_Docum = db.Sbor_Docum.Include(s => s.Documents).Include(s => s.Sotrs);
             return View(sbor_Docum.ToList());
         }
+        
 
         // GET: Sbor_Docum/Details/5
         public ActionResult Details(int? id)
@@ -86,17 +89,76 @@ namespace Personal_Management.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID_Sbora,Doc_ID,Sotr_ID,Itog,Photo_Doc")] Sbor_Docum sbor_Docum)
+        public ActionResult Edit(Sbor_Docum sbor_Docum, HttpPostedFileBase imgfile)
         {
-            if (ModelState.IsValid)
-            {
-                db.Entry(sbor_Docum).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
             ViewBag.Doc_ID = new SelectList(db.Documents, "ID_Doc", "Doc_Naim", sbor_Docum.Doc_ID);
             ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full", sbor_Docum.Sotr_ID);
+            SqlCommand command;
+            string path = upload(imgfile);
+            if (!path.Equals("-1"))
+            {
+                    command = new SqlCommand(
+                        "update Sbor_Docum " +
+                        "set " +
+                        "Doc_ID = '" + sbor_Docum.Doc_ID + "', " +
+                        "Sotr_ID = '" + sbor_Docum.Sotr_ID + "', " +
+                        "Itog = 1, " +
+                        "Photo_Doc = '" + path + "' " +
+                        "where ID_Sbora = " + sbor_Docum.ID_Sbora.ToString(),
+                        Program.SqlConnection);
+                    Program.SqlConnection.Open();
+                    command.ExecuteScalar();
+                    Program.SqlConnection.Close();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    command = new SqlCommand(
+                        "update Sbor_Docum " +
+                        "set " +
+                        "Doc_ID = '" + sbor_Docum.Doc_ID + "', " +
+                        "Sotr_ID = '" + sbor_Docum.Sotr_ID + "', " +
+                        "Itog = 0, " +
+                        "Photo_Doc = Photo_Doc " +
+                        "where ID_Sbora = " + sbor_Docum.ID_Sbora.ToString(),
+                        Program.SqlConnection);
+                    Program.SqlConnection.Open();
+                    command.ExecuteScalar();
+                    Program.SqlConnection.Close();
+                    return RedirectToAction("Index");
+                }
+            
             return View(sbor_Docum);
+        }
+
+        public string upload(HttpPostedFileBase file)
+        {
+            Random r = new Random();
+            string path = "-1";
+            int random = r.Next();
+            if (file != null && file.ContentLength > 0)
+            {
+                string extension = Path.GetExtension(file.FileName);
+                if (extension.ToLower().Equals(".jpg") || extension.ToLower().Equals(".jpeg") || extension.ToLower().Equals(".png"))
+                {
+                    try
+                    {
+                        path = Path.Combine(Server.MapPath("~/Content/Photo/dok/"), DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName));
+                        file.SaveAs(path);
+                        path = DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName);
+                        //    ViewBag.Message = "File uploaded successfully";
+                    }
+                    catch (Exception ex)
+                    {
+                        path = "-1";
+                    }
+                }
+                else
+                {
+                    Response.Write("<script>alert('Only jpg ,jpeg or png formats are acceptable....'); </script>");
+                }
+            }
+            return path;
         }
 
         // GET: Sbor_Docum/Delete/5
@@ -120,8 +182,17 @@ namespace Personal_Management.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Sbor_Docum sbor_Docum = db.Sbor_Docum.Find(id);
-            db.Sbor_Docum.Remove(sbor_Docum);
-            db.SaveChanges();
+            SqlCommand command;
+            command = new SqlCommand(
+                            "update Sbor_Docum " +
+                            "set " +
+                            "Itog = 0, " +
+                            "Photo_Doc = '' " +
+                            "where ID_Sbora = " + sbor_Docum.ID_Sbora.ToString(),
+                            Program.SqlConnection);
+            Program.SqlConnection.Open();
+            command.ExecuteScalar();
+            Program.SqlConnection.Close();
             return RedirectToAction("Index");
         }
 
