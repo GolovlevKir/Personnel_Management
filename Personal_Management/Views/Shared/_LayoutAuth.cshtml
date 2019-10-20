@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/Photo/fav.ico" rel="icon">
+    @Scripts.Render("~/bundles/modernizr")
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="~/Scripts/jquery.maskedinput.min.js"></script>
+    <script src="~/Content/sweetalert-master/docs/assets/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert-master/src/sweetalert.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css" />
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+    <link href="~/Content/StyleSite2.css" rel="stylesheet" />
+    
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div id="logo" class="pull-left">
+            <a href="#intro"><img src="~/Content/Photo/60.png" style="width: 200px; height:auto;" alt="" title="" /></a>
+        </div>
+    </nav>
+    
+    <div class="container body-content ">
+        @RenderBody()
+        <hr />
+    </div>
+        <footer id="footer" class="bg-primary">
+            <div class="footer-top ">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-6 col-lg-4 footer-info">
+                            <h3>IT Liga</h3>
+                            <p>Служба технической поддержки. Разработка и поддержка информационных систем.</p>
+                            <br><br>
+                        </div>
+                        <div class="col-12 col-lg-4 footer-contact">
+                            <h4>Наши контакты</h4>
+                            <p>
+                                127254 г. Москва, <br>
+                                пр. Огородный, 9ас1<br>
+                                <strong>Телефон:</strong><a href="tel:+74953692434"> +7 (495) 369-24-34</a><br>
+                                <strong>Email:</strong><a href="mailto:info@itliga.ru"> info@itliga.ru</a><br>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="credits">
+                        @DateTime.Now.Year <strong>IT Liga</strong> Все права защищены<br>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

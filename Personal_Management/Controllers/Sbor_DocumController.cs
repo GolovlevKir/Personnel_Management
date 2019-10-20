@@ -17,15 +17,17 @@ namespace Personal_Management.Controllers
         private PersonalContext db = new PersonalContext();
 
         // GET: Sbor_Docum
+        [Authorize]
         public ActionResult Index()
         {
             Program.update();
             var sbor_Docum = db.Sbor_Docum.Include(s => s.Documents).Include(s => s.Sotrs);
             return View(sbor_Docum.ToList());
         }
-        
+
 
         // GET: Sbor_Docum/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -41,6 +43,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Sbor_Docum/Create
+        [Authorize]
         public ActionResult Create()
         {
             ViewBag.Doc_ID = new SelectList(db.Documents, "ID_Doc", "Doc_Naim");
@@ -51,6 +54,7 @@ namespace Personal_Management.Controllers
         // POST: Sbor_Docum/Create
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID_Sbora,Doc_ID,Sotr_ID,Itog,Photo_Doc")] Sbor_Docum sbor_Docum)
@@ -68,6 +72,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Sbor_Docum/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -87,6 +92,7 @@ namespace Personal_Management.Controllers
         // POST: Sbor_Docum/Edit/5
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Sbor_Docum sbor_Docum, HttpPostedFileBase imgfile)
@@ -162,6 +168,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Sbor_Docum/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -177,6 +184,7 @@ namespace Personal_Management.Controllers
         }
 
         // POST: Sbor_Docum/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

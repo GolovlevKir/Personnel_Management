@@ -5,11 +5,18 @@
 }
 
 <h2>Изменение</h2>
-
+<hr />
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"> @Html.ActionLink("Вернуться к списку этапов", "Index")</li>
+    <li class="breadcrumb-item"> @Html.ActionLink("Испытательные сроки", "Index", "Isp_Sroki")</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Сбор документов", "Index", "Sbor_Docum")</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Список сотрудников", "Index", "Sotrs")</li>
+</ol>
+<hr />
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Этапы принятия сотрудника</h4>
         <hr />
@@ -86,12 +93,8 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Сохранить изменения" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>

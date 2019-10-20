@@ -5,7 +5,11 @@
 }
 
 <h2>Изменение данных</h2>
-
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"> @Html.ActionLink("Перейти к списку ставок", "Index")</li>
+    <li class="breadcrumb-item"> @Html.ActionLink("Данные сотрудников", "Index", "Sotrs")</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Список рабочих графиков", "Index", "Work_Schedule")</li>
+</ol>
 
 @using (Html.BeginForm())
 {
@@ -32,10 +36,6 @@
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Вернуться к списку ставок", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

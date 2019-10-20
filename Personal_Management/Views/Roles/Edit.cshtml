@@ -6,68 +6,68 @@
 
 <h2>Изменение</h2>
 
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">@Html.ActionLink("Перейти к списку ролей", "Index")</li>
+    <li class="breadcrumb-item"> @Html.ActionLink("Аккаунты", "Index", "Accounts")</li>
+</ol>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
-<div class="form-horizontal">
-    <h4>Роль</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.ID_Role)
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Role_Naim, htmlAttributes: new { @class = "control-label col-md-5" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Role_Naim, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Role_Naim, "", new { @class = "text-danger" })
+    <div class="form-horizontal">
+        <h4>Роль</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ID_Role)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Role_Naim, htmlAttributes: new { @class = "control-label col-md-5" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Role_Naim, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Role_Naim, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                @Html.CheckBoxFor(model => model.Manip_Roles, new { @class = "col-md-2", @type = "checkbox", @style = "width: 20px; height: 20px;" })
+                @Html.LabelFor(model => model.Manip_Roles, htmlAttributes: new { @class = "control-label col-md-5" })
+                @Html.ValidationMessageFor(model => model.Manip_Roles, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                @Html.CheckBoxFor(model => model.Manip_Sotrs, new { @class = "col-md-2", @type = "checkbox", @style = "width: 20px; height: 20px;" })
+                @Html.LabelFor(model => model.Manip_Sotrs, htmlAttributes: new { @class = "control-label col-md-5" })
+                @Html.ValidationMessageFor(model => model.Manip_Sotrs, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                @Html.CheckBoxFor(model => model.Manip_Department, new { @class = "col-md-2", @type = "checkbox", @style = "width: 20px; height: 20px;" })
+                @Html.LabelFor(model => model.Manip_Department, htmlAttributes: new { @class = "control-label col-md-5" })
+                @Html.ValidationMessageFor(model => model.Manip_Department, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                @Html.CheckBoxFor(model => model.Buh_Ych, new { @class = "col-md-2", @type = "checkbox", @style = "width: 20px; height: 20px;" })
+                @Html.LabelFor(model => model.Buh_Ych, htmlAttributes: new { @class = "control-label col-md-5" })
+                @Html.ValidationMessageFor(model => model.Buh_Ych, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Сохранить изменения" class="btn btn-default" />
+            </div>
         </div>
     </div>
-
-    <div class="form-group">
-        <div class="col-md-10">
-            @Html.CheckBoxFor(model => model.Manip_Roles, new { @class = "col-md-2", @type = "checkbox", @style = "width: 20px; height: 20px;" })
-            @Html.LabelFor(model => model.Manip_Roles, htmlAttributes: new { @class = "control-label col-md-5" })
-            @Html.ValidationMessageFor(model => model.Manip_Roles, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-10">
-            @Html.CheckBoxFor(model => model.Manip_Sotrs, new { @class = "col-md-2", @type = "checkbox", @style = "width: 20px; height: 20px;" })
-            @Html.LabelFor(model => model.Manip_Sotrs, htmlAttributes: new { @class = "control-label col-md-5" })
-            @Html.ValidationMessageFor(model => model.Manip_Sotrs, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-10">
-            @Html.CheckBoxFor(model => model.Manip_Department, new { @class = "col-md-2", @type = "checkbox", @style = "width: 20px; height: 20px;" })
-            @Html.LabelFor(model => model.Manip_Department, htmlAttributes: new { @class = "control-label col-md-5" })
-            @Html.ValidationMessageFor(model => model.Manip_Department, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-10">
-            @Html.CheckBoxFor(model => model.Buh_Ych, new { @class = "col-md-2", @type = "checkbox", @style = "width: 20px; height: 20px;" })
-            @Html.LabelFor(model => model.Buh_Ych, htmlAttributes: new { @class = "control-label col-md-5" })
-            @Html.ValidationMessageFor(model => model.Buh_Ych, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Сохранить изменения" class="btn btn-default" />
-        </div>
-    </div>
-</div>
 }
-
-<div>
-    @Html.ActionLink("Вернуться к списку ролей", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

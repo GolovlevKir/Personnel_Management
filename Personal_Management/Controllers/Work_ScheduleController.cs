@@ -15,6 +15,7 @@ namespace Personal_Management.Controllers
         private PersonalContext db = new PersonalContext();
 
         // GET: Work_Schedule
+        [Authorize]
         public ActionResult Index()
         {
             Program.update();
@@ -22,6 +23,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Work_Schedule/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -37,6 +39,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Work_Schedule/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
@@ -45,6 +48,7 @@ namespace Personal_Management.Controllers
         // POST: Work_Schedule/Create
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID_Schedule,Naim_Sche")] Work_Schedule work_Schedule)
@@ -60,6 +64,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Work_Schedule/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -77,6 +82,7 @@ namespace Personal_Management.Controllers
         // POST: Work_Schedule/Edit/5
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID_Schedule,Naim_Sche")] Work_Schedule work_Schedule)
@@ -91,6 +97,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Work_Schedule/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -106,6 +113,7 @@ namespace Personal_Management.Controllers
         }
 
         // POST: Work_Schedule/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

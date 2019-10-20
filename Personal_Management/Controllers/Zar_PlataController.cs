@@ -15,6 +15,7 @@ namespace Personal_Management.Controllers
         private PersonalContext db = new PersonalContext();
 
         // GET: Zar_Plata
+        [Authorize]
         public ActionResult Index()
         {
             Program.update();
@@ -23,6 +24,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Zar_Plata/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -38,6 +40,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Zar_Plata/Create
+        [Authorize]
         public ActionResult Create()
         {
             ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Surname_Sot");
@@ -47,6 +50,7 @@ namespace Personal_Management.Controllers
         // POST: Zar_Plata/Create
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID_Zar,Sotr_ID,Data_Viplati,Vremya_Viplati,NDS,Itog")] Zar_Plata zar_Plata)
@@ -63,6 +67,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Zar_Plata/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -81,6 +86,7 @@ namespace Personal_Management.Controllers
         // POST: Zar_Plata/Edit/5
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID_Zar,Sotr_ID,Data_Viplati,Vremya_Viplati,NDS,Itog")] Zar_Plata zar_Plata)
@@ -96,6 +102,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Zar_Plata/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -111,6 +118,7 @@ namespace Personal_Management.Controllers
         }
 
         // POST: Zar_Plata/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

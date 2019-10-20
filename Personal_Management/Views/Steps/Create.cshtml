@@ -5,11 +5,17 @@
 }
 
 <h2>Create</h2>
-
-@using (Html.BeginForm()) 
+<hr />
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"> @Html.ActionLink("Back to List", "Index")</li>
+<li class="breadcrumb-item"> @Html.ActionLink("Данные ставок", "Index", "Rates")</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Список рабочих графиков", "Index", "Work_Schedule")</li>
+</ol>
+<hr />
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Steps</h4>
         <hr />
@@ -90,6 +96,3 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>

@@ -5,7 +5,13 @@
 }
 
 <h2>Удаление записи</h2>
-
+<hr />
+<ol class="breadcrumb mb-3">
+    <li class="breadcrumb-item">@Html.ActionLink("Вернуться к списку испытательных сроков", "Index")</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Сотрудники", "Index", "Sotrs")</li>
+    <li class="breadcrumb-item"><a href="/Positions/Index/0">Просмотреть должности</a></li>
+</ol>
+<hr />
 <h3>Вы действительно хотите удалить запись?</h3>
 <div>
     <h4>Испытательные сроки</h4>
@@ -45,12 +51,12 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Удалить" class="btn btn-default" /> |
-            @Html.ActionLink("Вернуться к списку испытательных сроков", "Index")
+            <input type="submit" value="Удалить" class="btn btn-default" /> 
         </div>
     }
 </div>

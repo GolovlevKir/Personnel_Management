@@ -5,7 +5,12 @@
 }
 
 <h2>Подробные данные</h2>
-
+<hr />
+<ol class="breadcrumb mb-3">
+    <li class="breadcrumb-item">@Html.ActionLink("Вернуться к списку должностей", "Index")</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Отделы", "Index", "Departments")</li>
+</ol>
+<hr />
 <div>
     <h4>Должность</h4>
     <hr />
@@ -53,6 +58,5 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Изменить", "Edit", new { id = Model.ID_Positions }) |
-    @Html.ActionLink("Вернуться к списку должностей", "Index")
+    @Html.ActionLink("Изменить", "Edit", new { id = Model.ID_Positions })
 </p>

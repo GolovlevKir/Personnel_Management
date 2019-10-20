@@ -5,12 +5,16 @@
 }
 
 <h2>Изменение данных</h2>
-
+<hr />
+<ol class="breadcrumb mb-3">
+    <li class="breadcrumb-item">@Html.ActionLink("Вернуться ко всем отделам", "Index")</li>
+</ol>
+<hr />
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Отделы</h4>
         <hr />
@@ -32,10 +36,6 @@
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Вернуться ко всем отделам", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

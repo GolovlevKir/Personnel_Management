@@ -5,17 +5,22 @@
 }
 
 <h2>Должности</h2>
-
+<hr />
+<ol class="breadcrumb mb-3">
+    <li class="breadcrumb-item">@Html.ActionLink("Отделы", "Index", "Departments")</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Сотрудники", "Index", "Sotrs")</li>
+</ol>
+<hr />
 <p>
-    @Html.ActionLink("Добавить", "Create") |  @Html.ActionLink("Список отделов", "Index", "Departments")
+    @Html.ActionLink("Добавить", "Create")
 </p>
 <table class="table">
     <tr>
         @if (Personal_Management.Controllers.PositionsController.idpos == 0)
         {
-        <th>
-            @Html.DisplayNameFor(model => model.Departments.Naim_Depart)
-        </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Departments.Naim_Depart)
+            </th>
         }
         <th>
             @Html.DisplayNameFor(model => model.Naim_Posit)
@@ -23,23 +28,24 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-<tr>
-    @if (Personal_Management.Controllers.PositionsController.idpos == 0)
+    @foreach (var item in Model)
     {
-        <td>
-            @Html.DisplayFor(modelItem => item.Departments.Naim_Depart)
-        </td>
+        <tr>
+            @if (Personal_Management.Controllers.PositionsController.idpos == 0)
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.Departments.Naim_Depart)
+                </td>
+            }
+            <td>
+                @Html.DisplayFor(modelItem => item.Naim_Posit)
+            </td>
+            <td>
+                @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Positions }) |
+                @Html.ActionLink("Детали", "Details", new { id = item.ID_Positions }) |
+                @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Positions })
+            </td>
+        </tr>
     }
-        <td>
-            @Html.DisplayFor(modelItem => item.Naim_Posit)
-        </td>
-        <td>
-            @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Positions }) |
-            @Html.ActionLink("Детали", "Details", new { id = item.ID_Positions }) |
-            @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Positions })
-        </td>
-    </tr>
-}
 
 </table>

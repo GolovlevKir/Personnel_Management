@@ -16,6 +16,7 @@ namespace Personal_Management.Controllers
         private PersonalContext db = new PersonalContext();
 
         // GET: Sotrs
+        [Authorize]
         public ActionResult Index(int? pos, int? rate, int? sche, string search)
         {
             Program.update();
@@ -53,6 +54,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Sotrs/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -67,6 +69,7 @@ namespace Personal_Management.Controllers
             return View(sotrs);
         }
 
+        [Authorize]
         [HttpGet]
         // GET: Sotrs/Create
         public ActionResult Create()
@@ -77,6 +80,7 @@ namespace Personal_Management.Controllers
             return View();
         }
 
+        [Authorize]
         [HttpGet]
         public ActionResult addnewrecord()
         {
@@ -86,6 +90,7 @@ namespace Personal_Management.Controllers
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         public ActionResult addnewrecord(Sotrs sotrs, HttpPostedFileBase imgfile, HttpPostedFileBase doc)
         {
@@ -189,6 +194,7 @@ namespace Personal_Management.Controllers
             return path;
         }
 
+        [Authorize]
         [HttpGet]
         public ActionResult Edit(int? id)
         {
@@ -210,6 +216,7 @@ namespace Personal_Management.Controllers
         // POST: Sotrs/Edit/5
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         public ActionResult Edit(Sotrs sotrs, HttpPostedFileBase imgfile, HttpPostedFileBase doc)
         {
@@ -368,6 +375,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Sotrs/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -383,6 +391,7 @@ namespace Personal_Management.Controllers
         }
 
         // POST: Sotrs/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

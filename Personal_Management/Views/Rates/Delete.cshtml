@@ -5,7 +5,11 @@
 }
 
 <h2>Удаление</h2>
-
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"> @Html.ActionLink("Перейти к списку ставок", "Index")</li>
+    <li class="breadcrumb-item"> @Html.ActionLink("Данные сотрудников", "Index", "Sotrs")</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Список рабочих графиков", "Index", "Work_Schedule")</li>
+</ol>
 <h3>Вы действиетльно хотите удалить эту запись?</h3>
 <div>
     <h4>Ставки</h4>
@@ -25,8 +29,7 @@
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Удалить" class="btn btn-default" /> |
-            @Html.ActionLink("Вернуться к списку ставок", "Index")
+            <input type="submit" value="Удалить" class="btn btn-default" />
         </div>
     }
 </div>

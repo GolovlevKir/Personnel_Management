@@ -86,9 +86,9 @@ namespace Personal_Management.Models
         [Key]
         public int ID_Rate { get; set; }
         [Display(Name = "Ставка")]
-        [RegularExpression(@"^([0-9 .&'-]+)$", ErrorMessage = "Поле может содержать только следующие символы: 0-9 и .")]
-        [Range(typeof(decimal), "0.0", "10.0", ErrorMessage = "Наименьшая ставка - 0.0, а наибольшая - 10.0")]
-        [Required(ErrorMessage = "Указанная ставка введена неправильно (Должны содержаться числа и(или) .)")]
+        [RegularExpression(@"^([0-9 ,&'-]+)$", ErrorMessage = "Поле может содержать только следующие символы: 0-9 и ,")]
+        [Range(typeof(decimal), "0,0", "10,0", ErrorMessage = "Наименьшая ставка - 0,0, а наибольшая - 10,0")]
+        [Required(ErrorMessage = "Указанная ставка введена неправильно (Должны содержаться числа и(или) ,)")]
         public decimal Rate { get; set; }
         public Rates()
         {

@@ -5,7 +5,7 @@
 }
 
 <h2>Сотрудники</h2>
-
+<hr />
 <ol class="breadcrumb">
     @if (Program.Kadri != 0)
     {
@@ -14,6 +14,7 @@
     <li class="breadcrumb-item"> @Html.ActionLink("Данные ставок", "Index", "Rates")</li>
     <li class="breadcrumb-item">@Html.ActionLink("Список рабочих графиков", "Index", "Work_Schedule")</li>
 </ol>
+<hr />
 
 
 <div class="container">
@@ -56,47 +57,47 @@
     {
         @Html.ActionLink("Добавить нового сотрудника", "addnewrecord")
     }
-        <hr />
-        <div class="row">
-            @foreach (var item in Model.Sotrs)
-            {
-                <div class="card mb-3 col-md-offset-2" style="margin: 0 auto; width: 350px;">
-                    <h4 class="card-header">@item.Full</h4>
-                    <div class="card-body">
-                        <h6 class="card-title">Должность</h6>
-                        <h7 class="card-subtitle text-muted ">@item.Positions.Naim_Posit</h7>
-                    </div>
-                    <img style="margin: 0 auto; height: 340px; width: 260px; display: block;" src="~/Content/Photo/st/@item.Photo" alt="Card image">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Номер телефона: @Html.DisplayFor(modelItem => item.Num_Phone)</li>
-                        <li class="list-group-item">Эл. почта: @Html.DisplayFor(modelItem => item.Email)</li>
-                        <li class="list-group-item">Дата принятия: @Html.DisplayFor(modelItem => item.Date_of_adoption)</li>
-                        @if (item.rezume != "-")
-                        {
-                            <li class="list-group-item"><a href="~/Content/Files/@item.rezume" download>Скачать резюме</a></li>
-                        }
-                        else
-                        {
-                            <li class="list-group-item">Резюме отсутствует</li>
-                        }
-                    </ul>
-                    @if (Program.Kadri != 0)
+    <hr />
+    <div class="row">
+        @foreach (var item in Model.Sotrs)
+        {
+            <div class="card mb-3 col-md-offset-2" style="margin: 0 auto; width: 350px;">
+                <h4 class="card-header">@item.Full</h4>
+                <div class="card-body">
+                    <h6 class="card-title">Должность</h6>
+                    <h7 class="card-subtitle text-muted ">@item.Positions.Naim_Posit</h7>
+                </div>
+                <img style="margin: 0 auto; height: 340px; width: 260px; display: block;" src="~/Content/Photo/st/@item.Photo" alt="Card image">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Номер телефона: @Html.DisplayFor(modelItem => item.Num_Phone)</li>
+                    <li class="list-group-item">Эл. почта: @Html.DisplayFor(modelItem => item.Email)</li>
+                    <li class="list-group-item">Дата принятия: @Html.DisplayFor(modelItem => item.Date_of_adoption)</li>
+                    @if (item.rezume != "-")
                     {
-                        <div class="card-footer text-center">
-                            @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sotr }) |
-                            @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }) |
-                            @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Sotr }) |
-
-                        </div>
+                        <li class="list-group-item"><a href="~/Content/Files/@item.rezume" download>Скачать резюме</a></li>
                     }
                     else
                     {
-                        <div class="card-footer text-center">
-                            @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr })
-                        </div>
+                        <li class="list-group-item">Резюме отсутствует</li>
                     }
-                </div>
-            }
-        </div>
+                </ul>
+                @if (Program.Kadri != 0)
+                {
+                    <div class="card-footer text-center">
+                        @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sotr }) |
+                        @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }) |
+                        @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Sotr }) |
+
+                    </div>
+                }
+                else
+                {
+                    <div class="card-footer text-center">
+                        @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr })
+                    </div>
+                }
+            </div>
+        }
     </div>
+</div>
 

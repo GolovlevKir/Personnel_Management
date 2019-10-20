@@ -15,6 +15,7 @@ namespace Personal_Management.Controllers
         private PersonalContext db = new PersonalContext();
 
         // GET: Documents
+        [Authorize]
         public ActionResult Index()
         {
             Program.update();
@@ -23,6 +24,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Documents/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -38,6 +40,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Documents/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
@@ -61,6 +64,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Documents/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -78,6 +82,7 @@ namespace Personal_Management.Controllers
         // POST: Documents/Edit/5
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID_Doc,Doc_Naim")] Documents documents)
@@ -92,6 +97,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Documents/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -107,6 +113,7 @@ namespace Personal_Management.Controllers
         }
 
         // POST: Documents/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

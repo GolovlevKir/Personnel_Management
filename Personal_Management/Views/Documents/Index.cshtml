@@ -5,7 +5,11 @@
 }
 
 <h2>Виды документов</h2>
-
+<hr />
+<ol class="breadcrumb mb-3">
+    <li class="breadcrumb-item">@Html.ActionLink("Cбор документов", "Index", "Sbor_Docum")</li>
+</ol>
+<hr />
 <p>
     @Html.ActionLink("Добавить новый документ", "Create")
 </p>
@@ -17,16 +21,17 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Doc_Naim)
-        </td>
-        <td>
-            @Html.ActionLink("Изменить", "Edit", new { id=item.ID_Doc }) |
-            @Html.ActionLink("Удалить", "Delete", new { id=item.ID_Doc })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Doc_Naim)
+            </td>
+            <td>
+                @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Doc }) |
+                @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Doc })
+            </td>
+        </tr>
+    }
 
 </table>

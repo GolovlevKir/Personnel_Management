@@ -5,7 +5,12 @@
 }
 
 <h2>Удаление</h2>
-
+<hr />
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">@Html.ActionLink("Вернуться к списку графиков работы", "Index")</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Список сотрудников", "Index", "Sotrs")</li>
+</ol>
+<hr />
 <h3>Вы действительно хотите удалить?</h3>
 <div>
     <h4>Рабочие графики</h4>
@@ -21,12 +26,12 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Удалить" class="btn btn-default" /> |
-            @Html.ActionLink("Вернуться к списку рабочих графиков", "Index")
+            <input type="submit" value="Удалить" class="btn btn-default" />
         </div>
     }
 </div>

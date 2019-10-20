@@ -5,7 +5,10 @@
 }
 
 <h2>Удаление</h2>
-
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">@Html.ActionLink("Вернуться к списку собранных документов", "Index")</li>
+    <li class="breadcrumb-item"> @Html.ActionLink("Документы", "Index", "Documents")</li>
+</ol>
 <h3>Вы уверены что хотите удалить?</h3>
 <div>
     <h4>Сбор данных документов сотрудников</h4>
@@ -49,8 +52,7 @@
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Удалить" class="btn btn-default" /> |
-            @Html.ActionLink("Вернуться к списку собранных документов", "Index")
+            <input type="submit" value="Удалить" class="btn btn-default" /> 
         </div>
     }
 </div>

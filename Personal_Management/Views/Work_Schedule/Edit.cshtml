@@ -5,12 +5,17 @@
 }
 
 <h2>Изменение данных</h2>
-
+<hr />
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">@Html.ActionLink("Вернуться к списку графиков работы", "Index")</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Список сотрудников", "Index", "Sotrs")</li>
+</ol>
+<hr />
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Рабочий график</h4>
         <hr />
@@ -33,9 +38,6 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("Вернуться к списку графиков работы", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

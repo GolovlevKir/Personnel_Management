@@ -9,6 +9,7 @@ namespace Personal_Management.Controllers
 {
     public class HomeController : Controller
     {
+        [Authorize]
         [HttpGet]
         public ActionResult Index()
         {
@@ -69,7 +70,7 @@ namespace Personal_Management.Controllers
             }
         }
 
-        
+        [Authorize]
         [HttpPost]
         public ActionResult Index(string password, string password1, string password2)
         {
@@ -115,7 +116,7 @@ namespace Personal_Management.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize]
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -123,7 +124,7 @@ namespace Personal_Management.Controllers
             return View();
         }
 
-        //[Authorize]
+        [Authorize]
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";

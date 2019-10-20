@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -12,6 +13,7 @@ namespace Personal_Management.Controllers
         private PersonalContext db = new PersonalContext();
 
         // GET: Isp_Sroki
+        [Authorize]
         public ActionResult Index()
         {
             Program.update();
@@ -20,6 +22,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Isp_Sroki/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -35,6 +38,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Isp_Sroki/Create
+        [Authorize]
         public ActionResult Create()
         {
             SelectList sot = new SelectList(db.Sotrs, "ID_Sotr", "Full");
@@ -46,6 +50,7 @@ namespace Personal_Management.Controllers
         // POST: Isp_Sroki/Create
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID_Isp,Sotr_ID,Date_Start,Date_Finish,Status_ID")] Isp_Sroki isp_Sroki)
@@ -62,6 +67,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Isp_Sroki/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -82,14 +88,18 @@ namespace Personal_Management.Controllers
         // POST: Isp_Sroki/Edit/5
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID_Isp,Sotr_ID,Date_Start,Date_Finish,Status_ID")] Isp_Sroki isp_Sroki)
+        public ActionResult Edit(Isp_Sroki isp_Sroki)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(isp_Sroki).State = EntityState.Modified;
-                db.SaveChanges();
+                SqlCommand command = new SqlCommand("", Program.SqlConnection);
+                Program.SqlConnection.Open();
+                command.CommandText = "update Isp_Sroki set Sotr_ID = " + isp_Sroki.Sotr_ID.ToString() + " , Date_Start = '" + isp_Sroki.Date_Start + "', Date_Finish = '" + isp_Sroki.Date_Finish + "', Status_ID = " + isp_Sroki.Status_ID.ToString() + " where ID_Isp = " + isp_Sroki.ID_Isp.ToString();
+                command.ExecuteScalar();
+                Program.SqlConnection.Close();
                 return RedirectToAction("Index");
             }
             ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Surname_Sot", isp_Sroki.Sotr_ID);
@@ -98,6 +108,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Isp_Sroki/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -113,6 +124,7 @@ namespace Personal_Management.Controllers
         }
 
         // POST: Isp_Sroki/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

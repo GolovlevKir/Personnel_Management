@@ -5,8 +5,17 @@
 }
 
 <h2>Изменение данных</h2>
-
-
+<hr />
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"> @Html.ActionLink("Вернуться к списку сотрудников", "Index")</li>
+    @if (Program.Kadri != 0)
+    {
+        <li class="breadcrumb-item">@Html.ActionLink("Посмотреть этапы принятия", "Index", "Steps")</li>
+    }
+    <li class="breadcrumb-item"> @Html.ActionLink("Данные ставок", "Index", "Rates")</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Список рабочих графиков", "Index", "Work_Schedule")</li>
+</ol>
+<hr />
 @using (Html.BeginForm("Edit", "Sotrs", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
@@ -136,10 +145,6 @@
     </div>
 </div>
 }
-
-<div>
-    @Html.ActionLink("Вернуться к списку сотрудников", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

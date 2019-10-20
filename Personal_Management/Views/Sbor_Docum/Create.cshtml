@@ -5,12 +5,16 @@
 }
 
 <h2>Добавление записи</h2>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">@Html.ActionLink("Вернуться к списку собранных документов", "Index")</li>
+    <li class="breadcrumb-item"> @Html.ActionLink("Документы", "Index", "Documents")</li>
+</ol>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Сбор документов с сотрудников</h4>
         <hr />
@@ -54,10 +58,6 @@
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Вернуться к списку собранных документов", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

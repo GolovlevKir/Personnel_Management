@@ -15,6 +15,7 @@ namespace Personal_Management.Controllers
         private PersonalContext db = new PersonalContext();
 
         // GET: Accounts
+        [Authorize]
         public ActionResult Index()
         {
             Program.update();
@@ -23,6 +24,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Accounts/Details/5
+        [Authorize]
         public ActionResult Details(string id)
         {
             if (id == null)
@@ -38,6 +40,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Accounts/Create
+        [Authorize]
         public ActionResult Create()
         {
             ViewBag.Role_ID = new SelectList(db.Roles, "ID_Role", "Role_Naim");
@@ -48,6 +51,7 @@ namespace Personal_Management.Controllers
         // POST: Accounts/Create
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Login,Password,Role_ID,Sotr_ID")] Accounts accounts)
@@ -65,6 +69,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Accounts/Edit/5
+        [Authorize]
         public ActionResult Edit(string id)
         {
             if (id == null)
@@ -77,13 +82,14 @@ namespace Personal_Management.Controllers
                 return HttpNotFound();
             }
             ViewBag.Role_ID = new SelectList(db.Roles, "ID_Role", "Role_Naim", accounts.Role_ID);
-            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Surname_Sot", accounts.Sotr_ID);
+            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full", accounts.Sotr_ID);
             return View(accounts);
         }
 
         // POST: Accounts/Edit/5
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Login,Password,Role_ID,Sotr_ID")] Accounts accounts)
@@ -95,11 +101,12 @@ namespace Personal_Management.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.Role_ID = new SelectList(db.Roles, "ID_Role", "Role_Naim", accounts.Role_ID);
-            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Surname_Sot", accounts.Sotr_ID);
+            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full", accounts.Sotr_ID);
             return View(accounts);
         }
 
         // GET: Accounts/Delete/5
+        [Authorize]
         public ActionResult Delete(string id)
         {
             if (id == null)
@@ -115,6 +122,7 @@ namespace Personal_Management.Controllers
         }
 
         // POST: Accounts/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)

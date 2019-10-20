@@ -5,7 +5,9 @@
 }
 
 <h2>Сбор данных документов сотрудников</h2>
-
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"> @Html.ActionLink("Документы", "Index", "Documents")</li>
+</ol>
 
 @foreach (var group in Model.GroupBy(item => item.Sotrs.FullName))
 {

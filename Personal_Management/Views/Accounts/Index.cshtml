@@ -5,6 +5,13 @@
 }
 
 <h2>Аккаунты сотрудников</h2>
+<hr />
+<ol class="breadcrumb mb-3">
+    <li class="breadcrumb-item">@Html.ActionLink("Вернуться к списку аккаунтов", "Index")</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Список прав доступа", "Index", "Roles")</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Список сотрудников", "Index", "Sotrs")</li>
+</ol>
+<hr />
 
 <p>
     @Html.ActionLink("Добавить новый аккаунт", "Create")
@@ -26,25 +33,26 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.Sotrs.FullName)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Roles.Role_Naim)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Login)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Password)
-    </td>
-    <td>
-        @Html.ActionLink("Изменить", "Edit", new { id = item.Login }) |
-        @Html.ActionLink("Удалить", "Delete", new { id = item.Login })
-    </td>
-</tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sotrs.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Roles.Role_Naim)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Login)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Password)
+            </td>
+            <td>
+                @Html.ActionLink("Изменить", "Edit", new { id = item.Login }) |
+                @Html.ActionLink("Удалить", "Delete", new { id = item.Login })
+            </td>
+        </tr>
+    }
 
 </table>

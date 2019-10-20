@@ -14,8 +14,6 @@ namespace Personal_Management
     {
         protected void Application_Start()
         {
-            SqlDependency sql = new SqlDependency();
-            
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

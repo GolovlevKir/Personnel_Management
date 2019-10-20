@@ -5,9 +5,12 @@
 }
 
 <h2>Права доступа</h2>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"> @Html.ActionLink("Аккаунты", "Index", "Accounts")</li>
+</ol>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Добавить новые", "Create")
 </p>
 <table class="table">
     <tr>
@@ -17,16 +20,17 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Role_Naim)
-        </td>
-        <td>
-            @Html.ActionLink("Изменить", "Edit", new { id=item.ID_Role }) |
-            @Html.ActionLink("Удалить", "Delete", new { id=item.ID_Role })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Role_Naim)
+            </td>
+            <td>
+                @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Role }) |
+                @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Role })
+            </td>
+        </tr>
+    }
 
 </table>

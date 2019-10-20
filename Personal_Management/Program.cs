@@ -22,7 +22,7 @@ namespace Personal_Management
                 SqlCommand command = new SqlCommand("select count(*) from Isp_Sroki where Status_ID = 3", Program.SqlConnection);
                 Program.SqlConnection.Open();
                 Program.colIsp = Convert.ToInt32(command.ExecuteScalar());
-                command.CommandText = "update Isp_Sroki set Status_ID = 3 where DATEDIFF(day, Convert(datetime, Date_Finish,104), GETDATE()) > 0 and Status_ID = 2";
+                command.CommandText = "update Isp_Sroki set Status_ID = 3 where DATEDIFF(day, Convert(datetime, Date_Finish,104), GETDATE()) = 0 and Status_ID = 2";
                 command.ExecuteScalar();
                 Program.SqlConnection.Close();
             }

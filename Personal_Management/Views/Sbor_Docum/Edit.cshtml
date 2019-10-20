@@ -5,7 +5,10 @@
 }
 
 <h2>Изменение данных</h2>
-
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">@Html.ActionLink("Вернуться к списку собранных документов", "Index")</li>
+    <li class="breadcrumb-item"> @Html.ActionLink("Документы", "Index", "Documents")</li>
+</ol>
 
 @using (Html.BeginForm("Edit", "Sbor_Docum", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
@@ -56,10 +59,6 @@
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Вернуться к списку сданных документов", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

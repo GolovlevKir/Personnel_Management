@@ -5,7 +5,12 @@
 }
 
 <h2>Добавление записи</h2>
-
+<hr />
+<ol class="breadcrumb mb-3">
+    <li class="breadcrumb-item">@Html.ActionLink("Вернуться к списку документов", "Index")</li>
+    <li class="breadcrumb-item">@Html.ActionLink("Cбор документов", "Index","Sbor_Docum")</li>
+</ol>
+<hr />
 
 @using (Html.BeginForm())
 {
@@ -30,10 +35,6 @@
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Вернуться к списку документов", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

@@ -15,6 +15,7 @@ namespace Personal_Management.Controllers
         private PersonalContext db = new PersonalContext();
 
         // GET: Pass_Dannie
+        [Authorize]
         public ActionResult Index()
         {
             var pass_Dannie = db.Pass_Dannie.Include(p => p.Sotrs);
@@ -22,6 +23,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Pass_Dannie/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -37,6 +39,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Pass_Dannie/Create
+        [Authorize]
         public ActionResult Create()
         {
             Program.update();
@@ -47,6 +50,7 @@ namespace Personal_Management.Controllers
         // POST: Pass_Dannie/Create
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID_Pass,S_Pas,N_Pas,Sotr_ID")] Pass_Dannie pass_Dannie)
@@ -62,7 +66,7 @@ namespace Personal_Management.Controllers
             return View(pass_Dannie);
         }
 
-        // GET: Pass_Dannie/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -81,6 +85,7 @@ namespace Personal_Management.Controllers
         // POST: Pass_Dannie/Edit/5
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID_Pass,S_Pas,N_Pas,Sotr_ID")] Pass_Dannie pass_Dannie)
@@ -96,6 +101,7 @@ namespace Personal_Management.Controllers
         }
 
         // GET: Pass_Dannie/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -111,6 +117,7 @@ namespace Personal_Management.Controllers
         }
 
         // POST: Pass_Dannie/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

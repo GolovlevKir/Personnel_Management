@@ -39,7 +39,6 @@ namespace Personal_Management.Controllers
             }
             return View(model);
         }
-
         public ActionResult Register()
         {
             SelectList sot = new SelectList(db.Sotrs, "ID_Sotr", "Full");

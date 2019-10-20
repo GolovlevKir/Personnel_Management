@@ -5,6 +5,10 @@
 }
 
 <h2>Удаление</h2>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">@Html.ActionLink("Перейти к списку ролей", "Index")</li>
+    <li class="breadcrumb-item"> @Html.ActionLink("Аккаунты", "Index", "Accounts")</li>
+</ol>
 
 <h3>Вы уверены, что хотите удалить?</h3>
 <div>
@@ -20,12 +24,12 @@
         </dd>
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Удалить" class="btn btn-default" /> |
-            @Html.ActionLink("Вернуться к списку ролей", "Index")
+            <input type="submit" value="Удалить" class="btn btn-default" />
         </div>
     }
 </div>
