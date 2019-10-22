@@ -31,7 +31,7 @@
     {
         <tr>
             <td>
-                @Html.ActionLink(item.Sotrs.FullName, "Details", new { id = item.ID_Isp })
+                @Html.ActionLink(item.Sotrs.FullName, "Edit", new { id = item.ID_Isp }, new { @class = "compItem" })
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Date_Start) - @Html.DisplayFor(modelItem => item.Date_Finish)
@@ -69,3 +69,23 @@
     }
 
 </table>
+<div id="modDialog" class="modal fade">
+    <div id="dialogContent" class="modal-dialog"></div>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(function () {
+            $.ajaxSetup({ cache: false });
+            $(".compItem").click(function (e) {
+
+                e.preventDefault();
+                $.get(this.href, function (data) {
+                    $('#dialogContent').html(data);
+                    $('#modDialog').modal('show');
+                });
+            });
+        })
+    </script>
+}

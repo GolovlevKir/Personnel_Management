@@ -61,6 +61,7 @@ namespace Personal_Management.Controllers
         [Authorize]
         public ActionResult Create()
         {
+            ViewBag.u = idpos;
             ViewBag.Depart_ID = new SelectList(db.Departments, "ID_Depart", "Naim_Depart");
             return View();
         }
@@ -75,11 +76,20 @@ namespace Personal_Management.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Positions.Add(positions);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (idpos == 0)
+                {
+                    db.Positions.Add(positions);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    positions.Depart_ID = Convert.ToInt32(idpos);
+                    db.Positions.Add(positions);
+                    db.SaveChanges();
+                    return Redirect("/Positions/Index/" + idpos.ToString()) ;
+                }
             }
-
             ViewBag.Depart_ID = new SelectList(db.Departments, "ID_Depart", "Naim_Depart", positions.Depart_ID);
             return View(positions);
         }
@@ -113,7 +123,7 @@ namespace Personal_Management.Controllers
             {
                 db.Entry(positions).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Redirect("/Positions/Index/" + idpos.ToString());
             }
             ViewBag.Depart_ID = new SelectList(db.Departments, "ID_Depart", "Naim_Depart", positions.Depart_ID);
             return View(positions);
@@ -144,7 +154,7 @@ namespace Personal_Management.Controllers
             Positions positions = db.Positions.Find(id);
             db.Positions.Remove(positions);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return Redirect("/Positions/Index/" + idpos.ToString());
         }
 
         protected override void Dispose(bool disposing)

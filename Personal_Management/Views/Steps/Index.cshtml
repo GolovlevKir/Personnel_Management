@@ -25,11 +25,11 @@
             <ul class="progressbar">
                 @if (item.AddSotrInIS)
                 {
-                    <li class="active"><a data-placement="top" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Sotrs/Index">Этап 1</a></li>
+                    <li class="active"><a data-placement="top" , class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Sotrs/Edit/@item.Sotr_ID">Этап 1</a></li>
                 }
                 else
                 {
-                    <li><a href="~/Sotrs/Index">Этап 1</a></li>
+                    <li><a href="~/Sotrs/Create">Этап 1</a></li>
                 }
                 @if (item.AddRezume)
                 {
@@ -76,4 +76,24 @@
     </div>
     <hr />
 
+}
+<div id="modDialog" class="modal fade">
+    <div id="dialogContent" class="modal-dialog"></div>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(function () {
+            $.ajaxSetup({ cache: false });
+            $(".compItem").click(function (e) {
+
+                e.preventDefault();
+                $.get(this.href, function (data) {
+                    $('#dialogContent').html(data);
+                    $('#modDialog').modal('show');
+                });
+            });
+        })
+    </script>
 }

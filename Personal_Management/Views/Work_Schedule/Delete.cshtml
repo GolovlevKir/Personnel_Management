@@ -1,37 +1,28 @@
 ﻿@model Personal_Management.Models.Work_Schedule
 
 @{
-    ViewBag.Title = "Delete";
+    Layout = null;
 }
 
-<h2>Удаление</h2>
-<hr />
-<ol class="breadcrumb">
-    <li class="breadcrumb-item">@Html.ActionLink("Вернуться к списку графиков работы", "Index")</li>
-    <li class="breadcrumb-item">@Html.ActionLink("Список сотрудников", "Index", "Sotrs")</li>
-</ol>
-<hr />
-<h3>Вы действительно хотите удалить?</h3>
-<div>
-    <h4>Рабочие графики</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Naim_Sche)
-        </dt>
+<div class="modal-content" style="width:100%">
+    <div class="modal-header">
+        <h3>Удаление записи</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="dl-horizontal">
+            <p class="text-muted">Вы действительно хотите удалить график работы: @Model.Naim_Sche? Все сотрудники с данным видом работы пропадут!</p>
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
 
-        <dd>
-            @Html.DisplayFor(model => model.Naim_Sche)
-        </dd>
-
-    </dl>
-
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Удалить" class="btn btn-default" />
+                <div class="form-actions no-color">
+                    <input type="submit" value="Удалить" class="btn btn-outline-danger" />
+                </div>
+            }
         </div>
-    }
+    </div>
 </div>
+

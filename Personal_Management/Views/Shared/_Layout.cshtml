@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
-    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/@Program.style" rel="stylesheet" />
     <link href="~/Content/Photo/fav.ico" rel="icon">
     @Scripts.Render("~/bundles/modernizr")
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -35,7 +35,7 @@
                         <a class="nav-link" href="@Url.Action("Index","Home")">Домашняя страница</a>
                     </li>
                     @if (Program.admin != 0 || Program.Buh != 0 || Program.Kadri != 0 || Program.Otdeli != 0)
-                    { 
+                    {
                         <li class="nav-item dropdown ">
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Данные сотрудников</a>
                             <div class="dropdown-menu" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
@@ -68,7 +68,7 @@
 
                             </div>
                         </li>
-                        }
+                    }
                     @if (Program.Buh != 0)
                     {
                         <li class="nav-item dropdown">
@@ -91,6 +91,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="@Url.Action("LogOut","Account")">Выйти</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Them","Account")">Сменить тему</a>
+                    </li>
                 </ul>
 
             </form>
@@ -106,13 +109,13 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-6 col-lg-4 footer-info">
-                            <h3>IT Liga</h3>
-                            <p>Служба технической поддержки. Разработка и поддержка информационных систем.</p>
+                            <h3 style="color:white">IT Liga</h3>
+                            <p class="text-muted">Служба технической поддержки. Разработка и поддержка информационных систем.</p>
                             <br><br>
                         </div>
                         <div class="col-12 col-lg-4 footer-contact">
-                            <h4>Наши контакты</h4>
-                            <p>
+                            <h4 style="color:white">Наши контакты</h4>
+                            <p class="text-muted">
                                 127254 г. Москва, <br>
                                 пр. Огородный, 9ас1<br>
                                 <strong>Телефон:</strong><a href="tel:+74953692434"> +7 (495) 369-24-34</a><br>
@@ -122,7 +125,7 @@
                     </div>
                 </div>
                 <div class="container">
-                    <div class="credits">
+                    <div class="credits" style="color:white">
                         @DateTime.Now.Year <strong>IT Liga</strong> Все права защищены<br>
                     </div>
                 </div>

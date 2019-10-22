@@ -1,37 +1,28 @@
 ﻿@model Personal_Management.Models.Documents
 
 @{
-    ViewBag.Title = "Delete";
+    Layout = null;
 }
 
-<h2>Удаление</h2>
-<hr />
-<ol class="breadcrumb mb-3">
-    <li class="breadcrumb-item">@Html.ActionLink("Вернуться к списку документов", "Index")</li>
-    <li class="breadcrumb-item">@Html.ActionLink("Cбор документов", "Index", "Sbor_Docum")</li>
-</ol>
-<hr />
-<h3>Вы действительно хотите удалить запись??</h3>
-<div>
-    <h4>Документы</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Doc_Naim)
-        </dt>
+<div class="modal-content" style="width:100%">
+    <div class="modal-header">
+        <h3>Удаление записи</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="dl-horizontal">
+            <p class="text-muted">Вы действительно хотите удалить документ: @Model.Doc_Naim?</p>
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
 
-        <dd>
-            @Html.DisplayFor(model => model.Doc_Naim)
-        </dd>
-
-    </dl>
-
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Удалить" class="btn btn-default" />
+                <div class="form-actions no-color">
+                    <input type="submit" value="Удалить" class="btn btn-outline-danger" />
+                </div>
+            }
         </div>
-    }
+    </div>
 </div>
+

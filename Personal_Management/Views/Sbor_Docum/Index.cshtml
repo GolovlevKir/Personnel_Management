@@ -16,18 +16,39 @@
     <div class="row">
         @foreach (var item in group)
         {
-        <div class="card mb-3 col-md-offset-2" style="margin: 0 auto; width: 350px;">
-            <h4 class="card-header">@Html.Encode(item.Documents.Doc_Naim)</h4>
-            <img style="margin: 0 auto; height: 340px; width: 260px; display: block;" src="~/Content/Photo/dok/@Html.Encode(item.Photo_Doc)" alt="Card image">
-            
-            <div class="card-footer text-center">
-                @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sbora }) |
-                <a href="~/Content/Photo/dok/@Html.Encode(item.Photo_Doc)" download>Скачать</a> |
-                    @Html.ActionLink("Очистить", "Delete", new { id = item.ID_Sbora }) 
-            </div></div>
-            
+            <div class="card mb-3 col-md-offset-2" style="margin: 0 auto; width: 350px;">
+                <h4 class="card-header">@Html.Encode(item.Documents.Doc_Naim)</h4>
+                <img style="margin: 0 auto; height: 340px; width: 260px; display: block;" src="~/Content/Photo/dok/@Html.Encode(item.Photo_Doc)" alt="Card image">
+
+                <div class="card-footer text-center">
+                    @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sbora }) |
+                    <a href="~/Content/Photo/dok/@Html.Encode(item.Photo_Doc)" download>Скачать</a> |
+                    @Html.ActionLink("Очистить", "Delete", new { id = item.ID_Sbora }, new { @class = "compItem" })
+                </div>
+            </div>
+
         }
     </div>
-            
+
+}
+<div id="modDialog" class="modal fade">
+    <div id="dialogContent" class="modal-dialog"></div>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(function () {
+            $.ajaxSetup({ cache: false });
+            $(".compItem").click(function (e) {
+
+                e.preventDefault();
+                $.get(this.href, function (data) {
+                    $('#dialogContent').html(data);
+                    $('#modDialog').modal('show');
+                });
+            });
+        })
+    </script>
 }
 

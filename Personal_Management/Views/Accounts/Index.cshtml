@@ -22,9 +22,6 @@
             ФИО сотрудника (Должность)
         </th>
         <th>
-            Права доступа
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.Login)
         </th>
         <th>
@@ -40,9 +37,6 @@
                 @Html.DisplayFor(modelItem => item.Sotrs.FullName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Roles.Role_Naim)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Login)
             </td>
             <td>
@@ -50,9 +44,29 @@
             </td>
             <td>
                 @Html.ActionLink("Изменить", "Edit", new { id = item.Login }) |
-                @Html.ActionLink("Удалить", "Delete", new { id = item.Login })
+                @Html.ActionLink("Удалить", "Delete", new { id = item.Login }, new { @class = "compItem" })
             </td>
         </tr>
     }
 
 </table>
+<div id="modDialog" class="modal fade">
+    <div id="dialogContent" class="modal-dialog"></div>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(function () {
+            $.ajaxSetup({ cache: false });
+            $(".compItem").click(function (e) {
+
+                e.preventDefault();
+                $.get(this.href, function (data) {
+                    $('#dialogContent').html(data);
+                    $('#modDialog').modal('show');
+                });
+            });
+        })
+    </script>
+}

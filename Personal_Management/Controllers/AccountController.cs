@@ -82,5 +82,17 @@ namespace Personal_Management.Controllers
             FormsAuthentication.SignOut();
             return RedirectToAction("Login", "Account");
         }
+        public ActionResult Them()
+        {
+            if (Program.style == "bootstrap.min.css")
+            {
+                Program.style = "bootstrap2.min.css";
+            }
+            else
+            {
+                Program.style = "bootstrap.min.css";
+            }
+            return RedirectToAction("Index","Home");
+        }
     }
 }

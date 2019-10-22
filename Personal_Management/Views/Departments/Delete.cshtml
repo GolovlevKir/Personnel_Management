@@ -1,35 +1,27 @@
 ﻿@model Personal_Management.Models.Departments
 
 @{
-    ViewBag.Title = "Delete";
+    Layout = null;
 }
 
-<h2>Удаление</h2>
-<hr />
-<ol class="breadcrumb mb-3">
-    <li class="breadcrumb-item">@Html.ActionLink("Вернуться ко всем отделам", "Index")</li>
-</ol>
-<hr />
-<h3>Вы действительно хотете удалить?</h3>
-<div>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Naim_Depart)
-        </dt>
+<div class="modal-content" style="width:100%">
+    <div class="modal-header">
+        <h3>Удаление записи</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="dl-horizontal">
+            <p class="text-muted">Вы действительно хотите удалить отдел: @Model.Naim_Depart?</p>
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
 
-        <dd>
-            @Html.DisplayFor(model => model.Naim_Depart)
-        </dd>
-
-    </dl>
-
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Удалить отдел" class="btn btn-default" />
+                <div class="form-actions no-color">
+                    <input type="submit" value="Удалить" class="btn btn-outline-danger" />
+                </div>
+            }
         </div>
-    }
+    </div>
 </div>

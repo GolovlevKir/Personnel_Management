@@ -1,35 +1,27 @@
 ﻿@model Personal_Management.Models.Rates
 
 @{
-    ViewBag.Title = "Delete";
+    Layout = null;
 }
 
-<h2>Удаление</h2>
-<ol class="breadcrumb">
-    <li class="breadcrumb-item"> @Html.ActionLink("Перейти к списку ставок", "Index")</li>
-    <li class="breadcrumb-item"> @Html.ActionLink("Данные сотрудников", "Index", "Sotrs")</li>
-    <li class="breadcrumb-item">@Html.ActionLink("Список рабочих графиков", "Index", "Work_Schedule")</li>
-</ol>
-<h3>Вы действиетльно хотите удалить эту запись?</h3>
-<div>
-    <h4>Ставки</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Rate)
-        </dt>
+<div class="modal-content" style="width:100%">
+    <div class="modal-header">
+        <h3>Удаление записи</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="dl-horizontal">
+            <p class="text-muted">Вы действительно хотите удалить ставку: @Model.Rate? Все сотрудники с данной ставкой будут удалены!</p>
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
 
-        <dd>
-            @Html.DisplayFor(model => model.Rate)
-        </dd>
-
-    </dl>
-
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Удалить" class="btn btn-default" />
+                <div class="form-actions no-color">
+                    <input type="submit" value="Удалить" class="btn btn-outline-danger" />
+                </div>
+            }
         </div>
-    }
+    </div>
 </div>

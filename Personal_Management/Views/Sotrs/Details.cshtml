@@ -1,132 +1,159 @@
 ﻿@model Personal_Management.Models.Sotrs
 
 @{
-    ViewBag.Title = "Details";
+    Layout = null;
 }
 
-<h2>Детали</h2>
-<hr />
-<ol class="breadcrumb">
-    <li class="breadcrumb-item"> @Html.ActionLink("Вернуться к списку сотрудников", "Index")</li>
-    @if (Program.Kadri != 0)
-    {
-        <li class="breadcrumb-item">@Html.ActionLink("Посмотреть этапы принятия", "Index", "Steps")</li>
-    }
-    <li class="breadcrumb-item"> @Html.ActionLink("Данные ставок", "Index", "Rates")</li>
-    <li class="breadcrumb-item">@Html.ActionLink("Список рабочих графиков", "Index", "Work_Schedule")</li>
-</ol>
-<hr />
-<div>
-    <h4>Сотрудник</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Positions.Naim_Posit)
-        </dt>
+<div class="modal-content" style="width:100%">
+    <div class="modal-header">
+        <h5 class="modal-title">Изменение данных должностей</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="dl-horizontal">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"> @Html.ActionLink("Вернуться к списку сотрудников", "Index")</li>
+                @if (Program.Kadri != 0)
+                {
+                    <li class="breadcrumb-item">@Html.ActionLink("Посмотреть этапы принятия", "Index", "Steps")</li>
+                }
+                <li class="breadcrumb-item"> @Html.ActionLink("Данные ставок", "Index", "Rates")</li>
+                <li class="breadcrumb-item">@Html.ActionLink("Список рабочих графиков", "Index", "Work_Schedule")</li>
+            </ol>
+            <hr />
+            <div>
+                <h4>Сотрудник</h4>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>
+                        <img style="margin: 0 auto; height: 340px; width: 260px; display: block;" src="~/Content/Photo/st/@Model.Photo" alt="Card image">
+                    </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Positions.Naim_Posit)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Positions.Naim_Posit)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.Positions.Naim_Posit)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Rates.Rate)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Rates.Rate)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Rates.Rate)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.Rates.Rate)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Work_Schedule.Naim_Sche)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Work_Schedule.Naim_Sche)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Work_Schedule.Naim_Sche)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.Work_Schedule.Naim_Sche)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Surname_Sot)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Surname_Sot)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Surname_Sot)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.Surname_Sot)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Name_Sot)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Name_Sot)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Name_Sot)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.Name_Sot)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Petronumic_Sot)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Petronumic_Sot)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Petronumic_Sot)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.Petronumic_Sot)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Day_Of_Birth)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Day_Of_Birth)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Day_Of_Birth)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.Day_Of_Birth)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Address)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Address)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.Address)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Num_Phone)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Num_Phone)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Num_Phone)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.Num_Phone)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.Email)
+                    </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Photo)
-        </dt>
+                    <dt>
+                        Резюме
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Photo)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Date_of_adoption)
-        </dt>
+                    @if (Model.rezume != "-")
+                    {
+                        <dd>
+                            <a href="~/Content/Files/@Model.rezume" download>Скачать резюме</a>
+                        </dd>
+                    }
+                    else
+                    {
+                        <dd>
+                            Отсутствует
+                        </dd>
+                    }
 
-        <dd>
-            @Html.DisplayFor(model => model.Date_of_adoption)
-        </dd>
 
-        <dt>
-            Описание
-        </dt>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Date_of_adoption)
+                    </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Opisanie)
-        </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.Date_of_adoption)
+                    </dd>
 
-    </dl>
+                    <dt>
+                        Описание
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Opisanie)
+                    </dd>
+
+                </dl>
+            </div>
+            <p>
+                @Html.ActionLink("Изменить данные", "Edit", new { id = Model.ID_Sotr })
+            </p>
+        </div>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Изменить данные", "Edit", new { id = Model.ID_Sotr }) |
-    @Html.ActionLink("Вернуться к списку сотрудников", "Index")
-</p>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

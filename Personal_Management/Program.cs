@@ -10,6 +10,7 @@ namespace Personal_Management
     public class Program
     {
         public static int colIsp = 0;
+        public static string style = "bootstrap2.min.css";
         public static int id;
         public static bool step1, step2, step3, step4, step5, step6;
         public static int admin;

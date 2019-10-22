@@ -35,7 +35,8 @@
                 @Html.ValidationMessageFor(model => model.Salary, "", new { @class = "text-danger" })
             </div>
         </div>
-
+        @if (Convert.ToInt32(ViewBag.u) == 0)
+        {
         <div class="form-group">
             @Html.LabelFor(model => model.Depart_ID, "Наименование отдела", htmlAttributes: new { @class = "control-label col-md-5" })
             <div class="col-md-10">
@@ -43,6 +44,7 @@
                 @Html.ValidationMessageFor(model => model.Depart_ID, "", new { @class = "text-danger" })
             </div>
         </div>
+        }
 
         <div class="form-group">
             @Html.LabelFor(model => model.Kol_Vo_Pers, htmlAttributes: new { @class = "control-label col-md-5" })
