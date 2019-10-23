@@ -93,39 +93,39 @@
             <ul class="progressbar">
                 @if (Program.step1)
                 {
-                    <li class="active"><a data-placement="top" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Sotrs/Index">Этап 1</a></li>
+                    <li class="active"><abbr title="Ваши данные занесены в базе данных">Этап 1</abbr></li>
                 }
                 else
                 {
-                    <li><a href="~/Sotrs/Index">Этап 1</a></li>
+                    <li><abbr title="Ваших данных еще нет в базе данных">Этап 1</abbr></li>
                 }
                 @if (Program.step2)
                 {
-                    <li class="active">Этап 2</li>
+                    <li class="active"><abbr title="Ваше резюме успешно загружено">Этап 2</abbr></li>
                 }
                 else
                 {
-                    <li>Этап 2</li>
+                    <li><abbr title="Ваше резюме еще не загружено">Этап 2</abbr></li>
                 }
                 @if (Program.step3)
                 {
-                    <li class="active">Этап 3</li>
+                    <li class="active"><abbr title="Ваши данные с собеседования добавлены">Этап 3</abbr></li>
                 }
                 else
                 {
-                    <li>Этап 3</li>
+                    <li><abbr title="Ваши данные с собеседования пока что еще не добавлены">Этап 3</abbr></li>
                 }
                 @if (Program.step4)
                 {
-                    <li class="active">Этап 4</li>
+                    <li class="active"><abbr title="Для вас назначен испытательный срок">Этап 4</abbr></li>
                 }
                 else
                 {
-                    <li>Этап 4</li>
+                    <li><abbr title="В ближайшее время для вас назначат испытательный срок">Этап 4</abbr></li>
                 }
                 @if (Program.step5)
                 {
-                    <li class="active">Этап 5</li>
+                    <li class="active"><abbr title="Испытательный срок окончен. Ожидайте результат, который будет отправлен на почту">Этап 5</abbr></li>
                 }
                 else
                 {
@@ -133,7 +133,7 @@
                 }
                 @if (Program.step6)
                 {
-                    <li class="active">Этап 6</li>
+                    <li class="active"><abbr title="Поздравляем! Теперь вы сотрудник компании It-Liga">Этап 6</abbr></li>
                 }
                 else
                 {

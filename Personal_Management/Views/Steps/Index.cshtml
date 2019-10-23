@@ -25,47 +25,47 @@
             <ul class="progressbar">
                 @if (item.AddSotrInIS)
                 {
-                    <li class="active"><a data-placement="top" , class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Sotrs/Edit/@item.Sotr_ID">Этап 1</a></li>
+                    <li class="active"><a data-placement="top" , class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Sotrs/Edit/@item.Sotr_ID"><abbr title="Добавление сотрудника в систему">Этап 1</abbr></a></li>
                 }
                 else
                 {
-                    <li><a href="~/Sotrs/Create">Этап 1</a></li>
+                    <li><a href="~/Sotrs/Create"><abbr title="Добавление сотрудника в систему">Этап 1</abbr></a></li>
                 }
                 @if (item.AddRezume)
                 {
-                    <li class="active">Этап 2</li>
+                    <li class="active"><abbr title="Резюме сотрудника">Этап 2</abbr></li>
                 }
                 else
                 {
-                    <li>Этап 2</li>
+                    <li><abbr title="Необходимо загрузить резюме">Этап 2</abbr></li>
                 }
                 @if (item.AddSobesedovanie)
                 {
-                    <li class="active">Этап 3</li>
+                    <li class="active"><abbr title="Просмотреть данные о сотруднике">Этап 3</abbr></li>
                 }
                 else
                 {
-                    <li>Этап 3</li>
+                    <li><abbr title="Добавить данные о сотруднике">Этап 3</abbr></li>
                 }
                 @if (item.AddIspSrok)
                 {
-                    <li class="active">Этап 4</li>
+                    <li class="active"><abbr title="Посмотреть данные испытательного срока">Этап 4</abbr></li>
                 }
                 else
                 {
-                    <li>Этап 4</li>
+                    <li><abbr title="Назначить испытательный срок">Этап 4</abbr></li>
                 }
                 @if (item.RezimOzidaniya)
                 {
-                    <li class="active">Этап 5</li>
+                    <li class="active"><abbr title="Перейти к принятию решения">Этап 5</abbr></li>
                 }
                 else
                 {
-                    <li>Этап 5</li>
+                    <li><abbr title="Испытательный срок ещё не окончен">Этап 5</abbr></li>
                 }
                 @if (item.Reshenie)
                 {
-                    <li class="active">Этап 6</li>
+                    <li class="active"><abbr title="Мы рады, что вы работаете вместе с нами в компании IT-Liga">Этап 6</abbr></li>
                 }
                 else
                 {
