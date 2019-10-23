@@ -61,7 +61,7 @@
     <hr />
 
     <div id="modDialog" class="modal fade">
-        <div id="dialogContent" class="modal-dialog"></div>
+        <div id="dialogContent" class="modal-dialog modal-lg"></div>
     </div>
 
     <div class="row">
@@ -75,7 +75,7 @@
                 </div>
                 <img style="margin: 0 auto; height: 340px; width: 260px; display: block;" src="~/Content/Photo/st/@item.Photo" alt="Card image">
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Номер телефона: @Html.DisplayFor(modelItem => item.Num_Phone)</li>
+                    <li class="list-group-item">Номер телефона: <a href="tel:@item.Num_Phone"> @item.Num_Phone</a></li>
                     <li class="list-group-item">Эл. почта: @Html.DisplayFor(modelItem => item.Email)</li>
                     <li class="list-group-item">Дата принятия: @Html.DisplayFor(modelItem => item.Date_of_adoption)</li>
                     @if (item.rezume != "-")

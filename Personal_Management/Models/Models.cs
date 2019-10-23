@@ -34,10 +34,8 @@ namespace Personal_Management.Models
         [Required(ErrorMessage = "Наименование не может быть пустым")]
         public string Naim_Posit { get; set; }
         [Display(Name = "Оклад")]
-        [RegularExpression(@"^([0-9 ,&'-]+)$", ErrorMessage = "Поле может содержать только следующие символы: 0-9 и ,")]
-        [Range(typeof(decimal), "0,0", "999999999999,9", ErrorMessage = "Наименьшая цена - 0.0 рублей")]
-        [Required(ErrorMessage = "Указанный оклад введен неправильно (Должны содержаться числа и(или) .)")]
-        public decimal Salary { get; set; }
+        [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true)]
+        public string Salary { get; set; }
         [ForeignKey("Departments")]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Display(Name = "Наименование отдела")]
@@ -86,10 +84,8 @@ namespace Personal_Management.Models
         [Key]
         public int ID_Rate { get; set; }
         [Display(Name = "Ставка")]
-        [RegularExpression(@"^([0-9 ,&'-]+)$", ErrorMessage = "Поле может содержать только следующие символы: 0-9 и ,")]
-        [Range(typeof(decimal), "0,0", "10,0", ErrorMessage = "Наименьшая ставка - 0,0, а наибольшая - 10,0")]
-        [Required(ErrorMessage = "Указанная ставка введена неправильно (Должны содержаться числа и(или) ,)")]
-        public decimal Rate { get; set; }
+        [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true)]
+        public string Rate { get; set; }
         public Rates()
         {
             this.Sotrs = new HashSet<Sotrs>();
@@ -358,13 +354,9 @@ namespace Personal_Management.Models
     public class LoginModel
     {
         [Display(Name = "Логин аккаунта")]
-        [RegularExpression("^([a-zA-Z0-9 .&'-]+)$", ErrorMessage = "Логин должен иметь заглавные (A-Z), прописные (a-z) буквы и цифры (0-9)")]
-        [StringLength(20, MinimumLength = 6, ErrorMessage = "Длина Логина должна быть от 6 до 20 символов")]
         [Required(ErrorMessage = "Данное поле неверно заполнено")]
         public string Login { get; set; }
         [Display(Name = "Пароль аккаунта")]
-        [RegularExpression("^([a-zA-Z0-9 .&'-]+)$", ErrorMessage = "Пароль должен иметь заглавные (A-Z), прописные (a-z) буквы и цифры (0-9)")]
-        [StringLength(20, MinimumLength = 6, ErrorMessage = "Длина Пароля должна быть от 6 до 20 символов")]
         [Required(ErrorMessage = "Данное поле неверно заполнено")]
         public string Password { get; set; }
     }

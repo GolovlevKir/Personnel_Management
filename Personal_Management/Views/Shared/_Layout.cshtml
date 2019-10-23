@@ -28,7 +28,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarColor01">
-            
+
             <form class="form-inline my-2 my-lg-0">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
@@ -100,37 +100,41 @@
 
         </div>
     </nav>
-    
+
     <div class="container body-content ">
         @RenderBody()
     </div>
-        <footer id="footer" class="bg-primary" >
-            <div class="footer-top ">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-6 col-lg-4 footer-info">
-                            <h3 style="color:white">IT Liga</h3>
-                            <p class="text-muted">Служба технической поддержки. Разработка и поддержка информационных систем.</p>
-                            <br><br>
-                        </div>
-                        <div class="col-12 col-lg-4 footer-contact">
-                            <h4 style="color:white">Наши контакты</h4>
-                            <p class="text-muted">
-                                127254 г. Москва, <br>
-                                пр. Огородный, 9ас1<br>
-                                <strong>Телефон:</strong><a href="tel:+74953692434"> +7 (495) 369-24-34</a><br>
-                                <strong>Email:</strong><a href="mailto:info@itliga.ru"> info@itliga.ru</a><br>
-                            </p>
-                        </div>
+    <br />
+    <br />
+    <br />
+    <br />
+    <footer id="footer" class="bg-primary">
+        <div class="footer-top ">
+            <div class="container">
+                <div class="row">
+                    <div class="col-6 col-lg-4 footer-info">
+                        <h3 style="color:white">IT Liga</h3>
+                        <p class="text-muted">Служба технической поддержки. Разработка и поддержка информационных систем.</p>
+                        <br><br>
                     </div>
-                </div>
-                <div class="container">
-                    <div class="credits" style="color:white">
-                        @DateTime.Now.Year <strong>IT Liga</strong> Все права защищены<br>
+                    <div class="col-12 col-lg-4 footer-contact">
+                        <h4 style="color:white">Наши контакты</h4>
+                        <p class="text-muted">
+                            127254 г. Москва, <br>
+                            пр. Огородный, 9ас1<br>
+                            <strong>Телефон:</strong><a href="tel:+74953692434"> +7 (495) 369-24-34</a><br>
+                            <strong>Email:</strong><a href="mailto:info@itliga.ru"> info@itliga.ru</a><br>
+                        </p>
                     </div>
                 </div>
             </div>
-        </footer>
+            <div class="container">
+                <div class="credits" style="color:white">
+                    @DateTime.Now.Year <strong>IT Liga</strong> Все права защищены<br>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

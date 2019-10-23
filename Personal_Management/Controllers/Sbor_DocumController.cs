@@ -134,7 +134,6 @@ namespace Personal_Management.Controllers
                     return RedirectToAction("Index");
                 }
             
-            return View(sbor_Docum);
         }
 
         public string upload(HttpPostedFileBase file)
@@ -154,7 +153,7 @@ namespace Personal_Management.Controllers
                         path = DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName);
                         //    ViewBag.Message = "File uploaded successfully";
                     }
-                    catch (Exception ex)
+                    catch 
                     {
                         path = "-1";
                     }

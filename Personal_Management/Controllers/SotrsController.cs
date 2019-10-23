@@ -41,7 +41,7 @@ namespace Personal_Management.Controllers
             List<Positions> posit = db.Positions.ToList();
             posit.Insert(0, new Positions { Naim_Posit = "Все", ID_Positions = 0 });
             List<Rates> rates = db.Rates.ToList();
-            rates.Insert(0, new Rates { Rate = 0, ID_Rate = 0 });
+            rates.Insert(0, new Rates { Rate = "Все", ID_Rate = 0 });
             List<Work_Schedule> sch = db.Work_Schedule.ToList();
             sch.Insert(0, new Work_Schedule { Naim_Sche = "Все", ID_Schedule = 0 });
             SotrsListViewModel plvm = new SotrsListViewModel {
@@ -203,7 +203,7 @@ namespace Personal_Management.Controllers
                         path = DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName);
                         //    ViewBag.Message = "File uploaded successfully";
                     }
-                    catch (Exception ex)
+                    catch 
                     {
                         path = "-1";
                     }
@@ -233,7 +233,7 @@ namespace Personal_Management.Controllers
                         path = DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName);
                         //    ViewBag.Message = "File uploaded successfully";
                     }
-                    catch (Exception ex)
+                    catch 
                     {
                         path = "-1";
                     }
@@ -390,7 +390,6 @@ namespace Personal_Management.Controllers
                 }
             }
             
-            return View(sotrs);
         }
 
         // GET: Sotrs/Delete/5
