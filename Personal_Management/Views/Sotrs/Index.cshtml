@@ -27,26 +27,26 @@
             <div class="mb-3" style="margin: 0 auto; width: auto;"><h3>Фильтрация данных</h3></div>
             <div class="collapse navbar-collapse" id="navbarColor02">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
+                    <li class="nav-item" style="margin-right: 5px;">
                         <label class="control-label">Должность: </label>
                         @Html.DropDownList("pos", Model.Positions as SelectList,
                                     htmlAttributes: new { @class = "form-control" })
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" style="margin-right: 5px;">
                         <label class="control-label">Ставка: </label>
                         @Html.DropDownList("rate", Model.Rates as SelectList,
-                                    htmlAttributes: new { @class = "form-control" })
+                                    htmlAttributes: new { @class = "form-control", @style="width:100%" })
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" style="margin-right: 5px;">
                         <label class="control-label" style="white-space:nowrap">График работы: </label>
                         @Html.DropDownList("sche", Model.Work_Schedule as SelectList,
                                     htmlAttributes: new { @class = "form-control" })
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" style="margin-right: 5px;">
                         <label class="control-label">Поиск: </label>
                         <input type="text" name="search" value="@ViewBag.seo" class="form-control" />
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" style="margin-right: 5px;">
                         <input type="submit" value="Фильтр" class="btn btn-default" />
                     </li>
                 </ul>
