@@ -15,6 +15,7 @@ namespace Personal_Management.Controllers
         {
             try
             {
+                
                 Program.update();
                 //Response.Write("<script>alert('Добро пожаловать!'); </script>");
                 if (User.Identity.IsAuthenticated)
@@ -35,26 +36,26 @@ namespace Personal_Management.Controllers
                     command.CommandText = "SELECT Photo FROM dbo.Accounts JOIN dbo.Sotrs ON dbo.Accounts.Sotr_ID = dbo.Sotrs.ID_Sotr where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
                     ViewBag.photo = command.ExecuteScalar().ToString();
                     command.CommandText = "SELECT dbo.Roles.Manip_Roles FROM dbo.Accounts INNER JOIN dbo.Roles ON dbo.Accounts.Role_ID = dbo.Roles.ID_Role where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
-                    Program.admin = Convert.ToInt32(command.ExecuteScalar());
+                    Session["admin"] = Convert.ToInt32(command.ExecuteScalar());
                     command.CommandText = "SELECT dbo.Roles.Manip_Sotrs FROM dbo.Accounts INNER JOIN dbo.Roles ON dbo.Accounts.Role_ID = dbo.Roles.ID_Role where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
-                    Program.Kadri = Convert.ToInt32(command.ExecuteScalar());
+                    Session["Kadri"] = Convert.ToInt32(command.ExecuteScalar());
                     command.CommandText = "SELECT dbo.Roles.Manip_Department FROM dbo.Accounts INNER JOIN dbo.Roles ON dbo.Accounts.Role_ID = dbo.Roles.ID_Role where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
-                    Program.Otdeli = Convert.ToInt32(command.ExecuteScalar());
+                    Session["Otdeli"] = Convert.ToInt32(command.ExecuteScalar());
                     command.CommandText = "SELECT dbo.Roles.Buh_Ych FROM dbo.Accounts INNER JOIN dbo.Roles ON dbo.Accounts.Role_ID = dbo.Roles.ID_Role where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
-                    Program.Buh = Convert.ToInt32(command.ExecuteScalar());
+                    Session["Buh"] = Convert.ToInt32(command.ExecuteScalar());
 
                     command.CommandText = "SELECT dbo.Steps.AddSotrInIS FROM dbo.Accounts JOIN dbo.Sotrs ON dbo.Accounts.Sotr_ID = dbo.Sotrs.ID_Sotr JOIN dbo.Steps ON dbo.Sotrs.ID_Sotr = dbo.Steps.Sotr_ID where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
-                    Program.step1 = Convert.ToBoolean(command.ExecuteScalar());
+                    Session["step1"] = Convert.ToBoolean(command.ExecuteScalar());
                     command.CommandText = "SELECT dbo.Steps.AddRezume FROM dbo.Accounts JOIN dbo.Sotrs ON dbo.Accounts.Sotr_ID = dbo.Sotrs.ID_Sotr JOIN dbo.Steps ON dbo.Sotrs.ID_Sotr = dbo.Steps.Sotr_ID where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
-                    Program.step2 = Convert.ToBoolean(command.ExecuteScalar());
+                    Session["step2"] = Convert.ToBoolean(command.ExecuteScalar());
                     command.CommandText = "SELECT dbo.Steps.AddSobesedovanie FROM dbo.Accounts JOIN dbo.Sotrs ON dbo.Accounts.Sotr_ID = dbo.Sotrs.ID_Sotr JOIN dbo.Steps ON dbo.Sotrs.ID_Sotr = dbo.Steps.Sotr_ID where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
-                    Program.step3 = Convert.ToBoolean(command.ExecuteScalar());
+                    Session["step3"] = Convert.ToBoolean(command.ExecuteScalar());
                     command.CommandText = "SELECT dbo.Steps.AddIspSrok FROM dbo.Accounts JOIN dbo.Sotrs ON dbo.Accounts.Sotr_ID = dbo.Sotrs.ID_Sotr JOIN dbo.Steps ON dbo.Sotrs.ID_Sotr = dbo.Steps.Sotr_ID where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
-                    Program.step4 = Convert.ToBoolean(command.ExecuteScalar());
+                    Session["step4"] = Convert.ToBoolean(command.ExecuteScalar());
                     command.CommandText = "SELECT dbo.Steps.RezimOzidaniya FROM dbo.Accounts JOIN dbo.Sotrs ON dbo.Accounts.Sotr_ID = dbo.Sotrs.ID_Sotr JOIN dbo.Steps ON dbo.Sotrs.ID_Sotr = dbo.Steps.Sotr_ID where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
-                    Program.step5 = Convert.ToBoolean(command.ExecuteScalar());
+                    Session["step5"] = Convert.ToBoolean(command.ExecuteScalar());
                     command.CommandText = "SELECT dbo.Steps.Reshenie FROM dbo.Accounts JOIN dbo.Sotrs ON dbo.Accounts.Sotr_ID = dbo.Sotrs.ID_Sotr JOIN dbo.Steps ON dbo.Sotrs.ID_Sotr = dbo.Steps.Sotr_ID where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
-                    Program.step6 = Convert.ToBoolean(command.ExecuteScalar());
+                    Session["step6"] = Convert.ToBoolean(command.ExecuteScalar());
 
                     Program.SqlConnection.Close();
                 }

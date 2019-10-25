@@ -21,6 +21,7 @@ namespace Personal_Management.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginModel model)
         {
+            Session["style"] = "bootstrap.min.css";
             if (ModelState.IsValid)
             {
                 // поиск пользователя в бд
@@ -84,15 +85,23 @@ namespace Personal_Management.Controllers
         }
         public ActionResult Them()
         {
-            if (Program.style == "bootstrap.min.css")
+            if (Session["style"] == null)
             {
-                Program.style = "bootstrap2.min.css";
+                Session["style"] = "bootstrap.min.css";
             }
             else
             {
-                Program.style = "bootstrap.min.css";
+                if (Session["style"].ToString() == "bootstrap.min.css")
+                {
+                    Session["style"] = "bootstrap2.min.css";
+                }
+                else
+                {
+                    Session["style"] = "bootstrap.min.css";
+                }
+                
             }
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
         }
     }
 }
