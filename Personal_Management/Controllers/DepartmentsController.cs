@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -135,5 +136,21 @@ namespace Personal_Management.Controllers
             base.Dispose(disposing);
         }
 
+        [HttpGet]
+        public ActionResult CreateDocument(HttpPostedFileBase file)
+        {
+            var script = @"alert(""Email sent successfully"");";
+            
+            try
+            {
+                    WordDocument.PrihZaDen();
+                return JavaScript(script);
+            }
+            catch
+            {
+                script = @"alert(""Error"");";
+                return JavaScript(script);
+            }
+        }
     }
 }

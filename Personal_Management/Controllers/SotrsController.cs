@@ -431,18 +431,5 @@ namespace Personal_Management.Controllers
             base.Dispose(disposing);
         }
 
-        [HttpGet]
-        public ActionResult CreateDocument()
-        {
-            try
-            {
-                WordDocument.PrihZaDen();
-                return JavaScript("alert('Файл создан на рабочем столе');");
-            }
-            catch
-            {
-                return JavaScript("alert('Попробуйте снова');");
-            }
-        }
     }
 }
