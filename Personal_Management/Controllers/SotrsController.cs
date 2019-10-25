@@ -44,7 +44,8 @@ namespace Personal_Management.Controllers
             rates.Insert(0, new Rates { Rate = "Все", ID_Rate = 0 });
             List<Work_Schedule> sch = db.Work_Schedule.ToList();
             sch.Insert(0, new Work_Schedule { Naim_Sche = "Все", ID_Schedule = 0 });
-            SotrsListViewModel plvm = new SotrsListViewModel {
+            SotrsListViewModel plvm = new SotrsListViewModel
+            {
                 Sotrs = sotrs.ToList(),
                 Positions = new SelectList(posit, "ID_Positions", "Naim_Posit"),
                 Rates = new SelectList(rates, "ID_Rate", "Rate"),
@@ -203,7 +204,7 @@ namespace Personal_Management.Controllers
                         path = DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName);
                         //    ViewBag.Message = "File uploaded successfully";
                     }
-                    catch 
+                    catch
                     {
                         path = "-1";
                     }
@@ -233,7 +234,7 @@ namespace Personal_Management.Controllers
                         path = DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName);
                         //    ViewBag.Message = "File uploaded successfully";
                     }
-                    catch 
+                    catch
                     {
                         path = "-1";
                     }
@@ -389,7 +390,7 @@ namespace Personal_Management.Controllers
                     }
                 }
             }
-            
+
         }
 
         // GET: Sotrs/Delete/5
@@ -415,7 +416,7 @@ namespace Personal_Management.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Sotrs sotrs = db.Sotrs.Find(id);
-            
+
             db.Sotrs.Remove(sotrs);
             db.SaveChanges();
             return RedirectToAction("Index");
@@ -428,6 +429,20 @@ namespace Personal_Management.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        [HttpGet]
+        public ActionResult CreateDocument()
+        {
+            try
+            {
+                WordDocument.PrihZaDen();
+                return JavaScript("alert('Файл создан на рабочем столе');");
+            }
+            catch
+            {
+                return JavaScript("alert('Попробуйте снова');");
+            }
         }
     }
 }

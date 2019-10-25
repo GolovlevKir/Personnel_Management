@@ -15,6 +15,15 @@
     <li class="breadcrumb-item"> @Html.ActionLink("Данные ставок", "Index", "Rates")</li>
     <li class="breadcrumb-item">@Html.ActionLink("Список рабочих графиков", "Index", "Work_Schedule")</li>
 </ol>
+
+@{Html.BeginForm("CreateDocument", "Sotrs", FormMethod.Get);
+    {
+    <div>
+        <button class="btn"><i class="fa fa-"></i></button>
+    </div>
+    }
+    Html.EndForm();
+}
 <hr />
 
 
@@ -35,7 +44,7 @@
                     <li class="nav-item" style="margin-right: 5px;">
                         <label class="control-label">Ставка: </label>
                         @Html.DropDownList("rate", Model.Rates as SelectList,
-                                    htmlAttributes: new { @class = "form-control", @style="width:100%" })
+                                    htmlAttributes: new { @class = "form-control", @style = "width:100%" })
                     </li>
                     <li class="nav-item" style="margin-right: 5px;">
                         <label class="control-label" style="white-space:nowrap">График работы: </label>
@@ -55,7 +64,7 @@
         </nav>
     </form>
     <hr />
-    @if (Program.Kadri != 0)
+    @if ((int)Session["Kadri"] != 0)
     {
         @Html.ActionLink("Добавить нового сотрудника", "addnewrecord")
     }
@@ -88,14 +97,14 @@
                         <li class="list-group-item">Резюме отсутствует</li>
                     }
                 </ul>
-                @if (Program.Kadri != 0)
+                @if ((int)Session["Kadri"] != 0)
                 {
-            <div class="card-footer text-center">
-                @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
-                @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
-                @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Sotr }, new { @class = "compItem" }) 
+                    <div class="card-footer text-center">
+                        @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
+                        @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
+                        @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Sotr }, new { @class = "compItem" })
 
-            </div>
+                    </div>
                 }
                 else
                 {

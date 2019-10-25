@@ -14,6 +14,7 @@
     }
 
     <link href="~/Content/Photo/fav.ico" rel="icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     @Scripts.Render("~/bundles/modernizr")
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="~/Scripts/jquery.maskedinput.min.js"></script>
@@ -25,7 +26,7 @@
             $('#phone').mask('+7(999)999-99-99');
         });</script>
     <link href="~/Content/StyleSite2.css" rel="stylesheet" />
-
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -40,12 +41,12 @@
             <form class="form-inline my-2 my-lg-0">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("Index","Home")">Домашняя страница</a>
+                        <a class="nav-link" href="@Url.Action("Index","Home")"><i class="fas fa-poo" style="margin-right: 5px;font-size:20px"></i>Домашняя страница</a>
                     </li>
                     @if ((int)Session["admin"] != 0 || (int)Session["Buh"] != 0 || (int)Session["Kadri"] != 0 || (int)Session["Otdeli"] != 0)
                     {
                         <li class="nav-item dropdown ">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Данные сотрудников</a>
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-friends" style="margin-right: 5px;font-size:20px"></i>Данные сотрудников</a>
                             <div class="dropdown-menu" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
                                 @if ((int)Session["Otdeli"] != 0)
                                 {
@@ -80,7 +81,7 @@
                     @if ((int)Session["Buh"] != 0)
                     {
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Бухгалтерия</a>
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-dollar-sign" style="margin-right: 5px;font-size:20px"></i>Бухгалтерия</a>
                             <div class="dropdown-menu" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
                                 @Html.ActionLink("Имеющиеся ставки", "Index", "Rates", null, new { @class = "dropdown-item" })
                             </div>
@@ -89,18 +90,25 @@
                     @if ((int)Session["admin"] != 0)
                     {
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Наcтройка прав доступа</a>
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-shield-alt" style="margin-right: 5px;font-size:20px"></i>Наcтройка прав доступа</a>
                             <div class="dropdown-menu" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
                                 @Html.ActionLink("Права доступа", "Index", "Roles", null, new { @class = "dropdown-item" })
                                 @Html.ActionLink("Аккаунты", "Index", "Accounts", null, new { @class = "dropdown-item" })
                             </div>
                         </li>
                     }
+                <li class="nav-item">
+                    @if (@Session["style"].ToString() == "bootstrap.min.css")
+                    {
+                        <a class="nav-link" href="@Url.Action("Them", "Account")"><i class="fas fa-bed" style="margin-right: 5px;font-size:20px"></i>Ночной режим</a>
+                    }
+                    else
+                    {
+                        <a class="nav-link" href="@Url.Action("Them", "Account")"><i class="fas fa-sun" style="margin-right: 5px;font-size:20px"></i>Обычный режим</a>
+                    }
+                </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("LogOut","Account")">Выйти</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("Them","Account")">Сменить тему</a>
+                        <a class="nav-link" href="@Url.Action("LogOut","Account")"><i class="fas fa-sign-in-alt" style="margin-right: 5px;font-size:20px"></i>Выйти</a>
                     </li>
                 </ul>
 
