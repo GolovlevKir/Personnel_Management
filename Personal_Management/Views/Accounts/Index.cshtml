@@ -1,7 +1,9 @@
 ﻿@model IEnumerable<Personal_Management.Models.Accounts>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Список пользователей";
+    ViewBag.NameMeta = "Acc";
+    ViewBag.ContentMeta = "На данном окне предоставлен список пользователей";
 }
 
 <h2>Аккаунты сотрудников</h2>
@@ -28,9 +30,6 @@
         <th>
             @Html.DisplayNameFor(model => model.Login)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Password)
-        </th>
         <th></th>
     </tr>
 
@@ -42,9 +41,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Login)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Password)
             </td>
             <td>
                 @Html.ActionLink("Изменить", "Edit", new { id = item.Login }) |

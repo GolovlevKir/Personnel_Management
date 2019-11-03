@@ -1,7 +1,9 @@
 ﻿@model IEnumerable<Personal_Management.Models.Isp_Sroki>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Испытательные сроки";
+    ViewBag.NameMeta = "Isp";
+    ViewBag.ContentMeta = "На данном окне возможно просмотреть список испытательных сроков";
 }
 
 <h2>Испытательные сроки</h2>
@@ -79,7 +81,7 @@
 </div>
 @section scripts
 {
-    <script type="text/javascript">
+    <script >
 
         $(function () {
             $.ajaxSetup({ cache: false });

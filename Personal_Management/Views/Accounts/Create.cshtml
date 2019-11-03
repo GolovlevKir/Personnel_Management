@@ -1,9 +1,10 @@
 ﻿@model Personal_Management.Models.Accounts
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Добавление нового пользователя";
+    ViewBag.NameMeta = "AddAcc";
+    ViewBag.ContentMeta = "На данном окне возможно добавление новых пользователей";
 }
-
 
 @using (Html.BeginForm())
 {
@@ -51,13 +52,19 @@
             </div>
         </div>
 
-
+        <div class="form-group">
+            @Html.LabelFor(model => model.Sotr_ID, "ФИО Сотрудника", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("Sotr_ID", null, htmlAttributes: new { @class = "form-control",  @id = "Sotr_ID" })
+                @Html.ValidationMessageFor(model => model.Sotr_ID, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Sotr_ID, "Сотрудник", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Password2, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("Sotr_ID", ViewBag.Sotr_ID as SelectList, htmlAttributes: new  { @class = "form-control", @id = "sot" })
-                @Html.ValidationMessageFor(model => model.Sotr_ID, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Password2, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Password2, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -68,7 +75,6 @@
         </div>
     </div>
 }
-
 @section scripts{
     <script type="text/javascript">
     $(function () {
@@ -82,7 +88,7 @@
                 url: '@Url.Action("GetItems")/' + id,
                 success: function (data) {
                     // заменяем содержимое присланным частичным представлением
-                    $('#sot').replaceWith(data);
+                    $('#Sotr_ID').replaceWith(data);
                 }
             });
         });

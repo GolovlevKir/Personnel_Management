@@ -75,11 +75,13 @@ namespace Personal_Management.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Login,Password,Role_ID,Sotr_ID")] Accounts accounts)
+        public ActionResult Create([Bind(Include = "Login,Password,Role_ID,Sotr_ID,Password2")] Accounts accounts)
         {
             if (ModelState.IsValid)
             {
                 //Создаем новый аккаунт
+                accounts.Password2 = accounts.Password;
+                accounts.Password = Program.Hash(accounts.Password);
                 db.Accounts.Add(accounts);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -115,11 +117,11 @@ namespace Personal_Management.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Login,Password,Role_ID,Sotr_ID")] Accounts accounts)
+        public ActionResult Edit(Accounts accounts)
         {
             if (ModelState.IsValid)
             {
-                //Сохраняем изменения
+                accounts.Password = Program.Hash(accounts.Password2);
                 db.Entry(accounts).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

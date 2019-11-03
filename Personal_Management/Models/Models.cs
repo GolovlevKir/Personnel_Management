@@ -238,10 +238,6 @@ namespace Personal_Management.Models
         public string Login { get; set; }
         //Отображение на странице
         [Display(Name = "Пароль аккаунта")]
-        //Регулярное выражение
-        [RegularExpression("^([a-zA-Z0-9 .&'-]+)$", ErrorMessage = "Пароль должен иметь заглавные (A-Z), прописные (a-z) буквы и цифры (0-9)")]
-        //Ограничения ввода
-        [StringLength(20, MinimumLength = 6, ErrorMessage = "Длина Пароля должна быть от 6 до 20 символов")]
         //Вывод ошибки
         [Required(ErrorMessage = "Данное поле неверно заполнено")]
         public string Password { get; set; }
@@ -255,6 +251,13 @@ namespace Personal_Management.Models
         //Отображение на странице
         [Display(Name = "ФИО сотрудника")]
         public int Sotr_ID { get; set; }
+        [Display(Name = "Пароль аккаунта")]
+        //Регулярное выражение
+        //Ограничения ввода
+        [StringLength(20, MinimumLength = 6, ErrorMessage = "Длина Пароля должна быть от 6 до 20 символов")]
+        //Вывод ошибки
+        [Required(ErrorMessage = "Данное поле неверно заполнено")]
+        public string Password2 { get; set; }
         public virtual Roles Roles { get; set; }
         public virtual Sotrs Sotrs { get; set; }
     }

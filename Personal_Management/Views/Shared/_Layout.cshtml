@@ -3,6 +3,10 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="@ViewBag.NameMeta" content="@ViewBag.ContentMeta">
+    <meta name="yandex-verification" content="f23e027a6cefd8c9" />
+    <meta name="google-site-verification" content="lFxRzrVPLrPmmzKY1pD2h4RBxIuDvyGufYBvSxdsPok" />
+
     <title>@ViewBag.Title</title>
     @if (@Session["style"] == null)
     {
@@ -18,13 +22,19 @@
     @Scripts.Render("~/bundles/modernizr")
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="~/Scripts/jquery.maskedinput.min.js"></script>
-    <script type="text/javascript">
+    <script>
         jQuery(function ($) {
             $.mask.definitions['~'] = '[+-]';
             $('#date').mask('99.99.9999');
             $('#date2').mask('99.99.9999');
             $('#phone').mask('+7(999)999-99-99');
         });</script>
+    <style>
+        #gmap_canvas img {
+            max-width: none !important;
+            background: none !important
+        }
+    </style>
     <link href="~/Content/StyleSite2.css" rel="stylesheet" />
     <script src='https://kit.fontawesome.com/a076d05399.js'></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -40,89 +50,90 @@
         <div class="collapse navbar-collapse" id="navbarColor01">
 
             <form class="form-inline my-2 my-lg-0">
-                @try
-                {
                 <ul class="navbar-nav" style="width:100%">
+
+
                     <li class="nav-item">
                         <a class="nav-link" href="@Url.Action("Index","Home")"><i class="fas fa-poo" style="margin-right: 5px;font-size:20px"></i>Домашняя страница</a>
                     </li>
-
-                    @if ((int)Session["admin"] != 0 || (int)Session["Buh"] != 0 || (int)Session["Kadri"] != 0 || (int)Session["Otdeli"] != 0)
+                    @try
                     {
-                        <li class="nav-item dropdown ">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-friends" style="margin-right: 5px;font-size:20px"></i>Данные сотрудников</a>
-                            <div class="dropdown-menu dropdown-menu-right " aria-labelledby="navbarDropdown" style="width:100%">
-                                @if ((int)Session["Otdeli"] != 0)
-                                {
-                                    @Html.ActionLink("Отделы организации", "Index", "Departments", null, new { @class = "dropdown-item nav-item" })
-                                    <a class="dropdown-item" href="/Positions/Index/0">Должности</a>
-                                    <div class="dropdown-divider"></div>
-                                }
-                                @if ((int)Session["Otdeli"] != 0)
-                                {
-                                    @Html.ActionLink("Документы для сдачи", "Index", "Documents", null, new { @class = "dropdown-item" })
-                                    @Html.ActionLink("Сбор документов", "Index", "Sbor_Docum", null, new { @class = "dropdown-item" })
-                                    <div class="dropdown-divider"></div>
-                                }
-                                @if ((int)Session["admin"] != 0 || (int)Session["Buh"] != 0 || (int)Session["Kadri"] != 0 || (int)Session["Otdeli"] != 0)
-                                {
-                                    @Html.ActionLink("Графики работы", "Index", "Work_Schedule", null, new { @class = "dropdown-item" })
-                                    <div class="dropdown-divider"></div>
-                                }
-                                @if ((int)Session["Otdeli"] != 0)
-                                {
-                                    <a class="dropdown-item" href="@Url.Action("Index", "Isp_Sroki")">Испытательные сроки <span class="badge badge-success badge-pill">@Program.colIsp</span></a>
-                                    <div class="dropdown-divider"></div>
-                                }
-                                @if ((int)Session["admin"] != 0 || (int)Session["Buh"] != 0 || (int)Session["Kadri"] != 0 || (int)Session["Otdeli"] != 0)
-                                {
-                                    @Html.ActionLink("Данные сотрудников", "Index", "Sotrs", null, new { @class = "dropdown-item" })
-                                }
-
-                            </div>
-                        </li>
-                    }
-                    @if ((int)Session["Buh"] != 0)
-                    {
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-dollar-sign" style="margin-right: 5px;font-size:20px"></i>Бухгалтерский отдел</a>
-                            <div class="dropdown-menu dropdown-menu-right " aria-labelledby="navbarDropdown" style="width:100%">
-                                @Html.ActionLink("Имеющиеся ставки", "Index", "Rates", null, new { @class = "dropdown-item" })
-                            </div>
-                        </li>
-                    }
-                    @if ((int)Session["admin"] != 0)
-                    {
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-shield-alt" style="margin-right: 5px;font-size:20px"></i>Наcтройка прав доступа</a>
-                            <div class="dropdown-menu dropdown-menu-right " aria-labelledby="navbarDropdown" style="width:100%">
-                                @Html.ActionLink("Права доступа", "Index", "Roles", null, new { @class = "dropdown-item" })
-                                @Html.ActionLink("Аккаунты", "Index", "Accounts", null, new { @class = "dropdown-item" })
-                            </div>
-                        </li>
-                    }
-                    <li class="nav-item">
-                        @if (@Session["style"].ToString() == "bootstrap.min.css")
+                        if ((int)Session["admin"] != 0 || (int)Session["Buh"] != 0 || (int)Session["Kadri"] != 0 || (int)Session["Otdeli"] != 0)
                         {
-                            <a class="nav-link" href="@Url.Action("Them", "Account")"><i class="fas fa-bed" style="margin-right: 5px;font-size:20px"></i>Ночной режим</a>
-                        }
-                        else
-                        {
-                            <a class="nav-link" href="@Url.Action("Them", "Account")"><i class="fas fa-sun" style="margin-right: 5px;font-size:20px"></i>Обычный режим</a>
-                        }
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("LogOut", "Account")"><i class="fas fa-sign-in-alt" style="margin-right: 5px;font-size:20px"></i>Выйти</a>
-                    </li>
+                            <li class="nav-item dropdown ">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-friends" style="margin-right: 5px;font-size:20px"></i>Данные сотрудников</a>
+                                <div class="dropdown-menu dropdown-menu-right " style="width:100%">
+                                    @if ((int)Session["Otdeli"] != 0)
+                                    {
+                                        @Html.ActionLink("Отделы организации", "Index", "Departments", null, new { @class = "dropdown-item nav-item" })
+                                        <a class="dropdown-item" href="/Positions/Index/0">Должности</a>
+                                        <div class="dropdown-divider"></div>
+                                    }
+                                    @if ((int)Session["Otdeli"] != 0)
+                                    {
+                                        @Html.ActionLink("Документы для сдачи", "Index", "Documents", null, new { @class = "dropdown-item" })
+                                        @Html.ActionLink("Сбор документов", "Index", "Sbor_Docum", null, new { @class = "dropdown-item" })
+                                        <div class="dropdown-divider"></div>
+                                    }
+                                    @if ((int)Session["admin"] != 0 || (int)Session["Buh"] != 0 || (int)Session["Kadri"] != 0 || (int)Session["Otdeli"] != 0)
+                                    {
+                                        @Html.ActionLink("Графики работы", "Index", "Work_Schedule", null, new { @class = "dropdown-item" })
+                                        <div class="dropdown-divider"></div>
+                                    }
+                                    @if ((int)Session["Otdeli"] != 0)
+                                    {
+                                        <a class="dropdown-item" href="@Url.Action("Index", "Isp_Sroki")">Испытательные сроки <span class="badge badge-success badge-pill">@Program.colIsp</span></a>
+                                        <div class="dropdown-divider"></div>
+                                    }
+                                    @if ((int)Session["admin"] != 0 || (int)Session["Buh"] != 0 || (int)Session["Kadri"] != 0 || (int)Session["Otdeli"] != 0)
+                                    {
+                                        @Html.ActionLink("Данные сотрудников", "Index", "Sotrs", null, new { @class = "dropdown-item" })
+                                    }
 
+                                </div>
+                            </li>
+                        }
+                        if ((int)Session["Buh"] != 0)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-dollar-sign" style="margin-right: 5px;font-size:20px"></i>Бухгалтерский отдел</a>
+                                <div class="dropdown-menu dropdown-menu-right " style="width:100%">
+                                    @Html.ActionLink("Имеющиеся ставки", "Index", "Rates", null, new { @class = "dropdown-item" })
+                                </div>
+                            </li>
+                        }
+                        if ((int)Session["admin"] != 0)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-shield-alt" style="margin-right: 5px;font-size:20px"></i>Наcтройка прав доступа</a>
+                                <div class="dropdown-menu dropdown-menu-right " style="width:100%">
+                                    @Html.ActionLink("Права доступа", "Index", "Roles", null, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Аккаунты", "Index", "Accounts", null, new { @class = "dropdown-item" })
+                                </div>
+                            </li>
+                        }
+                        <li class="nav-item">
+                            @if (@Session["style"].ToString() == "bootstrap.min.css")
+                            {
+                                <a class="nav-link" href="@Url.Action("Them", "Account")"><i class="fas fa-bed" style="margin-right: 5px;font-size:20px"></i>Ночной режим</a>
+                            }
+                            else
+                            {
+                                <a class="nav-link" href="@Url.Action("Them", "Account")"><i class="fas fa-sun" style="margin-right: 5px;font-size:20px"></i>Обычный режим</a>
+                            }
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("LogOut", "Account")"><i class="fas fa-sign-in-alt" style="margin-right: 5px;font-size:20px"></i>Выйти</a>
+                        </li>
+
+
+                    }
+                    catch
+                    {
+
+                    }
                 </ul>
-                }
-                catch
-                {
-
-                }
-
-            </form>
+                </form>
 
         </div>
     </nav>

@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<Personal_Management.Models.Sotrs>
-<select id="sot" name="Sotrs" class = "form-control">
+
+<select id="Sotr_ID" name="Sotr_ID" class = "form-control">
     @foreach (var item in Model)
     {
         <option value="@item.ID_Sotr">@item.Full</option>

@@ -304,7 +304,6 @@
     <Content Include="Views\Positions\Index.cshtml" />
     <Content Include="Views\Departments\Create.cshtml" />
     <Content Include="Views\Departments\Delete.cshtml" />
-    <Content Include="Views\Departments\Details.cshtml" />
     <Content Include="Views\Departments\Edit.cshtml" />
     <Content Include="Views\Departments\Index.cshtml" />
     <Content Include="Views\Documents\Create.cshtml" />
@@ -326,7 +325,6 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Pass_Dannie\Create.cshtml" />
     <Content Include="Views\Pass_Dannie\Delete.cshtml" />
-    <Content Include="Views\Pass_Dannie\Details.cshtml" />
     <Content Include="Views\Pass_Dannie\Edit.cshtml" />
     <Content Include="Views\Pass_Dannie\Index.cshtml" />
     <Content Include="Views\Rates\Create.cshtml" />
@@ -354,15 +352,14 @@
     <Content Include="Views\Accounts\Index.cshtml" />
     <Content Include="Views\Accounts\Edit.cshtml" />
     <Content Include="Views\Accounts\Delete.cshtml" />
-    <Content Include="Views\Accounts\Create.cshtml" />
     <Content Include="Views\Steps\Create.cshtml" />
     <Content Include="Views\Steps\Delete.cshtml" />
-    <Content Include="Views\Steps\Details.cshtml" />
     <Content Include="Views\Steps\Edit.cshtml" />
     <Content Include="Views\Steps\Index.cshtml" />
     <Content Include="Views\Shared\_LayoutAuth.cshtml" />
     <Content Include="Views\Accounts\GetItems.cshtml" />
     <Content Include="Views\Shared\_Layout2.cshtml" />
+    <Content Include="Views\Accounts\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

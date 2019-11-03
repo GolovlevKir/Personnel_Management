@@ -23,8 +23,9 @@ namespace Personal_Management.Controllers
             {
                 // поиск пользователя в бд
                 Accounts user = null;
+                string pa = Program.Hash(model.Password);
                 //Поиск аккаунта по логину и паролю
-                user = db.Accounts.FirstOrDefault(u => u.Login == model.Login && u.Password == model.Password);
+                user = db.Accounts.FirstOrDefault(u => u.Login == model.Login && u.Password == pa);
                 //Если найден, то открыть домашнюю страницу
                 if (user != null)
                 {
