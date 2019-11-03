@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
@@ -14,27 +13,16 @@ namespace Personal_Management.Controllers
 
         // GET: Isp_Sroki
         [Authorize]
-        public ActionResult Index()
+        public ActionResult Index(string search)
         {
             Program.update();
             var isp_Sroki = db.Isp_Sroki.Include(i => i.Sotrs).Include(i => i.status_isp_sroka);
+            //Осуществление поиска
+            if (search != null && search != "")
+            {
+                isp_Sroki = isp_Sroki.Where(s => (s.Sotrs.Surname_Sot.Contains(search)) || (s.Sotrs.Name_Sot.Contains(search)) || (s.Sotrs.Petronumic_Sot.Contains(search)) || (s.Sotrs.Positions.Naim_Posit.Contains(search)));
+            }
             return View(isp_Sroki.ToList());
-        }
-
-        // GET: Isp_Sroki/Details/5
-        [Authorize]
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Isp_Sroki isp_Sroki = db.Isp_Sroki.Find(id);
-            if (isp_Sroki == null)
-            {
-                return HttpNotFound();
-            }
-            return View(isp_Sroki);
         }
 
         // GET: Isp_Sroki/Create
@@ -57,6 +45,7 @@ namespace Personal_Management.Controllers
         {
             if (ModelState.IsValid)
             {
+                //Добавление испытательного срока
                 db.Isp_Sroki.Add(isp_Sroki);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -96,6 +85,7 @@ namespace Personal_Management.Controllers
             if (ModelState.IsValid)
             {
                 SqlCommand command = new SqlCommand("", Program.SqlConnection);
+                //Изменение данных
                 Program.SqlConnection.Open();
                 command.CommandText = "update Isp_Sroki set Sotr_ID = " + isp_Sroki.Sotr_ID.ToString() + " , Date_Start = '" + isp_Sroki.Date_Start + "', Date_Finish = '" + isp_Sroki.Date_Finish + "', Status_ID = " + isp_Sroki.Status_ID.ToString() + " where ID_Isp = " + isp_Sroki.ID_Isp.ToString();
                 command.ExecuteScalar();
@@ -130,6 +120,7 @@ namespace Personal_Management.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Isp_Sroki isp_Sroki = db.Isp_Sroki.Find(id);
+            //Удаление данных
             db.Isp_Sroki.Remove(isp_Sroki);
             db.SaveChanges();
             return RedirectToAction("Index");

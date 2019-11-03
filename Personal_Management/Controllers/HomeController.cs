@@ -1,8 +1,5 @@
-﻿using Personal_Management.Models;
-using System;
+﻿using System;
 using System.Data.SqlClient;
-using System.IO;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Personal_Management.Controllers
@@ -15,11 +12,12 @@ namespace Personal_Management.Controllers
         {
             try
             {
-                
+                //Проверка на испытательные сроки
                 Program.update();
                 //Response.Write("<script>alert('Добро пожаловать!'); </script>");
                 if (User.Identity.IsAuthenticated)
                 {
+                    //Получение значений личного кабинета
                     ViewBag.log = "Ваш логин: " + User.Identity.Name;
                     SqlCommand command = new SqlCommand("", Program.SqlConnection);
                     Program.SqlConnection.Open();
@@ -78,6 +76,7 @@ namespace Personal_Management.Controllers
             SqlCommand command = new SqlCommand("", Program.SqlConnection);
             if (password != null || password1 != null || password2 != null)
             {
+                //Изменение пароля
                 command.CommandText = "SELECT count(*) FROM dbo.Accounts where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "' and [dbo].[Accounts].[Password] = '" + password + "'";
                 Program.SqlConnection.Open();
                 int co = Convert.ToInt32(command.ExecuteScalar());
@@ -100,37 +99,22 @@ namespace Personal_Management.Controllers
                     }
                     else
                     {
-                        Response.Write("<script>alert('Введенные новые пароли не совпадают!'); </script>");
-                        return RedirectToAction("Index");
+                        ModelState.AddModelError("", "Введенные новые пароли не совпадают!");
+                        return View("Index");
                     }
                 }
                 else
                 {
-                    Response.Write("<script>alert('Старый пароль введен неверно!'); </script>");
-                    return RedirectToAction("Index");
+                    ModelState.AddModelError("", "Старый пароль введен неверно!");
+                    return View("Index");
                 }
             }
             else
             {
-                Response.Write("<script>alert('Заполните поля паролей!'); </script>");
-                return RedirectToAction("Index");
+                ModelState.AddModelError("", "Заполните поля паролей!");
+                return View("Index");
             }
         }
 
-        [Authorize]
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        [Authorize]
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
     }
 }

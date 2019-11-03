@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using Personal_Management.Models;
 
@@ -27,6 +25,7 @@ namespace Personal_Management.Controllers
                 Program.id = id;
                 var model = db.Positions.Include(x => x.Departments).ToList();
                 model = model.Where(p => p.Depart_ID == id).ToList();
+                //Получение наименования отдела
                 SqlCommand command = new SqlCommand("SELECT Naim_Depart FROM Departments where ID_Depart = " + idpos.ToString(), Program.SqlConnection);
                 Program.SqlConnection.Open();
                 ViewBag.d = command.ExecuteScalar();
@@ -78,12 +77,14 @@ namespace Personal_Management.Controllers
             {
                 if (idpos == 0)
                 {
+                    //Добавление записи
                     db.Positions.Add(positions);
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
                 else
                 {
+                    //Добавление записи при известном id
                     positions.Depart_ID = Convert.ToInt32(idpos);
                     db.Positions.Add(positions);
                     db.SaveChanges();
@@ -121,6 +122,7 @@ namespace Personal_Management.Controllers
         {
             if (ModelState.IsValid)
             {
+                //Изменение данных
                 db.Entry(positions).State = EntityState.Modified;
                 db.SaveChanges();
                 return Redirect("/Positions/Index/" + idpos.ToString());
@@ -151,6 +153,7 @@ namespace Personal_Management.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            //Удаление данных
             Positions positions = db.Positions.Find(id);
             db.Positions.Remove(positions);
             db.SaveChanges();

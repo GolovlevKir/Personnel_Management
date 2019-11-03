@@ -56,10 +56,18 @@
         </nav>
     </form>
     <hr />
-    @if ((int)Session["Kadri"] != 0)
+    @try
+    {
+    if ((int)Session["Kadri"] != 0)
     {
         @Html.ActionLink("Добавить нового сотрудника", "addnewrecord")
     }
+    }
+    catch
+        {
+
+        }
+
     <hr />
 
     <div id="modDialog" class="modal fade">
@@ -75,7 +83,7 @@
                     <h6 class="card-title">Должность</h6>
                     <h7 class="card-subtitle text-muted ">@item.Positions.Naim_Posit</h7>
                 </div>
-                <img style="margin: 0 auto; height: 340px; width: 260px; display: block;" src="~/Content/Photo/st/@item.Photo" alt="Card image">
+                <img style="margin: 0 auto; height: 170px; width: 100px; display: block;" src="~/Content/Photo/st/@item.Photo" alt="Card image">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">Номер телефона: <a href="tel:@item.Num_Phone"> @item.Num_Phone</a></li>
                     <li class="list-group-item">Эл. почта: @Html.DisplayFor(modelItem => item.Email)</li>
@@ -89,22 +97,26 @@
                         <li class="list-group-item">Резюме отсутствует</li>
                     }
                 </ul>
-                @if ((int)Session["Kadri"] != 0)
+                @try
                 {
+                    if ((int)Session["Kadri"] != 0)
+                    {
                     <div class="card-footer text-center">
                         @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
                         @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
                         @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Sotr }, new { @class = "compItem" })
 
                     </div>
-                }
-                else
-                {
+                    }
+                    else
+                    {
 
                     <div class="card-footer text-center">
                         @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }, new { @class = "compItem" })
                     </div>
+                    }
                 }
+                catch { }
             </div>
         }
     </div>

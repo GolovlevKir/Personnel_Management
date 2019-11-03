@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using Personal_Management.Models;
 
@@ -18,24 +14,9 @@ namespace Personal_Management.Controllers
         [Authorize]
         public ActionResult Index()
         {
+            //Проверка на испытательные сроки
             Program.update();
             return View(db.Rates.ToList());
-        }
-
-        // GET: Rates/Details/5
-        [Authorize]
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Rates rates = db.Rates.Find(id);
-            if (rates == null)
-            {
-                return HttpNotFound();
-            }
-            return View(rates);
         }
 
         // GET: Rates/Create
@@ -55,6 +36,7 @@ namespace Personal_Management.Controllers
         {
             if (ModelState.IsValid)
             {
+                //Добавление данных
                 db.Rates.Add(rates);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -89,6 +71,7 @@ namespace Personal_Management.Controllers
         {
             if (ModelState.IsValid)
             {
+                //Изменение данных
                 db.Entry(rates).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -118,6 +101,7 @@ namespace Personal_Management.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            //Удаление данных
             Rates rates = db.Rates.Find(id);
             db.Rates.Remove(rates);
             db.SaveChanges();

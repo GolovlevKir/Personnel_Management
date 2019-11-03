@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using Personal_Management.Models;
 
@@ -18,26 +14,11 @@ namespace Personal_Management.Controllers
         [Authorize]
         public ActionResult Index()
         {
+            //Проверка на испытательные сроки
             Program.update();
             return View(db.Work_Schedule.ToList());
         }
-
-        // GET: Work_Schedule/Details/5
-        [Authorize]
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Work_Schedule work_Schedule = db.Work_Schedule.Find(id);
-            if (work_Schedule == null)
-            {
-                return HttpNotFound();
-            }
-            return View(work_Schedule);
-        }
-
+        
         // GET: Work_Schedule/Create
         [Authorize]
         public ActionResult Create()
@@ -55,6 +36,7 @@ namespace Personal_Management.Controllers
         {
             if (ModelState.IsValid)
             {
+                //Добавление записи
                 db.Work_Schedule.Add(work_Schedule);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -89,6 +71,7 @@ namespace Personal_Management.Controllers
         {
             if (ModelState.IsValid)
             {
+                //Изменение данных
                 db.Entry(work_Schedule).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -118,6 +101,7 @@ namespace Personal_Management.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            //Удаление данных
             Work_Schedule work_Schedule = db.Work_Schedule.Find(id);
             db.Work_Schedule.Remove(work_Schedule);
             db.SaveChanges();

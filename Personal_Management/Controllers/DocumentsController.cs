@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using Personal_Management.Models;
 
@@ -23,21 +19,6 @@ namespace Personal_Management.Controllers
             return View(db.Documents.ToList());
         }
 
-        // GET: Documents/Details/5
-        [Authorize]
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Documents documents = db.Documents.Find(id);
-            if (documents == null)
-            {
-                return HttpNotFound();
-            }
-            return View(documents);
-        }
 
         // GET: Documents/Create
         [Authorize]
@@ -55,6 +36,7 @@ namespace Personal_Management.Controllers
         {
             if (ModelState.IsValid)
             {
+                //Добавление данных
                 db.Documents.Add(documents);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -89,6 +71,7 @@ namespace Personal_Management.Controllers
         {
             if (ModelState.IsValid)
             {
+                //Изменение данных
                 db.Entry(documents).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -118,6 +101,7 @@ namespace Personal_Management.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            //Удаление данных
             Documents documents = db.Documents.Find(id);
             db.Documents.Remove(documents);
             db.SaveChanges();

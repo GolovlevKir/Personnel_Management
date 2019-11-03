@@ -5,10 +5,10 @@
 }
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Создание аккаунта</h4>
         <hr />
@@ -44,9 +44,19 @@
         </div>
 
         <div class="form-group">
+            @Html.LabelFor(model => model.Sotrs.Positions_ID, "Выберите должность", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("Positions", ViewBag.Positions as SelectList, new { id = "pos", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Sotr_ID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
             @Html.LabelFor(model => model.Sotr_ID, "Сотрудник", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("Sotr_ID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownList("Sotr_ID", ViewBag.Sotr_ID as SelectList, htmlAttributes: new  { @class = "form-control", @id = "sot" })
                 @Html.ValidationMessageFor(model => model.Sotr_ID, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -57,4 +67,25 @@
             </div>
         </div>
     </div>
+}
+
+@section scripts{
+    <script type="text/javascript">
+    $(function () {
+
+        $('#pos').change(function()
+        {
+            // получаем выбранный id
+            var id = $(this).val();
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetItems")/' + id,
+                success: function (data) {
+                    // заменяем содержимое присланным частичным представлением
+                    $('#sot').replaceWith(data);
+                }
+            });
+        });
+    })
+    </script>
 }

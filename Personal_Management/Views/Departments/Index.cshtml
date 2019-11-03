@@ -8,11 +8,22 @@
 <hr />
 <ol class="breadcrumb mb-3">
     <li class="breadcrumb-item"><a href="/Positions/Index/0">Просмотреть все должности</a></li>
-    <li class="breadcrumb-item"><a style="font-size:16px" href="@Url.Action("CreateDocument","Departments")"><i class="fas fa-download"></i>Скачать отчет по отделам</a></li>
+    @*@if (ViewBag.mob == 0)
+    {*@
+
+        <li class="breadcrumb-item"><a style="font-size:16px" href="@Url.Action("Generar", "Departments")"><i class="fas fa-download"></i>Скачать отчет по отделам</a></li>
+    @*}  *@
 </ol>
 <hr />
+@*@using (Html.BeginForm("GenerateDocument", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+
+    <button type="submit" class="btn btn-success btn-lg">
+        <i class="fa fa-list-alt"></i> Generate document
+    </button>
+}*@
 <p>
-    @Html.ActionLink("Создать отдел", "Create") 
+    @Html.ActionLink("Создать отдел", "Create")
 
 </p>
 
@@ -39,6 +50,7 @@
     }
 
 </table>
+
 <div id="modDialog" class="modal fade">
     <div id="dialogContent" class="modal-dialog modal-lg"></div>
 </div>

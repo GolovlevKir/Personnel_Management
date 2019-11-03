@@ -1,62 +1,28 @@
 ﻿@model Personal_Management.Models.Isp_Sroki
 
 @{
-    ViewBag.Title = "Delete";
+    Layout = null;
 }
 
-<h2>Удаление записи</h2>
-<hr />
-<ol class="breadcrumb mb-3">
-    <li class="breadcrumb-item">@Html.ActionLink("Вернуться к списку испытательных сроков", "Index")</li>
-    <li class="breadcrumb-item">@Html.ActionLink("Сотрудники", "Index", "Sotrs")</li>
-    <li class="breadcrumb-item"><a href="/Positions/Index/0">Просмотреть должности</a></li>
-</ol>
-<hr />
-<h3>Вы действительно хотите удалить запись?</h3>
-<div>
-    <h4>Испытательные сроки</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            ФИО сотрудника (Должность)
-        </dt>
+<div class="modal-content" style="width:100%">
+    <div class="modal-header">
+        <h3>Удаление записи</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="dl-horizontal">
+            <p class="text-muted">Вы действительно хотите удалить испытательный срок?</p>
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
 
-        <dd>
-            @Html.DisplayFor(model => model.Sotrs.FullName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.status_isp_sroka.Name_St)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.status_isp_sroka.Name_St)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Date_Start)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Date_Start)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Date_Finish)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Date_Finish)
-        </dd>
-
-    </dl>
-
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Удалить" class="btn btn-default" />  
+                <div class="form-actions no-color">
+                    <input type="submit" value="Удалить" class="btn btn-outline-danger" />
+                </div>
+            }
         </div>
-    }
+    </div>
 </div>
+

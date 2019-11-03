@@ -1,10 +1,7 @@
 ﻿using Microsoft.Office.Interop.Word;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 using word = Microsoft.Office.Interop.Word;
 
 

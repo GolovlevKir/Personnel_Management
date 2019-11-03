@@ -11,6 +11,11 @@
     <li class="breadcrumb-item"><a href="/Positions/Index/0">Просмотреть должности</a></li>
 </ol>
 <hr />
+<form method="get" class="form-inline mr-auto" style="margin: 0 auto; width:80%">
+    <input class="form-control" style="width:85%" type="text" placeholder="Поиск..." name="search" aria-label="Search">
+    <button class="btn bg-dark" type="submit"><i class="fas fa-search" aria-hidden="true"></i></button>
+</form>
+<hr />
 <p>
     @Html.ActionLink("Добавить новый испытательный срок", "Create")
 </p>
@@ -31,7 +36,7 @@
     {
         <tr>
             <td>
-                @Html.ActionLink(item.Sotrs.FullName, "Edit", new { id = item.ID_Isp }, new { @class = "compItem" })
+                @item.Sotrs.FullName | @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Isp }, new { @class = "compItem" }) | @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Isp }, new { @class = "compItem" })
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Date_Start) - @Html.DisplayFor(modelItem => item.Date_Finish)

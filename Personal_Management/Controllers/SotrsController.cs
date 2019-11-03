@@ -19,31 +19,44 @@ namespace Personal_Management.Controllers
         [Authorize]
         public ActionResult Index(int? pos, int? rate, int? sche, string search)
         {
+            //Проверка на испытательные сроки
             Program.update();
+            //Фильтрация
             IQueryable<Sotrs> sotrs = db.Sotrs.Include(s => s.Positions).Include(s => s.Rates).Include(s => s.Work_Schedule);
             if (pos != null && pos != 0)
             {
+                //Проверка на выбранную должность
                 sotrs = sotrs.Where(s => s.Positions_ID == pos);
             }
             if (rate != null && rate != 0)
             {
+                //Проверка на выбранную ставку
                 sotrs = sotrs.Where(s => s.Rate_ID == rate);
             }
             if (sche != null && sche != 0)
             {
+                //Проверка на выбранный график работы
                 sotrs = sotrs.Where(s => s.Schedule_ID == sche);
             }
             ViewBag.seo = search;
+            //Поиск по значениям
             if (search != null && search != "")
             {
                 sotrs = sotrs.Where(s => (s.Surname_Sot.Contains(search)) || (s.Name_Sot.Contains(search)) || (s.Petronumic_Sot.Contains(search)) || (s.Positions.Naim_Posit.Contains(search)) || (s.Num_Phone.Contains(search)) || (s.Opisanie.Contains(search)) || (s.Email.Contains(search)) || (s.Day_Of_Birth.Contains(search)) || (s.Date_of_adoption.Contains(search)));
             }
+            //Лист должностей
             List<Positions> posit = db.Positions.ToList();
+            //Добавление значения со значением 0
             posit.Insert(0, new Positions { Naim_Posit = "Все", ID_Positions = 0 });
+            //Лист ставок
             List<Rates> rates = db.Rates.ToList();
+            //Добавление значения со значением 0
             rates.Insert(0, new Rates { Rate = "Все", ID_Rate = 0 });
+            //Лист рабочих графиков
             List<Work_Schedule> sch = db.Work_Schedule.ToList();
+            //Добавление значения со значением 0
             sch.Insert(0, new Work_Schedule { Naim_Sche = "Все", ID_Schedule = 0 });
+            //Осуществление фильтрации
             SotrsListViewModel plvm = new SotrsListViewModel
             {
                 Sotrs = sotrs.ToList(),
@@ -58,6 +71,7 @@ namespace Personal_Management.Controllers
         [Authorize]
         public ActionResult Details(int? id)
         {
+            //Осуществление подробных данных о сотруднике
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -96,8 +110,11 @@ namespace Personal_Management.Controllers
         public ActionResult addnewrecord(Sotrs sotrs, HttpPostedFileBase imgfile, HttpPostedFileBase doc)
         {
             Sotrs sot = new Sotrs();
+            //Загрузка изображения
             string path = uploadimage(imgfile);
+            //Загрузка документа
             string pathrez = uploaddoc(doc);
+            //Осуществление добавления данных
             if (pathrez.Equals("-1") && path.Equals("-1"))
             {
                 sot.Surname_Sot = sotrs.Surname_Sot;
@@ -189,9 +206,8 @@ namespace Personal_Management.Controllers
 
         public string uploadimage(HttpPostedFileBase file)
         {
-            Random r = new Random();
+            //Переменная с путем
             string path = "-1";
-            int random = r.Next();
             if (file != null && file.ContentLength > 0)
             {
                 string extension = Path.GetExtension(file.FileName);
@@ -199,10 +215,12 @@ namespace Personal_Management.Controllers
                 {
                     try
                     {
+                        //Изменение пути
                         path = Path.Combine(Server.MapPath("~/Content/Photo/st/"), DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName));
+                        //Сохранение 
                         file.SaveAs(path);
+                        //Наименование файла
                         path = DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName);
-                        //    ViewBag.Message = "File uploaded successfully";
                     }
                     catch
                     {
@@ -211,7 +229,7 @@ namespace Personal_Management.Controllers
                 }
                 else
                 {
-                    Response.Write("<script>alert('Only jpg ,jpeg or png formats are acceptable....'); </script>");
+                    ModelState.AddModelError("", "Возможны форматы для изображения только: *.jpg/*.jpeg/*.png");
                 }
             }
             return path;
@@ -229,10 +247,12 @@ namespace Personal_Management.Controllers
                 {
                     try
                     {
+                        //Изменение пути
                         path = Path.Combine(Server.MapPath("~/Content/Files/"), DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName));
+                        //Сохранение документа
                         file.SaveAs(path);
+                        //Наименование файла
                         path = DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName);
-                        //    ViewBag.Message = "File uploaded successfully";
                     }
                     catch
                     {
@@ -241,7 +261,7 @@ namespace Personal_Management.Controllers
                 }
                 else
                 {
-                    Response.Write("<script>alert('Форматы только doc ,docx или pdf ...'); </script>");
+                    ModelState.AddModelError("", "Форматы резюме только doc ,docx или pdf");
                 }
             }
             return path;
@@ -279,7 +299,7 @@ namespace Personal_Management.Controllers
             SqlCommand command;
             string path = uploadimage(imgfile);
             string pathrez = uploaddoc(doc);
-
+            //Изменение данных
             if (pathrez.Equals("-1") && path.Equals("-1"))
             {
                 command = new SqlCommand(
@@ -416,7 +436,7 @@ namespace Personal_Management.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Sotrs sotrs = db.Sotrs.Find(id);
-
+            //Удаление данных
             db.Sotrs.Remove(sotrs);
             db.SaveChanges();
             return RedirectToAction("Index");

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 
 namespace Personal_Management.Models
 {
@@ -21,8 +17,6 @@ namespace Personal_Management.Models
         public DbSet<Sotrs> Sotrs { get; set; }
         public DbSet<status_isp_sroka> status_isp_sroka { get; set; }
         public DbSet<Work_Schedule> Work_Schedule { get; set; }
-        public DbSet<Zar_Plata> Zar_Plata { get; set; }
-
-        public System.Data.Entity.DbSet<Personal_Management.Models.Steps> Steps { get; set; }
+        public DbSet<Steps> Steps { get; set; }
     }
 }

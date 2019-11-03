@@ -1,12 +1,10 @@
-﻿using System;
+﻿using Personal_Management.Models;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using Personal_Management.Models;
 
 namespace Personal_Management.Controllers
 {
@@ -16,36 +14,59 @@ namespace Personal_Management.Controllers
 
         // GET: Accounts
         [Authorize]
-        public ActionResult Index()
+        public ActionResult Index(string search)
         {
+            //Проверка на испытательные сроки
             Program.update();
+            //Связь с сотрудниками и ролями
             var accounts = db.Accounts.Include(a => a.Roles).Include(a => a.Sotrs);
+            ViewBag.seo = search;
+            //Поиск
+            if (search != null && search != "")
+            {
+                accounts = accounts.Where(s => (s.Login.Contains(search)) || (s.Sotrs.Surname_Sot.Contains(search)) || (s.Sotrs.Name_Sot.Contains(search)) || (s.Sotrs.Petronumic_Sot.Contains(search)) || (s.Sotrs.Positions.Naim_Posit.Contains(search)));
+            }
             return View(accounts.ToList());
-        }
-
-        // GET: Accounts/Details/5
-        [Authorize]
-        public ActionResult Details(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Accounts accounts = db.Accounts.Find(id);
-            if (accounts == null)
-            {
-                return HttpNotFound();
-            }
-            return View(accounts);
         }
 
         // GET: Accounts/Create
         [Authorize]
         public ActionResult Create()
         {
+            int selectedIndex = 0;
+            //Получаем наименования ролей
             ViewBag.Role_ID = new SelectList(db.Roles, "ID_Role", "Role_Naim");
-            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full");
+            //Создаем лист должностей
+            List<Positions> pos = db.Positions.ToList();
+            //Добавляем все
+            pos.Insert(0, new Positions { ID_Positions = 0, Naim_Posit = "Все" });
+            //Создаем список должностей
+            ViewBag.Positions = new SelectList(pos, "ID_Positions", "Naim_Posit", selectedIndex);
+            if (selectedIndex > 0)
+            {
+                ViewBag.Sotr_ID = new SelectList(db.Sotrs.Where(p => p.Positions_ID == selectedIndex), "ID_Sotr", "Full");
+            }
+            else
+            {
+                ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full");
+            }
+
+
             return View();
+        }
+
+        public ActionResult GetItems(int id)
+        {
+            //Получаем список сотрудников
+            if (id > 0)
+            {
+                return PartialView(db.Sotrs.Where(c => c.Positions_ID == id).ToList());
+            }
+            else
+            {
+                return PartialView(db.Sotrs);
+            }
+                
         }
 
         // POST: Accounts/Create
@@ -58,6 +79,7 @@ namespace Personal_Management.Controllers
         {
             if (ModelState.IsValid)
             {
+                //Создаем новый аккаунт
                 db.Accounts.Add(accounts);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -81,6 +103,7 @@ namespace Personal_Management.Controllers
             {
                 return HttpNotFound();
             }
+            //Получем список ролей и сотрудников
             ViewBag.Role_ID = new SelectList(db.Roles, "ID_Role", "Role_Naim", accounts.Role_ID);
             ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full", accounts.Sotr_ID);
             return View(accounts);
@@ -96,6 +119,7 @@ namespace Personal_Management.Controllers
         {
             if (ModelState.IsValid)
             {
+                //Сохраняем изменения
                 db.Entry(accounts).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -127,6 +151,7 @@ namespace Personal_Management.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
+            //Удаление данных
             Accounts accounts = db.Accounts.Find(id);
             db.Accounts.Remove(accounts);
             db.SaveChanges();
