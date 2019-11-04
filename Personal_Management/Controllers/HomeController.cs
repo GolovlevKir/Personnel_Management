@@ -18,21 +18,21 @@ namespace Personal_Management.Controllers
                 if (User.Identity.IsAuthenticated)
                 {
                     //Получение значений личного кабинета
-                    ViewBag.log = "Ваш логин: " + User.Identity.Name;
+                    Session["log"] = "Ваш логин: " + User.Identity.Name;
                     SqlCommand command = new SqlCommand("", Program.SqlConnection);
                     Program.SqlConnection.Open();
                     command.CommandText = "SELECT dbo.Sotrs.Surname_Sot + ' ' + dbo.Sotrs.Name_Sot + ' ' + dbo.Sotrs.Petronumic_Sot FROM dbo.Accounts JOIN dbo.Sotrs ON dbo.Accounts.Sotr_ID = dbo.Sotrs.ID_Sotr where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
-                    ViewBag.FIO = command.ExecuteScalar().ToString();
+                    Session["FIO"] = command.ExecuteScalar().ToString();
                     command.CommandText = "SELECT Num_Phone FROM dbo.Accounts JOIN dbo.Sotrs ON dbo.Accounts.Sotr_ID = dbo.Sotrs.ID_Sotr where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
-                    ViewBag.Phone = command.ExecuteScalar().ToString();
+                    Session["Phone"] = command.ExecuteScalar().ToString();
                     command.CommandText = "SELECT Email FROM dbo.Accounts JOIN dbo.Sotrs ON dbo.Accounts.Sotr_ID = dbo.Sotrs.ID_Sotr where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
-                    ViewBag.Em = command.ExecuteScalar().ToString();
+                    Session["Em"] = command.ExecuteScalar().ToString();
                     command.CommandText = "SELECT dbo.Positions.Naim_Posit FROM dbo.Accounts JOIN dbo.Sotrs ON dbo.Accounts.Sotr_ID = dbo.Sotrs.ID_Sotr JOIN dbo.Positions ON dbo.Sotrs.Positions_ID = dbo.Positions.ID_Positions where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
-                    ViewBag.Pos = command.ExecuteScalar().ToString();
+                    Session["Pos"] = command.ExecuteScalar().ToString();
                     command.CommandText = "SELECT Opisanie FROM dbo.Accounts JOIN dbo.Sotrs ON dbo.Accounts.Sotr_ID = dbo.Sotrs.ID_Sotr where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
-                    ViewBag.Opis = command.ExecuteScalar().ToString();
+                    Session["Opis"] = command.ExecuteScalar().ToString();
                     command.CommandText = "SELECT Photo FROM dbo.Accounts JOIN dbo.Sotrs ON dbo.Accounts.Sotr_ID = dbo.Sotrs.ID_Sotr where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
-                    ViewBag.photo = command.ExecuteScalar().ToString();
+                    Session["photo"] = command.ExecuteScalar().ToString();
                     command.CommandText = "SELECT dbo.Roles.Manip_Roles FROM dbo.Accounts INNER JOIN dbo.Roles ON dbo.Accounts.Role_ID = dbo.Roles.ID_Role where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
                     Session["admin"] = Convert.ToInt32(command.ExecuteScalar());
                     command.CommandText = "SELECT dbo.Roles.Manip_Sotrs FROM dbo.Accounts INNER JOIN dbo.Roles ON dbo.Accounts.Role_ID = dbo.Roles.ID_Role where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "'";
@@ -74,23 +74,25 @@ namespace Personal_Management.Controllers
         public ActionResult Index(string password, string password1, string password2)
         {
             SqlCommand command = new SqlCommand("", Program.SqlConnection);
-            if (password != null || password1 != null || password2 != null)
+            if (password != "" && password1 != "" && password2 != "")
             {
+                ViewBag.Mes = "";
                 //Изменение пароля
-                command.CommandText = "SELECT count(*) FROM dbo.Accounts where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "' and [dbo].[Accounts].[Password] = '" + password + "'";
+                command.CommandText = "SELECT count(*) FROM dbo.Accounts where [dbo].[Accounts].[Login] = '" + User.Identity.Name + "' and [dbo].[Accounts].[Password2] = '" + password + "'";
                 Program.SqlConnection.Open();
                 int co = Convert.ToInt32(command.ExecuteScalar());
                 Program.SqlConnection.Close();
                 if (co > 0)
                 {
-                    if (password1 == password2)
+                    if (password1 == password2 && password1 !="" && password2!="")
                     {
                         ViewBag.New = "";
                         ViewBag.NewPass = "";
                         ViewBag.OldPass = "";
                         command.CommandText = "update Accounts " +
                         "set " +
-                        "Password = '" + password1 + "' " +
+                        "Password = '" + Program.Hash(password1) + "', " +
+                        "Password2 = '" + password1 + "' " +
                         "where Login = '" + User.Identity.Name + "'";
                         Program.SqlConnection.Open();
                         command.ExecuteScalar();
@@ -99,19 +101,22 @@ namespace Personal_Management.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Введенные новые пароли не совпадают!");
+                        ViewBag.Mes = "";
+                        ViewBag.Old = "";
+                        ViewBag.New = "Новые пароли не совпадают";
                         return View("Index");
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Старый пароль введен неверно!");
+                    ViewBag.Mes = "";
+                    ViewBag.Old = "Старый пароль указан неверно";
                     return View("Index");
                 }
             }
             else
             {
-                ModelState.AddModelError("", "Заполните поля паролей!");
+                ViewBag.Mes = "Вы не заполнили поля";
                 return View("Index");
             }
         }

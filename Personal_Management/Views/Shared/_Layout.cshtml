@@ -10,13 +10,20 @@
     <title>@ViewBag.Title</title>
     @if (@Session["style"] == null)
     {
-        <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+        <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" id="style" />
     }
     else
     {
         <link href="~/Content/@Session["style"].ToString()" rel="stylesheet" />
     }
-
+<script type="text/javascript">
+    var date = new Date(); // Получаем текущие дату и время
+    var h = date.getHours(); // Получаем текущий час
+    if (h < 8 || h > 20) {
+        document.getElementById("style").href = "/Content/bootstrap.min.css";
+    } // Если сейчас ночь, то меняем файл стилей
+    else document.getElementById("style").href = "/Content/bootstrap2.min.css";
+</script>
     <link href="~/Content/Photo/fav.ico" rel="icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     @Scripts.Render("~/bundles/modernizr")
@@ -28,7 +35,10 @@
             $('#date').mask('99.99.9999');
             $('#date2').mask('99.99.9999');
             $('#phone').mask('+7(999)999-99-99');
-        });</script>
+            $('#phone1').mask('+7(999)999-99-99');
+        });
+        
+    </script>
     <style>
         #gmap_canvas img {
             max-width: none !important;
@@ -112,8 +122,19 @@
                                 </div>
                             </li>
                         }
-                        <li class="nav-item">
-                            @if (@Session["style"].ToString() == "bootstrap.min.css")
+                    }
+                    catch
+                    {
+
+                    }
+                    <li class="nav-item">
+                        @if (@Session["style"] == null)
+                        {
+                            <a class="nav-link" href="@Url.Action("Them", "Account")">Сменить тему</a>
+                        }
+                        else
+                        {
+                            if (@Session["style"].ToString() == "bootstrap.min.css")
                             {
                                 <a class="nav-link" href="@Url.Action("Them", "Account")"><i class="fas fa-bed" style="margin-right: 5px;font-size:20px"></i>Ночной режим</a>
                             }
@@ -121,19 +142,16 @@
                             {
                                 <a class="nav-link" href="@Url.Action("Them", "Account")"><i class="fas fa-sun" style="margin-right: 5px;font-size:20px"></i>Обычный режим</a>
                             }
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("LogOut", "Account")"><i class="fas fa-sign-in-alt" style="margin-right: 5px;font-size:20px"></i>Выйти</a>
-                        </li>
+                        }
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("LogOut", "Account")"><i class="fas fa-sign-in-alt" style="margin-right: 5px;font-size:20px"></i>Выйти</a>
+                    </li>
 
 
-                    }
-                    catch
-                    {
 
-                    }
                 </ul>
-                </form>
+            </form>
 
         </div>
     </nav>
@@ -177,5 +195,6 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    
 </body>
 </html>

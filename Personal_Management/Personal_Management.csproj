@@ -360,6 +360,10 @@
     <Content Include="Views\Accounts\GetItems.cshtml" />
     <Content Include="Views\Shared\_Layout2.cshtml" />
     <Content Include="Views\Accounts\Create.cshtml" />
+    <Content Include="Views\Steps\AddRezume.cshtml" />
+    <Content Include="Views\Steps\AddOpisanie.cshtml" />
+    <Content Include="Views\Steps\AddIsp.cshtml" />
+    <Content Include="Views\Steps\UpdIsp.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -17,8 +17,6 @@ namespace Personal_Management.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginModel model)
         {
-            //Внешний вид
-            Session["style"] = "bootstrap.min.css";
             if (ModelState.IsValid)
             {
                 // поиск пользователя в бд

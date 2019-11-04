@@ -10,10 +10,16 @@
 <h2>Сотрудники</h2>
 <hr />
 <ol class="breadcrumb">
-    @if (Program.Kadri != 0)
+    @try
     {
-        <li class="breadcrumb-item">@Html.ActionLink("Посмотреть этапы принятия", "Index", "Steps")</li>
+        if ((int)Session["Kadri"] != 0)
+        {
+            <li class="breadcrumb-item">@Html.ActionLink("Посмотреть этапы принятия", "Index", "Steps")</li>
+        }      
     }
+    catch
+    { }
+
     <li class="breadcrumb-item"> @Html.ActionLink("Данные ставок", "Index", "Rates")</li>
     <li class="breadcrumb-item">@Html.ActionLink("Список рабочих графиков", "Index", "Work_Schedule")</li>
 </ol>

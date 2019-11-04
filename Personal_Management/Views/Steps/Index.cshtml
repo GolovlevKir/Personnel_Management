@@ -27,7 +27,7 @@
             <ul class="progressbar">
                 @if (item.AddSotrInIS)
                 {
-                    <li class="active"><a data-placement="top" , class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Sotrs/Edit/@item.Sotr_ID"><abbr title="Добавление сотрудника в систему">Этап 1</abbr></a></li>
+                    <li class="active"><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Sotrs/Edit/@item.Sotr_ID"><abbr title="Добавление сотрудника в систему">Этап 1</abbr></a></li>
                 }
                 else
                 {
@@ -35,27 +35,27 @@
                 }
                 @if (item.AddRezume)
                 {
-                    <li class="active"><abbr title="Резюме сотрудника">Этап 2</abbr></li>
+                    <li class="active"><a href="~/Content/Files/@item.Sotrs.rezume" download><abbr title="Скачать резюме сотрудника">Этап 2</abbr></a></li>
                 }
                 else
                 {
-                    <li><abbr title="Необходимо загрузить резюме">Этап 2</abbr></li>
+                    <li><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Steps/AddRezume/@item.Sotr_ID"><abbr title="Добавить резюме">Этап 2</abbr></a></li>
                 }
                 @if (item.AddSobesedovanie)
                 {
-                    <li class="active"><abbr title="Просмотреть данные о сотруднике">Этап 3</abbr></li>
+                    <li class="active"><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Sotrs/Edit/@item.Sotr_ID"><abbr title="Просмотреть описание о сотруднике">Этап 3</abbr></a></li>
                 }
                 else
                 {
-                    <li><abbr title="Добавить данные о сотруднике">Этап 3</abbr></li>
+                    <li><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Steps/AddOpisanie/@item.Sotr_ID"><abbr title="Добавить описания о сотруднике">Этап 3</abbr></a></li>
                 }
                 @if (item.AddIspSrok)
                 {
-                    <li class="active"><abbr title="Посмотреть данные испытательного срока">Этап 4</abbr></li>
+                    <li class="active"><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Steps/UpdIsp/@item.Sotr_ID"><abbr title="Изменить испытательный срок">Этап 4</abbr></a></li>
                 }
                 else
                 {
-                    <li><abbr title="Назначить испытательный срок">Этап 4</abbr></li>
+                    <li><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Steps/AddIsp/@item.Sotr_ID"><abbr title="Назначить испытательный срок">Этап 4</abbr></a></li>
                 }
                 @if (item.RezimOzidaniya)
                 {
