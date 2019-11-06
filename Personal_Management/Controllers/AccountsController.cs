@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -66,7 +67,7 @@ namespace Personal_Management.Controllers
             {
                 return PartialView(db.Sotrs);
             }
-                
+
         }
 
         // POST: Accounts/Create
@@ -77,18 +78,41 @@ namespace Personal_Management.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Login,Password,Role_ID,Sotr_ID,Password2")] Accounts accounts)
         {
-            if (ModelState.IsValid)
+            SqlCommand command = new SqlCommand("", Program.SqlConnection);
+            command.CommandText = "Select count(*) from Accounts where Login = '" + accounts.Login + "'";
+            Program.SqlConnection.Open();
+            int co = (int)command.ExecuteScalar();
+            Program.SqlConnection.Close();
+            if (co == 0)
             {
-                //Создаем новый аккаунт
-                accounts.Password2 = accounts.Password;
-                accounts.Password = Program.Hash(accounts.Password);
-                db.Accounts.Add(accounts);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (accounts.Password == accounts.Password2)
+                {
+                    if (ModelState.IsValid)
+                    {
+                        //Создаем новый аккаунт
+                        accounts.Password = Program.Hash(accounts.Password2);
+                        db.Accounts.Add(accounts);
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+
+                    }
+                }
+                else
+                {
+                    ViewBag.p = "Введенные пароли не совпадают";
+                }
+            }
+            else
+            {
+                ViewBag.m = "Пользователь с таким логином уже существует!";
             }
 
             ViewBag.Role_ID = new SelectList(db.Roles, "ID_Role", "Role_Naim", accounts.Role_ID);
             ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Surname_Sot", accounts.Sotr_ID);
+            List<Positions> pos = db.Positions.ToList();
+            //Добавляем все
+            pos.Insert(0, new Positions { ID_Positions = 0, Naim_Posit = "Все" });
+            ViewBag.Positions = new SelectList(pos, "ID_Positions", "Naim_Posit", 0);
             return View(accounts);
         }
 
@@ -121,6 +145,7 @@ namespace Personal_Management.Controllers
         {
             if (ModelState.IsValid)
             {
+
                 accounts.Password = Program.Hash(accounts.Password2);
                 db.Entry(accounts).State = EntityState.Modified;
                 db.SaveChanges();

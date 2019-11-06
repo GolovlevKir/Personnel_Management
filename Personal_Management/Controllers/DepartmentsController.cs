@@ -3,6 +3,7 @@ using Personal_Management.Models;
 using System;
 using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -66,12 +67,24 @@ namespace Personal_Management.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID_Depart,Naim_Depart")] Departments departments)
         {
-            if (ModelState.IsValid)
+            SqlCommand command = new SqlCommand("", Program.SqlConnection);
+            command.CommandText = "Select count(*) from Departments where Naim_Depart = '" + departments.Naim_Depart + "'";
+            Program.SqlConnection.Open();
+            int co = (int)command.ExecuteScalar();
+            Program.SqlConnection.Close();
+            if (co == 0)
             {
-                //Добавление новой записи
-                db.Departments.Add(departments);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    //Добавление новой записи
+                    db.Departments.Add(departments);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+            }
+            else
+            {
+                ViewBag.m = "Такой отдел уже существует!";
             }
 
             return View(departments);

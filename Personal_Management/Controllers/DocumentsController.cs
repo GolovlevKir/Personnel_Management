@@ -1,8 +1,9 @@
-﻿using System.Data.Entity;
+﻿using Personal_Management.Models;
+using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using Personal_Management.Models;
 
 namespace Personal_Management.Controllers
 {
@@ -34,12 +35,24 @@ namespace Personal_Management.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID_Doc,Doc_Naim")] Documents documents)
         {
-            if (ModelState.IsValid)
+            SqlCommand command = new SqlCommand("", Program.SqlConnection);
+            command.CommandText = "Select count(*) from Documents where Doc_Naim = '" + documents.Doc_Naim + "'";
+            Program.SqlConnection.Open();
+            int co = (int)command.ExecuteScalar();
+            Program.SqlConnection.Close();
+            if (co == 0)
             {
-                //Добавление данных
-                db.Documents.Add(documents);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    //Добавление данных
+                    db.Documents.Add(documents);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+            }
+            else
+            {
+                ViewBag.m = "Такой документ уже существует!";
             }
 
             return View(documents);

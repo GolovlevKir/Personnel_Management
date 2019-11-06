@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Personal_Management.Models;
+using System;
 using System.Data;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using Personal_Management.Models;
 
 namespace Personal_Management.Controllers
 {
@@ -73,23 +73,36 @@ namespace Personal_Management.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID_Positions,Naim_Posit,Salary,Depart_ID,Kol_Vo_Pers,Kol_Vo_On_Isp")] Positions positions)
         {
-            if (ModelState.IsValid)
+            SqlCommand command = new SqlCommand("", Program.SqlConnection);
+            command.CommandText = "Select count(*) from Positions where Naim_Posit = '" + positions.Naim_Posit + "'";
+            Program.SqlConnection.Open();
+            int co = (int)command.ExecuteScalar();
+            ViewBag.m = "";
+            Program.SqlConnection.Close();
+            if (co == 0)
             {
-                if (idpos == 0)
+                if (ModelState.IsValid)
                 {
-                    //Добавление записи
-                    db.Positions.Add(positions);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
+                    if (idpos == 0)
+                    {
+                        //Добавление записи
+                        db.Positions.Add(positions);
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        //Добавление записи при известном id
+                        positions.Depart_ID = Convert.ToInt32(idpos);
+                        db.Positions.Add(positions);
+                        db.SaveChanges();
+                        return Redirect("/Positions/Index/" + idpos.ToString());
+                    }
                 }
-                else
-                {
-                    //Добавление записи при известном id
-                    positions.Depart_ID = Convert.ToInt32(idpos);
-                    db.Positions.Add(positions);
-                    db.SaveChanges();
-                    return Redirect("/Positions/Index/" + idpos.ToString()) ;
-                }
+            }
+            else
+            {
+                ViewBag.m = "Такая должность уже существует!";
             }
             ViewBag.Depart_ID = new SelectList(db.Departments, "ID_Depart", "Naim_Depart", positions.Depart_ID);
             return View(positions);

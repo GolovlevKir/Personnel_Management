@@ -13,8 +13,7 @@
 
 @foreach (var group in Model.GroupBy(item => item.Sotrs.FullName))
 {
-
-    <h4>@Html.Encode(group.Key)</h4>
+    <h3>@Html.Encode(group.Key)</h3>
     <div class="row">
         @foreach (var item in group)
         {
@@ -28,10 +27,8 @@
                     @Html.ActionLink("Очистить", "Delete", new { id = item.ID_Sbora }, new { @class = "compItem" })
                 </div>
             </div>
-
         }
     </div>
-
 }
 <div id="modDialog" class="modal fade">
     <div id="dialogContent" class="modal-dialog modal-lg"></div>

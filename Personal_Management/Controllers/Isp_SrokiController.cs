@@ -17,6 +17,7 @@ namespace Personal_Management.Controllers
         {
             Program.update();
             var isp_Sroki = db.Isp_Sroki.Include(i => i.Sotrs).Include(i => i.status_isp_sroka);
+            ViewBag.seo = search;
             //Осуществление поиска
             if (search != null && search != "")
             {
