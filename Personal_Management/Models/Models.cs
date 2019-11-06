@@ -1,6 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Configuration;
+using System.Net;
+using System.Net.Mail;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace Personal_Management.Models
@@ -471,5 +476,50 @@ namespace Personal_Management.Models
         public SelectList Positions { get; set; }
         public SelectList Rates { get; set; }
         public SelectList Work_Schedule { get; set; }
+    }
+
+    public class MessageSrvices
+    {
+        public async static Task SendEmailAsynk(string email, string subject, string message)
+        {
+            try
+            {
+                var _email = "kirvik12122000@gmail.com";
+                var _epass = ConfigurationManager.AppSettings["EmailPassword"];
+                var _dispName = "Devsone";
+                MailMessage myMessage = new MailMessage();
+                myMessage.To.Add(email);
+                myMessage.From = new MailAddress(_email, _dispName);
+                myMessage.Subject = subject;
+                myMessage.Body = message;
+                myMessage.IsBodyHtml = true;
+                using (SmtpClient smtp = new SmtpClient())
+                {
+                    smtp.EnableSsl = true;
+                    smtp.Host = "smtp.gmail.com";
+                    smtp.Port = 587;
+                    smtp.UseDefaultCredentials = false;
+                    smtp.Credentials = new NetworkCredential(_email, _epass);
+                    smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    smtp.SendCompleted += (s, e) => { smtp.Dispose(); };
+                    await smtp.SendMailAsync(myMessage);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+    }
+    public class SendEMailViewModel
+    {
+        [Required]
+        [Display(Name = "Имя")]
+        public string FirstName { get; set; }
+        [Required]
+        [Display(Name = "Email")]
+        [DataType(DataType.EmailAddress)]
+        public string Email { get; set; }
     }
 }

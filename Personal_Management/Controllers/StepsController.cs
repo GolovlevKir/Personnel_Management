@@ -1,10 +1,12 @@
 ﻿using Personal_Management.Models;
 using System;
+using System.Configuration;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 
@@ -361,5 +363,77 @@ namespace Personal_Management.Controllers
             Program.SqlConnection.Close();
             return RedirectToAction("Index");
         }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult Ozidan(int id)
+        {
+            SqlCommand command;
+            command = new SqlCommand(
+                "select ID_Isp from [dbo].[Isp_Sroki] where Sotr_ID = " + id.ToString(), Program.SqlConnection);
+            Program.SqlConnection.Open();
+            int i = (int)command.ExecuteScalar();
+            Program.SqlConnection.Close();
+            Isp_Sroki isp_Sroki = db.Isp_Sroki.Find(i);
+            if (isp_Sroki == null)
+            {
+                return HttpNotFound();
+            }
+            SelectList sot = new SelectList(db.Sotrs, "ID_Sotr", "Full", id);
+            ViewBag.Sotrs = sot;
+            ViewBag.Status_ID = new SelectList(db.status_isp_sroka, "ID_St", "Name_St");
+            return View(isp_Sroki);
+        }
+
+        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
+        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
+        [HttpPost]
+        public ActionResult Ozidan([Bind(Include = "ID_Isp,Sotr_ID,Date_Start,Date_Finish,Status_ID")] Isp_Sroki isp_Sroki, string sod, string tema, string otprav)
+        {
+            ViewBag.Status_ID = new SelectList(db.status_isp_sroka, "ID_St", "Name_St", isp_Sroki.Status_ID);
+            SelectList sot = new SelectList(db.Sotrs, "ID_Sotr", "Full");
+            ViewBag.Sotrs = sot;
+            SqlCommand command;
+            command = new SqlCommand(
+                "update Isp_Sroki set Sotr_ID = Sotr_ID, Date_Start = '" + isp_Sroki.Date_Start + "', Date_Finish = '" + isp_Sroki.Date_Finish + "', Status_ID = " + isp_Sroki.Status_ID.ToString() + " where ID_Isp = " + isp_Sroki.ID_Isp.ToString(), Program.SqlConnection);
+            Program.SqlConnection.Open();
+            command.ExecuteScalar();
+            command = new SqlCommand(
+                "select Email from Sotrs where ID_Sotr = " + isp_Sroki.Sotr_ID.ToString(), Program.SqlConnection);
+            string email = command.ExecuteScalar().ToString();
+            Program.SqlConnection.Close();
+            if (sod != "" && tema != "" && otprav != "")
+            {
+                var _epass = ConfigurationManager.AppSettings["EmailPassword"];
+                //Отправитель
+                var from = new MailAddress("kirvik12122000@gmail.com", otprav);
+                //Получатель
+                var to = new MailAddress(email);
+                //Адрес smtp-сервера и порт, с которого будем отправлять письмо
+                SmtpClient smtp = new SmtpClient("smtp.gmail.com");
+                smtp.Port = 587;
+                smtp.UseDefaultCredentials = true;
+                //Логин и пароль от нашей почты
+                smtp.Credentials = new NetworkCredential("kirvik12122000@gmail.com", _epass);
+                //Шифрование соединения
+                smtp.EnableSsl = true;
+                //Создание экземпляра класса сообщения
+                MailMessage mail = new MailMessage(from, to);
+                //Тема письма
+                mail.Subject = tema;
+                //Текст содержит язык HTML
+                mail.IsBodyHtml = true;
+                //Изменение стиля сообщения
+                mail.Body =
+                "<center><big><h4>" + tema + "</h4></big></center>" +
+                "<p>" + sod + "</p></html>" +
+                "<br><br><em><p>Компания IT-Liga " + DateTime.Now.Year.ToString() + "<p></em>";
+                //Отправка
+                smtp.Send(mail);
+            }
+            return RedirectToAction("Index");
+        }
+
     }
 }

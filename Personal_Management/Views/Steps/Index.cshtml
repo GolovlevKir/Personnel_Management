@@ -59,11 +59,11 @@
                 }
                 @if (item.RezimOzidaniya)
                 {
-                    <li class="active"><abbr title="Перейти к принятию решения">Этап 5</abbr></li>
+                    <li class="active"><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Steps/Ozidan/@item.Sotr_ID"><abbr title="Решение испытательного срока">Этап 5</abbr></a></li>
                 }
                 else
                 {
-                    <li><abbr title="Испытательный срок ещё не окончен">Этап 5</abbr></li>
+                    <li><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Steps/Ozidan/@item.Sotr_ID"><abbr title="Назначить решение испытательного срока">Этап 5</abbr></a></li>
                 }
                 @if (item.Reshenie)
                 {

@@ -1,0 +1,86 @@
+﻿@model Personal_Management.Models.Isp_Sroki
+
+@{
+    Layout = null;
+    ViewBag.Kn = "Сохранить";
+}
+
+<div class="modal-content" style="width:100%">
+    <div class="modal-header">
+        <h3>Добавление решения</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="dl-horizontal">
+            <ol class="breadcrumb mb-3">
+                <li class="breadcrumb-item">@Html.ActionLink("Вернуться к списку этапов принятия", "Index")</li>
+                <li class="breadcrumb-item">@Html.ActionLink("Сотрудники", "Index", "Sotrs")</li>
+            </ol>
+            <hr />
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    <h4>Итог испытательного срока</h4>
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.ID_Isp)
+                    @Html.HiddenFor(model => model.Sotr_ID)
+                    @Html.HiddenFor(model => model.Date_Start)
+                    @Html.HiddenFor(model => model.Date_Finish)
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Status_ID, "Статус", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-12">
+                            @Html.DropDownList("Status_ID", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Status_ID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <div class="custom-control col-md-12 custom-switch">
+                                <input type="checkbox" class="custom-control-input ShowOrHide" value="myDivId1" name="pis" id="customSwitch1" />
+                                <label class="custom-control-label" for="customSwitch1">Написать письмо сотруднику</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="myDivId1" class="ShowOrHide form-group" style="display: none;">
+                        <div class="col-md-12">
+                            <label for="tema">Тема письма</label>
+                            <input type="text" class="form-control" id="tema" name="tema" placeholder="Введите тему письма">
+                            <label for="otprav">От кого</label>
+                            <input type="text" class="form-control" id="otprav" name="otprav" placeholder="Имя отправителя" value="Компания It-liga">
+                            <label for="sod">Текст письма</label>
+                            <textarea class="form-control" id="sod" name="sod" rows="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-12">
+                            <input type="submit" value="Сохранить" class="btn btn-outline-success" />
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script>
+    $('input.ShowOrHide').click(function () {
+
+        var checked = $("input.ShowOrHide:checked");
+
+        if (checked.length == 0) {
+            $("div.ShowOrHide").hide();
+        } else {
+            $("div.ShowOrHide").show();
+        }
+    });
+</script>
