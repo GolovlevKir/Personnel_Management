@@ -386,7 +386,7 @@ namespace Personal_Management.Models
         //Вывод ошибки
         [Required(ErrorMessage = "Если документа нет, укажите прочерк (-)")]
         public string Photo { get; set; }
-        
+
 
         [ForeignKey("Positions")]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -406,6 +406,7 @@ namespace Personal_Management.Models
         public string Date_of_adoption { get; set; }
         public string Opisanie { get; set; }
         public string rezume { get; set; }
+        
         public virtual Positions Positions { get; set; }
         public virtual Rates Rates { get; set; }
         public virtual Work_Schedule Work_Schedule { get; set; }

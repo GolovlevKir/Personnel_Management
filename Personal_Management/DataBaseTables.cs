@@ -26,9 +26,8 @@ namespace Personal_Management
                 //Открытие подключения
                 Program.SqlConnection.Open();
                 //Выполнение команды
-                dependency.AddCommandDependency(command);
                 //Прослушивание
-                SqlDependency.Start(Program.SqlConnection.ConnectionString);
+                //SqlDependency.Start(Program.SqlConnection.ConnectionString);
 
                 table.Load(command.ExecuteReader());
             }
