@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using Personal_Management.Models;
+using Personal_Management.Hubs;
 
 namespace Personal_Management.Controllers
 {
@@ -16,6 +17,12 @@ namespace Personal_Management.Controllers
         {
             var pass_Dannie = db.Pass_Dannie.Include(p => p.Sotrs);
             return View(pass_Dannie.ToList());
+        }
+
+        public ActionResult GetEmployeeData()
+        {
+            var pass_Dannie = db.Pass_Dannie.Include(p => p.Sotrs);
+            return PartialView("_EmployeeData", pass_Dannie.ToList());
         }
 
         // GET: Pass_Dannie/Details/5
@@ -55,6 +62,7 @@ namespace Personal_Management.Controllers
             {
                 db.Pass_Dannie.Add(pass_Dannie);
                 db.SaveChanges();
+                EmployeesHub.BroadcastData();
                 return RedirectToAction("Index");
             }
 
@@ -90,6 +98,7 @@ namespace Personal_Management.Controllers
             {
                 db.Entry(pass_Dannie).State = EntityState.Modified;
                 db.SaveChanges();
+                EmployeesHub.BroadcastData();
                 return RedirectToAction("Index");
             }
             ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Surname_Sot", pass_Dannie.Sotr_ID);
@@ -121,6 +130,7 @@ namespace Personal_Management.Controllers
             Pass_Dannie pass_Dannie = db.Pass_Dannie.Find(id);
             db.Pass_Dannie.Remove(pass_Dannie);
             db.SaveChanges();
+            EmployeesHub.BroadcastData();
             return RedirectToAction("Index");
         }
 

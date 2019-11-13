@@ -88,7 +88,7 @@ namespace Personal_Management
                 document.Paragraphs.Add();
                 Name_Doc.Range.Text = DateTime.Now.ToLongDateString();
             }
-            catch (Exception ex)
+            catch
             {
                
             }

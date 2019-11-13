@@ -6,40 +6,33 @@
     ViewBag.ContentMeta = "На данном окне возможно просмотреть паспортные данные";
 }
 
-<h2>Паспортные данные сотрудников</h2>
+<div id="dataModel"></div>
 
-<p>
-    @Html.ActionLink("Добавить данные", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            ФИО сотрудника (Должность)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.S_Pas)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.N_Pas)
-        </th>
-        <th></th>
-    </tr>
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Sotrs.FullName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.S_Pas)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.N_Pas)
-        </td>
-        <td>
-            @Html.ActionLink("Изменить", "Edit", new { id=item.ID_Pass }) |
-            @Html.ActionLink("Удалить данные", "Delete", new { id=item.ID_Pass })
-        </td>
-    </tr>
-}
+@section JavaScript{
+    <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
+    <script src="/signalr/hubs"></script>
+    <script type="text/javascript">
+        $(function () {
+            var hubNotify = $.connection.employeesHub;
 
-</table>
+            $.connection.hub.start().done(function () {
+                getAll();
+            });
+
+            hubNotify.client.refreshEmployeeData = function () {
+                getAll();
+            };
+        });
+
+        function getAll() {
+            var model = $('#dataModel');
+            $.ajax({
+                url: '/Pass_Dannie/GetEmployeeData',
+                contentType: 'application/html ; charset:utf-8',
+                type: 'GET',
+                dataType: 'html',
+                success: function (result) { model.empty().append(result); }
+            });
+        }
+    </script>
+}  

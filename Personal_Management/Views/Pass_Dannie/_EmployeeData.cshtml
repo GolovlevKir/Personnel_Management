@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Personal_Management.Models.Pass_Dannie>
+
+
+<h2>Паспортные данные сотрудников</h2>
+
+<p>
+    @Html.ActionLink("Добавить данные", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            ФИО сотрудника (Должность)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.S_Pas)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.N_Pas)
+        </th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sotrs.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.S_Pas)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.N_Pas)
+            </td>
+            <td>
+                @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Pass }) |
+                @Html.ActionLink("Удалить данные", "Delete", new { id = item.ID_Pass })
+            </td>
+        </tr>
+    }
+
+</table>
+

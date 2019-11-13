@@ -98,6 +98,7 @@
                                     @if ((int)Session["admin"] != 0 || (int)Session["Buh"] != 0 || (int)Session["Kadri"] != 0 || (int)Session["Otdeli"] != 0)
                                     {
                                         @Html.ActionLink("Данные сотрудников", "Index", "Sotrs", null, new { @class = "dropdown-item" })
+                                        @Html.ActionLink("Паспортные данные", "Index", "Pass_Dannie", null, new { @class = "dropdown-item" })
                                     }
 
                                 </div>
@@ -195,6 +196,7 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
-    
+    @RenderSection("JavaScript", required: false)
+
 </body>
 </html>

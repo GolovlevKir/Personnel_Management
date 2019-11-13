@@ -42,7 +42,7 @@ namespace Personal_Management.Controllers
             //Поиск по значениям
             if (search != null && search != "")
             {
-                sotrs = sotrs.Where(s => (s.Surname_Sot.Contains(search)) || (s.Name_Sot.Contains(search)) || (s.Petronumic_Sot.Contains(search)) || (s.Positions.Naim_Posit.Contains(search)) || (s.Num_Phone.Contains(search)) || (s.Opisanie.Contains(search)) || (s.Email.Contains(search)) || (s.Day_Of_Birth.Contains(search)) || (s.Date_of_adoption.Contains(search)));
+                sotrs = sotrs.Where(s => (s.Surname_Sot.Contains(search)) || (s.Name_Sot.Contains(search)) || (s.Petronumic_Sot.Contains(search)) || (s.Positions.Naim_Posit.Contains(search)) || (s.Num_Phone.Contains(search)) || (s.Opisanie.Contains(search)) || (s.Email.Contains(search)) || (s.Day_Of_Birth.Contains(search)) || s.Date_of_adoption.Contains(search) || s.Surname_Sot.Contains(search) && s.Name_Sot.Contains(search));
             }
             //Лист должностей
             List<Positions> posit = db.Positions.ToList();
@@ -109,35 +109,19 @@ namespace Personal_Management.Controllers
         [HttpPost]
         public ActionResult addnewrecord(Sotrs sotrs, HttpPostedFileBase imgfile, HttpPostedFileBase doc)
         {
+            ViewBag.Positions_ID = new SelectList(db.Positions, "ID_Positions", "Naim_Posit");
+            ViewBag.Rate_ID = new SelectList(db.Rates, "ID_Rate", "Rate");
+            ViewBag.Schedule_ID = new SelectList(db.Work_Schedule, "ID_Schedule", "Naim_Sche");
             Sotrs sot = new Sotrs();
             //Загрузка изображения
             string path = uploadimage(imgfile);
             //Загрузка документа
             string pathrez = uploaddoc(doc);
             //Осуществление добавления данных
-            if (pathrez.Equals("-1") && path.Equals("-1"))
-            {
-                sot.Surname_Sot = sotrs.Surname_Sot;
-                sot.Name_Sot = sotrs.Name_Sot;
-                sot.Petronumic_Sot = sotrs.Petronumic_Sot;
-                sot.Day_Of_Birth = sotrs.Day_Of_Birth;
-                sot.Address = sotrs.Address;
-                sot.Num_Phone = sotrs.Num_Phone;
-                sot.Email = sotrs.Email;
-                sot.Photo = "-";
-                sot.Positions_ID = sotrs.Positions_ID;
-                sot.Rate_ID = sotrs.Rate_ID;
-                sot.Schedule_ID = sotrs.Schedule_ID;
-                sot.Date_of_adoption = sotrs.Date_of_adoption;
-                sot.Opisanie = sotrs.Opisanie;
-                sot.rezume = "-";
-                db.Sotrs.Add(sot);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                if (path.Equals("-1"))
+            try
+            { 
+
+                if (pathrez.Equals("-1") && path.Equals("-1"))
                 {
                     sot.Surname_Sot = sotrs.Surname_Sot;
                     sot.Name_Sot = sotrs.Name_Sot;
@@ -152,14 +136,14 @@ namespace Personal_Management.Controllers
                     sot.Schedule_ID = sotrs.Schedule_ID;
                     sot.Date_of_adoption = sotrs.Date_of_adoption;
                     sot.Opisanie = sotrs.Opisanie;
-                    sot.rezume = pathrez;
+                    sot.rezume = "-";
                     db.Sotrs.Add(sot);
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
                 else
                 {
-                    if (pathrez.Equals("-1"))
+                    if (path.Equals("-1"))
                     {
                         sot.Surname_Sot = sotrs.Surname_Sot;
                         sot.Name_Sot = sotrs.Name_Sot;
@@ -168,28 +152,7 @@ namespace Personal_Management.Controllers
                         sot.Address = sotrs.Address;
                         sot.Num_Phone = sotrs.Num_Phone;
                         sot.Email = sotrs.Email;
-                        sot.Photo = path;
-                        sot.Positions_ID = sotrs.Positions_ID;
-                        sot.Rate_ID = sotrs.Rate_ID;
-                        sot.Schedule_ID = sotrs.Schedule_ID;
-                        sot.Date_of_adoption = sotrs.Date_of_adoption;
-                        sot.Opisanie = sotrs.Opisanie;
-                        sot.rezume = "-";
-                        db.Sotrs.Add(sot);
-                        db.SaveChanges();
-                        return RedirectToAction("Index");
-                    }
-
-                    else
-                    {
-                        sot.Surname_Sot = sotrs.Surname_Sot;
-                        sot.Name_Sot = sotrs.Name_Sot;
-                        sot.Petronumic_Sot = sotrs.Petronumic_Sot;
-                        sot.Day_Of_Birth = sotrs.Day_Of_Birth;
-                        sot.Address = sotrs.Address;
-                        sot.Num_Phone = sotrs.Num_Phone;
-                        sot.Email = sotrs.Email;
-                        sot.Photo = path;
+                        sot.Photo = "-";
                         sot.Positions_ID = sotrs.Positions_ID;
                         sot.Rate_ID = sotrs.Rate_ID;
                         sot.Schedule_ID = sotrs.Schedule_ID;
@@ -200,8 +163,57 @@ namespace Personal_Management.Controllers
                         db.SaveChanges();
                         return RedirectToAction("Index");
                     }
+                    else
+                    {
+                        if (pathrez.Equals("-1"))
+                        {
+                            sot.Surname_Sot = sotrs.Surname_Sot;
+                            sot.Name_Sot = sotrs.Name_Sot;
+                            sot.Petronumic_Sot = sotrs.Petronumic_Sot;
+                            sot.Day_Of_Birth = sotrs.Day_Of_Birth;
+                            sot.Address = sotrs.Address;
+                            sot.Num_Phone = sotrs.Num_Phone;
+                            sot.Email = sotrs.Email;
+                            sot.Photo = path;
+                            sot.Positions_ID = sotrs.Positions_ID;
+                            sot.Rate_ID = sotrs.Rate_ID;
+                            sot.Schedule_ID = sotrs.Schedule_ID;
+                            sot.Date_of_adoption = sotrs.Date_of_adoption;
+                            sot.Opisanie = sotrs.Opisanie;
+                            sot.rezume = "-";
+                            db.Sotrs.Add(sot);
+                            db.SaveChanges();
+                            return RedirectToAction("Index");
+                        }
+
+                        else
+                        {
+                            sot.Surname_Sot = sotrs.Surname_Sot;
+                            sot.Name_Sot = sotrs.Name_Sot;
+                            sot.Petronumic_Sot = sotrs.Petronumic_Sot;
+                            sot.Day_Of_Birth = sotrs.Day_Of_Birth;
+                            sot.Address = sotrs.Address;
+                            sot.Num_Phone = sotrs.Num_Phone;
+                            sot.Email = sotrs.Email;
+                            sot.Photo = path;
+                            sot.Positions_ID = sotrs.Positions_ID;
+                            sot.Rate_ID = sotrs.Rate_ID;
+                            sot.Schedule_ID = sotrs.Schedule_ID;
+                            sot.Date_of_adoption = sotrs.Date_of_adoption;
+                            sot.Opisanie = sotrs.Opisanie;
+                            sot.rezume = pathrez;
+                            db.Sotrs.Add(sot);
+                            db.SaveChanges();
+                            return RedirectToAction("Index");
+                        }
+                    }
                 }
             }
+            catch
+            {
+                ModelState.AddModelError("", "Возраст сотрудника должен быть больше 18 лет");
+            }
+            return View(sotrs);
         }
 
         public string uploadimage(HttpPostedFileBase file)

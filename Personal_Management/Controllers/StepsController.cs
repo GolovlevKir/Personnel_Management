@@ -298,7 +298,7 @@ namespace Personal_Management.Controllers
         {
             SelectList sot = new SelectList(db.Sotrs, "ID_Sotr", "Full",id);
             ViewBag.Sotrs = sot;
-            ViewBag.Status_ID = new SelectList(db.status_isp_sroka, "ID_St", "Name_St");
+            ViewBag.Status_ID = new SelectList(db.status_isp_sroka.Where(s => (s.ID_St == 1) || (s.ID_St == 2) || (s.ID_St == 4)), "ID_St", "Name_St");
             return View();
         }
 
@@ -308,7 +308,7 @@ namespace Personal_Management.Controllers
         [HttpPost]
         public ActionResult AddIsp([Bind(Include = "ID_Isp,Sotr_ID,Date_Start,Date_Finish,Status_ID")] Isp_Sroki isp_Sroki)
         {
-            ViewBag.Status_ID = new SelectList(db.status_isp_sroka, "ID_St", "Name_St", isp_Sroki.Status_ID);
+            ViewBag.Status_ID = new SelectList(db.status_isp_sroka.Where(s => (s.ID_St == 1) || (s.ID_St == 2) || (s.ID_St == 4)), "ID_St", "Name_St");
             SelectList sot = new SelectList(db.Sotrs, "ID_Sotr", "Full");
             ViewBag.Sotrs = sot;
             SqlCommand command;
@@ -342,7 +342,7 @@ namespace Personal_Management.Controllers
             }
             SelectList sot = new SelectList(db.Sotrs, "ID_Sotr", "Full",id);
             ViewBag.Sotrs = sot;
-            ViewBag.Status_ID = new SelectList(db.status_isp_sroka, "ID_St", "Name_St");
+            ViewBag.Status_ID = new SelectList(db.status_isp_sroka.Where(s => (s.ID_St == 1) || (s.ID_St == 2) || (s.ID_St == 4)), "ID_St", "Name_St");
             return View(isp_Sroki);
         }
 
@@ -381,7 +381,7 @@ namespace Personal_Management.Controllers
             }
             SelectList sot = new SelectList(db.Sotrs, "ID_Sotr", "Full", id);
             ViewBag.Sotrs = sot;
-            ViewBag.Status_ID = new SelectList(db.status_isp_sroka, "ID_St", "Name_St");
+            ViewBag.Status_ID = new SelectList(db.status_isp_sroka.Where(s => (s.ID_St == 1) || (s.ID_St == 2) || (s.ID_St == 4)), "ID_St", "Name_St");
             return View(isp_Sroki);
         }
 

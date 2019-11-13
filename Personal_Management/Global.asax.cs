@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -14,6 +15,7 @@ namespace Personal_Management
     {
         protected void Application_Start()
         {
+            SqlDependency.Start(ConfigurationManager.ConnectionStrings["PersonalContext"].ToString());
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
@@ -23,6 +25,7 @@ namespace Personal_Management
 
         protected void Application_End()
         {
+            SqlDependency.Stop(ConfigurationManager.ConnectionStrings["PersonalContext"].ToString());
             FormsAuthentication.SignOut();
         }
     }

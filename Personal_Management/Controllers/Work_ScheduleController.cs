@@ -32,7 +32,7 @@ namespace Personal_Management.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID_Schedule,Naim_Sche")] Work_Schedule work_Schedule)
+        public ActionResult Create([Bind(Include = "ID_Schedule, Naim_Sche")] Work_Schedule work_Schedule)
         {
             if (ModelState.IsValid)
             {

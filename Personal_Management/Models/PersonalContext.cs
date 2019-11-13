@@ -1,4 +1,7 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 
 namespace Personal_Management.Models
 {
@@ -18,5 +21,74 @@ namespace Personal_Management.Models
         public DbSet<status_isp_sroka> status_isp_sroka { get; set; }
         public DbSet<Work_Schedule> Work_Schedule { get; set; }
         public DbSet<Steps> Steps { get; set; }
+    }
+
+    public interface IReposit : IDisposable
+    {
+        List<Rates> GetComputerList();
+        Rates GetComputer(int id);
+        void Create(Rates item);
+        void Update(Rates item);
+        void Delete(int id);
+        void Save();
+    }
+
+    public class ComputerRepository : IReposit
+    {
+        private PersonalContext db;
+        public ComputerRepository()
+        {
+            this.db = new PersonalContext();
+        }
+        public List<Rates> GetComputerList()
+        {
+            return db.Rates.ToList();
+        }
+        public Rates GetComputer(int id)
+        {
+            return db.Rates.Find(id);
+        }
+
+        public void Create(Rates c)
+        {
+            db.Rates.Add(c);
+        }
+
+        public void Update(Rates c)
+        {
+            db.Entry(c).State = EntityState.Modified;
+        }
+
+        public void Delete(int id)
+        {
+            Rates c = db.Rates.Find(id);
+            if (c != null)
+                db.Rates.Remove(c);
+        }
+
+        public void Save()
+        {
+            db.SaveChanges();
+        }
+
+        private bool disposed = false;
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    db.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
     }
 }

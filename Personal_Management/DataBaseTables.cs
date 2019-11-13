@@ -31,7 +31,7 @@ namespace Personal_Management
 
                 table.Load(command.ExecuteReader());
             }
-            catch (StackOverflowException ex)
+            catch 
             {
                 
             }
