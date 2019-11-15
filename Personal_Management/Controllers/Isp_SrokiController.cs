@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
@@ -31,10 +32,39 @@ namespace Personal_Management.Controllers
         [Authorize]
         public ActionResult Create()
         {
-            SelectList sot = new SelectList(db.Sotrs, "ID_Sotr", "Full");
-            ViewBag.Sotrs = sot;
+            int selectedIndex = 0;
             ViewBag.Status_ID = new SelectList(db.status_isp_sroka.Where(s => (s.ID_St == 1) || (s.ID_St == 2) || (s.ID_St == 4)), "ID_St", "Name_St");
-            return View();
+            //Создаем лист должностей
+            List<Positions> pos = db.Positions.ToList();
+            //Добавляем все
+            pos.Insert(0, new Positions { ID_Positions = 0, Naim_Posit = "Все" });
+            //Создаем список должностей
+            ViewBag.Positions = new SelectList(pos, "ID_Positions", "Naim_Posit", selectedIndex);
+            if (selectedIndex > 0)
+            {
+                ViewBag.Sotr_ID = new SelectList(db.Sotrs.Where(p => p.Positions_ID == selectedIndex), "ID_Sotr", "Full");
+            }
+            else
+            {
+                ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full");
+            }
+            var m = new Isp_Sroki();
+            m.Date_Start = DateTime.Now.ToString("ddMMyyyy");
+            return View(m);
+        }
+
+        public ActionResult GetItems(int id)
+        {
+            //Получаем список сотрудников
+            if (id > 0)
+            {
+                return PartialView(db.Sotrs.Where(c => c.Positions_ID == id).ToList());
+            }
+            else
+            {
+                return PartialView(db.Sotrs);
+            }
+
         }
 
         // POST: Isp_Sroki/Create
@@ -52,8 +82,14 @@ namespace Personal_Management.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
+            ViewBag.Sotrs = new SelectList(db.Sotrs, "ID_Sotr", "Full",isp_Sroki.Sotr_ID);
             ViewBag.Status_ID = new SelectList(db.status_isp_sroka.Where(s => (s.ID_St == 1) || (s.ID_St == 2) || (s.ID_St == 4)), "ID_St", "Name_St");
+            
+            List<Positions> pos = db.Positions.ToList();
+            //Добавляем все
+            pos.Insert(0, new Positions { ID_Positions = 0, Naim_Posit = "Все" });
+            //Создаем список должностей
+            ViewBag.Positions = new SelectList(pos, "ID_Positions", "Naim_Posit", 0);
             return View(isp_Sroki);
         }
 
@@ -70,8 +106,21 @@ namespace Personal_Management.Controllers
             {
                 return HttpNotFound();
             }
-            SelectList sot = new SelectList(db.Sotrs, "ID_Sotr", "Full", isp_Sroki.Sotr_ID);
-            ViewBag.Sotrs = sot;
+            int selectedIndex = 0;
+            //Создаем лист должностей
+            List<Positions> pos = db.Positions.ToList();
+            //Добавляем все
+            pos.Insert(0, new Positions { ID_Positions = 0, Naim_Posit = "Все" });
+            //Создаем список должностей
+            ViewBag.Positions = new SelectList(pos, "ID_Positions", "Naim_Posit", selectedIndex);
+            if (selectedIndex > 0)
+            {
+                ViewBag.Sotr_ID = new SelectList(db.Sotrs.Where(p => p.Positions_ID == selectedIndex), "ID_Sotr", "Full");
+            }
+            else
+            {
+                ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full",isp_Sroki.Sotr_ID);
+            }
             ViewBag.Status_ID = new SelectList(db.status_isp_sroka.Where(s => (s.ID_St == 1) || (s.ID_St == 2) || (s.ID_St == 4)), "ID_St", "Name_St");
             return View(isp_Sroki);
         }
@@ -96,6 +145,11 @@ namespace Personal_Management.Controllers
             }
             ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Surname_Sot", isp_Sroki.Sotr_ID);
             ViewBag.Status_ID = new SelectList(db.status_isp_sroka.Where(s => (s.ID_St == 1) || (s.ID_St == 2) || (s.ID_St == 4)), "ID_St", "Name_St");
+            List<Positions> pos = db.Positions.ToList();
+            //Добавляем все
+            pos.Insert(0, new Positions { ID_Positions = 0, Naim_Posit = "Все" });
+            //Создаем список должностей
+            ViewBag.Positions = new SelectList(pos, "ID_Positions", "Naim_Posit", 0);
             return View(isp_Sroki);
         }
 

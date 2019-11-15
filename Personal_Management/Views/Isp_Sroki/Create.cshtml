@@ -19,51 +19,75 @@
 {
     @Html.AntiForgeryToken()
 
-<div class="form-horizontal">
-    <h4>Испытательные сроки</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(model => model.Sotr_ID, "ФИО сотрудника", htmlAttributes: new { @class = "control-label col-md-5" })
-        <div class="col-md-10">
-            @Html.DropDownList("Sotr_ID", ViewBag.Sotrs as SelectList, htmlAttributes: new { @class = "form-control custom-select" })
-            @Html.ValidationMessageFor(model => model.Sotr_ID, "", new { @class = "text-danger" })
+    <div class="form-horizontal">
+        <h4>Испытательные сроки</h4>
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.Sotrs.Positions_ID, "Выберите должность", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("Positions", ViewBag.Positions as SelectList, new { id = "pos", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Sotr_ID, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Date_Start, htmlAttributes: new { @class = "control-label col-md-5" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Date_Start, new { htmlAttributes = new { @class = "form-control", @id = "date" } })
-            @Html.ValidationMessageFor(model => model.Date_Start, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Sotr_ID, "ФИО Сотрудника", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("Sotr_ID", null, htmlAttributes: new { @class = "form-control", @id = "Sotr_ID" })
+                @Html.ValidationMessageFor(model => model.Sotr_ID, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Date_Finish, htmlAttributes: new { @class = "control-label col-md-5" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Date_Finish, new { htmlAttributes = new { @class = "form-control", @id = "date2" } })
-            @Html.ValidationMessageFor(model => model.Date_Finish, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Date_Start, htmlAttributes: new { @class = "control-label col-md-5" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Date_Start, new { htmlAttributes = new { @class = "form-control", @id = "date" } })
+                @Html.ValidationMessageFor(model => model.Date_Start, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Status_ID, "Статус прохождения", htmlAttributes: new { @class = "control-label col-md-5" })
-        <div class="col-md-10">
-            @Html.DropDownList("Status_ID", null, htmlAttributes: new { @class = "form-control custom-select" })
-            @Html.ValidationMessageFor(model => model.Status_ID, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Date_Finish, htmlAttributes: new { @class = "control-label col-md-5" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Date_Finish, new { htmlAttributes = new { @class = "form-control", @id = "date2" } })
+                @Html.ValidationMessageFor(model => model.Date_Finish, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Создать" class="btn btn-outline-success" />
+        <div class="form-group">
+            @Html.LabelFor(model => model.Status_ID, "Статус прохождения", htmlAttributes: new { @class = "control-label col-md-5" })
+            <div class="col-md-10">
+                @Html.DropDownList("Status_ID", null, htmlAttributes: new { @class = "form-control custom-select" })
+                @Html.ValidationMessageFor(model => model.Status_ID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Создать" class="btn btn-outline-success" />
+            </div>
         </div>
     </div>
-</div>
 }
 
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+@section scripts{
+    <script type="text/javascript">
+    $(function () {
+
+        $('#pos').change(function()
+        {
+            // получаем выбранный id
+            var id = $(this).val();
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetItems")/' + id,
+                success: function (data) {
+                    // заменяем содержимое присланным частичным представлением
+                    $('#Sotr_ID').replaceWith(data);
+                }
+            });
+        });
+    })
+    </script>
 }

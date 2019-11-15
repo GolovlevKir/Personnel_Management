@@ -85,7 +85,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.Photo, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            <input type="file" id="imgfile" name="imgfile" class="btn badge-info">
+            <input type="file" id="imgfile" name="imgfile" class="btn btn-primary control" style="width:100%">
             @Html.ValidationMessageFor(model => model.Photo, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -115,9 +115,9 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.Date_of_adoption, "Дата принятия", htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.Date_of_adoption, "Дата прихода", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.Date_of_adoption, new { htmlAttributes = new { @class = "form-control", id = "date2" } })
+            @Html.EditorFor(model => model.Date_of_adoption,DateTime.Now.ToShortDateString(), new { htmlAttributes = new { @class = "form-control", id = "date2", @value = "15112019" } })
             @Html.ValidationMessageFor(model => model.Date_of_adoption, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -133,7 +133,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.rezume, "Резюме", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            <input type="file" id="doc" name="doc" class="btn badge-info">
+            <input type="file" id="doc" name="doc" class="btn btn-primary control" style="width:100%">
             @Html.ValidationMessageFor(model => model.rezume, "", new { @class = "text-danger" })
         </div>
     </div>

@@ -391,6 +391,7 @@
     <Content Include="Views\Steps\Ozidan.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Pass_Dannie\_EmployeeData.cshtml" />
+    <Content Include="Views\Isp_Sroki\GetItems.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

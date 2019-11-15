@@ -92,6 +92,7 @@ namespace Personal_Management.Controllers
             ViewBag.Positions_ID = new SelectList(db.Positions, "ID_Positions", "Naim_Posit");
             ViewBag.Rate_ID = new SelectList(db.Rates, "ID_Rate", "Rate");
             ViewBag.Schedule_ID = new SelectList(db.Work_Schedule, "ID_Schedule", "Naim_Sche");
+            
             return View();
         }
 
@@ -99,10 +100,12 @@ namespace Personal_Management.Controllers
         [HttpGet]
         public ActionResult addnewrecord()
         {
+            var m = new Sotrs();
             ViewBag.Positions_ID = new SelectList(db.Positions, "ID_Positions", "Naim_Posit");
             ViewBag.Rate_ID = new SelectList(db.Rates, "ID_Rate", "Rate");
             ViewBag.Schedule_ID = new SelectList(db.Work_Schedule, "ID_Schedule", "Naim_Sche");
-            return View();
+            m.Date_of_adoption = DateTime.Now.ToString("ddMMyyyy");
+            return View(m);
         }
 
         [Authorize]

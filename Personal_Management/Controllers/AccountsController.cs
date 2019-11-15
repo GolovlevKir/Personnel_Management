@@ -51,8 +51,6 @@ namespace Personal_Management.Controllers
             {
                 ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full");
             }
-
-
             return View();
         }
 
