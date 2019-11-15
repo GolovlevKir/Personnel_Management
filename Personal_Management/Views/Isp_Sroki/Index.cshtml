@@ -41,235 +41,35 @@
     </li>
 </ul>
 
-<!-- Tab panes -->
-<div class="tab-content">
-    <div id="home" class="container tab-pane active">
-        <br>
-        <h3>Все испытательные сроки</h3>
-
-        <br>
-        <table class="table">
-            <tr>
-                <th>
-                    ФИО сотрудника (Должность)
-                </th>
-                <th>
-                    Период
-                </th>
-                <th>
-                    Статус
-                </th>
-            </tr>
-
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @item.Sotrs.FullName | @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Isp }, new { @class = "compItem" }) | @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Isp }, new { @class = "compItem" })
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date_Start) - @Html.DisplayFor(modelItem => item.Date_Finish)
-                    </td>
-                    @switch (item.status_isp_sroka.ID_St)
-                    {
-                        case (4):
-
-                            <td class="align-content-center badge badge-pill badge-danger" style="width:100%">
-                                @Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St, new { @class = "col-md-2" })
-                            </td>
-                            break;
-                        case (3):
-
-                            <td class="align-content-center badge badge-pill badge-info" style="width:100%">
-                                @Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St, new { @class = "col-md-2" })
-                            </td>
-                            break;
-                        case (2):
-                            <td class="align-content-center badge badge-pill badge-warning" style="width:100%">
-                                @Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St, new { @class = "col-md-2" })
-                            </td>
-                            break;
-
-                        case (1):
-                            <td class="align-content-center badge badge-pill badge-success" style="width:100%">
-                                @Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St, new { @class = "col-md-2" })
-                            </td>
-                            break;
-                    }
+<div id="dataModel"></div>
 
 
-
-                </tr>
-            }
-
-        </table>
-    </div>
-    <div id="menu1" class="container tab-pane fade">
-        <br>
-        <h3>Ожидание решения</h3>
-
-        <br>
-        <table class="table">
-            <tr>
-                <th>
-                    ФИО сотрудника (Должность)
-                </th>
-                <th>
-                    Период
-                </th>
-                <th>
-                    Статус
-                </th>
-            </tr>
-
-            @foreach (var item in Model)
-            {
-                if (item.status_isp_sroka.ID_St == 3)
-                {
-                    <tr>
-                        <td>
-                            @item.Sotrs.FullName | @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Isp }, new { @class = "compItem" }) | @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Isp }, new { @class = "compItem" })
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Date_Start) - @Html.DisplayFor(modelItem => item.Date_Finish)
-                        </td>
-                        <td class="align-content-center badge badge-pill badge-info" style="width:100%">
-                            @Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St, new { @class = "col-md-2" })
-                        </td>
-                    </tr>
-                }
-            }
-        </table>
-    </div>
-    <div id="menu2" class="container tab-pane fade">
-        <br>
-        <h3>Принятые</h3>
-
-        <br>
-        <table class="table">
-            <tr>
-                <th>
-                    ФИО сотрудника (Должность)
-                </th>
-                <th>
-                    Период
-                </th>
-                <th>
-                    Статус
-                </th>
-            </tr>
-
-            @foreach (var item in Model)
-            {
-                if (item.status_isp_sroka.ID_St == 1)
-                {
-                    <tr>
-                        <td>
-                            @item.Sotrs.FullName | @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Isp }, new { @class = "compItem" }) | @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Isp }, new { @class = "compItem" })
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Date_Start) - @Html.DisplayFor(modelItem => item.Date_Finish)
-                        </td>
-                        <td class="align-content-center badge badge-pill badge-success" style="width:100%">
-                            @Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St, new { @class = "col-md-2" })
-                        </td>
-                    </tr>
-                }
-            }
-        </table>
-    </div>
-    <div id="menu3" class="container tab-pane fade">
-        <br>
-        <h3>Отклоненные</h3>
-
-        <br>
-        <table class="table">
-            <tr>
-                <th>
-                    ФИО сотрудника (Должность)
-                </th>
-                <th>
-                    Период
-                </th>
-                <th>
-                    Статус
-                </th>
-            </tr>
-
-            @foreach (var item in Model)
-            {
-                if (item.status_isp_sroka.ID_St == 4)
-                {
-                    <tr>
-                        <td>
-                            @item.Sotrs.FullName | @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Isp }, new { @class = "compItem" }) | @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Isp }, new { @class = "compItem" })
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Date_Start) - @Html.DisplayFor(modelItem => item.Date_Finish)
-                        </td>
-                        <td class="align-content-center badge badge-pill badge-danger" style="width:100%">
-                            @Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St, new { @class = "col-md-2" })
-                        </td>
-                    </tr>
-                }
-            }
-        </table>
-    </div>
-    <div id="menu4" class="container tab-pane fade">
-        <br>
-        <h3>В процессе</h3>
-
-        <br>
-        <table class="table">
-            <tr>
-                <th>
-                    ФИО сотрудника (Должность)
-                </th>
-                <th>
-                    Период
-                </th>
-                <th>
-                    Статус
-                </th>
-            </tr>
-
-            @foreach (var item in Model)
-            {
-                if (item.status_isp_sroka.ID_St == 2)
-                {
-                    <tr>
-                        <td>
-                            @item.Sotrs.FullName | @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Isp }, new { @class = "compItem" }) | @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Isp }, new { @class = "compItem" })
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Date_Start) - @Html.DisplayFor(modelItem => item.Date_Finish)
-                        </td>
-                        <td class="align-content-center badge badge-pill badge-warning" style="width:100%">
-                            @Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St, new { @class = "col-md-2" })
-                        </td>
-                    </tr>
-                }
-            }
-        </table>
-    </div>
-</div>
-<div id="modDialog" class="modal fade">
-    <div id="dialogContent" class="modal-dialog"></div>
-</div>
 @section scripts
 {
+    <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
+    <script src="/signalr/hubs"></script>
     <script>
-
         $(function () {
-            $.ajaxSetup({ cache: false });
-            $(".compItem").click(function (e) {
+            var hubNotify = $.connection.employeesHub;
 
-                e.preventDefault();
-                $.get(this.href, function (data) {
-                    $('#dialogContent').html(data);
-                    $('#modDialog').modal('show');
-                });
+            $.connection.hub.start().done(function () {
+                getAll();
             });
-        })
+
+            hubNotify.client.refreshEmployeeData = function () {
+                getAll();
+            };
+        });
+
+        function getAll() {
+            var model = $('#dataModel');
+            $.ajax({
+                url: '/Isp_Sroki/GetEmployeeData',
+                contentType: 'application/html ; charset:utf-8',
+                type: 'GET',
+                dataType: 'html',
+                success: function (result) { model.empty().append(result); }
+            });
+        }
     </script>
 }

@@ -392,6 +392,7 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Pass_Dannie\_EmployeeData.cshtml" />
     <Content Include="Views\Isp_Sroki\GetItems.cshtml" />
+    <Content Include="Views\Isp_Sroki\_EmployeeData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

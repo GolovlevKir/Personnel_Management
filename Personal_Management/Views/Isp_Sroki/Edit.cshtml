@@ -15,9 +15,7 @@
 <div class="modal-content" style="width:100%">
     <div class="modal-header">
         <h3>Изменение записи</h3>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     </div>
     <div class="modal-body">
         <div class="dl-horizontal">
@@ -108,21 +106,5 @@
                 });
             });
         })
-
-        $(function () {
-        $('#pos').change(function()
-        {
-            // получаем выбранный id
-            var id = $(this).val();
-            $.ajax({
-                type: 'GET',
-                url: '@Url.Action("GetItems")/' + id,
-                success: function (data) {
-                    // заменяем содержимое присланным частичным представлением
-                    $('#Sotr_ID').replaceWith(data);
-                }
-            });
-        });
-    })
     </script>
 }

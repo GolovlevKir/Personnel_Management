@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using Personal_Management.Hubs;
 using Personal_Management.Models;
 
 namespace Personal_Management.Controllers
@@ -26,6 +27,12 @@ namespace Personal_Management.Controllers
                 isp_Sroki = isp_Sroki.Where(s => (s.Sotrs.Surname_Sot.Contains(search)) || (s.Sotrs.Name_Sot.Contains(search)) || (s.Sotrs.Petronumic_Sot.Contains(search)) || (s.Sotrs.Positions.Naim_Posit.Contains(search)));
             }
             return View(isp_Sroki.ToList());
+        }
+
+        public ActionResult GetEmployeeData()
+        {
+            var pass_Dannie = db.Isp_Sroki.Include(i => i.Sotrs).Include(i => i.status_isp_sroka);
+            return PartialView("_EmployeeData", pass_Dannie.ToList());
         }
 
         // GET: Isp_Sroki/Create
@@ -80,6 +87,7 @@ namespace Personal_Management.Controllers
                 //Добавление испытательного срока
                 db.Isp_Sroki.Add(isp_Sroki);
                 db.SaveChanges();
+                EmployeesHub.BroadcastData();
                 return RedirectToAction("Index");
             }
             ViewBag.Sotrs = new SelectList(db.Sotrs, "ID_Sotr", "Full",isp_Sroki.Sotr_ID);
@@ -141,6 +149,7 @@ namespace Personal_Management.Controllers
                 command.CommandText = "update Isp_Sroki set Sotr_ID = " + isp_Sroki.Sotr_ID.ToString() + " , Date_Start = '" + isp_Sroki.Date_Start + "', Date_Finish = '" + isp_Sroki.Date_Finish + "', Status_ID = " + isp_Sroki.Status_ID.ToString() + " where ID_Isp = " + isp_Sroki.ID_Isp.ToString();
                 command.ExecuteScalar();
                 Program.SqlConnection.Close();
+                EmployeesHub.BroadcastData();
                 return RedirectToAction("Index");
             }
             ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Surname_Sot", isp_Sroki.Sotr_ID);
@@ -179,6 +188,7 @@ namespace Personal_Management.Controllers
             //Удаление данных
             db.Isp_Sroki.Remove(isp_Sroki);
             db.SaveChanges();
+            EmployeesHub.BroadcastData();
             return RedirectToAction("Index");
         }
 
