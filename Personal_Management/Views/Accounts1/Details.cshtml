@@ -1,0 +1,50 @@
+﻿@model Personal_Management.Models.Accounts
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Accounts</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Roles.Role_Naim)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Roles.Role_Naim)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Sotrs.Surname_Sot)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sotrs.Surname_Sot)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Password)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Password)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Password2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Password2)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Login }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

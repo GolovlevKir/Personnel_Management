@@ -407,7 +407,9 @@ namespace Personal_Management.Models
         public string Date_of_adoption { get; set; }
         public string Opisanie { get; set; }
         public string rezume { get; set; }
-        
+        public bool otkl { get; set; }
+
+
         public virtual Positions Positions { get; set; }
         public virtual Rates Rates { get; set; }
         public virtual Work_Schedule Work_Schedule { get; set; }

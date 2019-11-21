@@ -1,0 +1,56 @@
+﻿@model Personal_Management.Models.Accounts
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Accounts</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Roles.Role_Naim)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Roles.Role_Naim)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Sotrs.Surname_Sot)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sotrs.Surname_Sot)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Password)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Password)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Password2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Password2)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

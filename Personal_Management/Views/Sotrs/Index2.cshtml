@@ -1,0 +1,111 @@
+﻿@model IEnumerable<Personal_Management.Models.Sotrs>
+
+@{
+    ViewBag.Title = "Index2";
+}
+
+<h2>Index2</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Positions.Naim_Posit)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Rates.Rate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Work_Schedule.Naim_Sche)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Surname_Sot)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name_Sot)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Petronumic_Sot)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Day_Of_Birth)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Num_Phone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Photo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date_of_adoption)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Opisanie)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.rezume)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Positions.Naim_Posit)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Rates.Rate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Work_Schedule.Naim_Sche)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Surname_Sot)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name_Sot)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Petronumic_Sot)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Day_Of_Birth)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Address)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Num_Phone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Photo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date_of_adoption)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Opisanie)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.rezume)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID_Sotr }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ID_Sotr }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID_Sotr })
+        </td>
+    </tr>
+}
+
+</table>

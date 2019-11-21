@@ -219,6 +219,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Accounts1Controller.cs" />
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\DepartmentsController.cs" />
     <Compile Include="Controllers\DocumentsController.cs" />
@@ -393,6 +394,12 @@
     <Content Include="Views\Pass_Dannie\_EmployeeData.cshtml" />
     <Content Include="Views\Isp_Sroki\GetItems.cshtml" />
     <Content Include="Views\Isp_Sroki\_EmployeeData.cshtml" />
+    <Content Include="Views\Accounts1\Create.cshtml" />
+    <Content Include="Views\Accounts1\Delete.cshtml" />
+    <Content Include="Views\Accounts1\Details.cshtml" />
+    <Content Include="Views\Accounts1\Edit.cshtml" />
+    <Content Include="Views\Accounts1\Index.cshtml" />
+    <Content Include="Views\Sotrs\Index2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

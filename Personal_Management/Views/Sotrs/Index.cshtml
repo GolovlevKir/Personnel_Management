@@ -6,7 +6,9 @@
     ViewBag.NameMeta = "AddAcc";
     ViewBag.ContentMeta = "На данном окне возможно просмотреть список сотрудников";
 }
-
+    <div id="modDialog" class="modal fade">
+        <div id="dialogContent" class="modal-dialog modal-lg"></div>
+    </div>
 <h2>Сотрудники</h2>
 <hr />
 <ol class="breadcrumb">
@@ -26,124 +28,332 @@
 
 <hr />
 
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#home"><i class="fa fa-th-large" aria-hidden="true"></i></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#menu1"><i class="fa fa-bars" aria-hidden="true"></i></a>
+    </li>
+</ul>
+<div class="tab-content">
+    <div id="home" class="container tab-pane active">
+        <br>
+        <div class="container">
+            <form method="get">
+                <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="mb-3" style="margin: 0 auto; width: auto;"><h3>Фильтрация данных</h3></div>
+                    <div class="collapse navbar-collapse" id="navbarColor02">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item" style="margin-right: 5px;">
+                                <label class="control-label">Должность: </label>
+                                @Html.DropDownList("pos", Model.Positions as SelectList,
+                                            htmlAttributes: new { @class = "form-control" })
+                            </li>
+                            <li class="nav-item" style="margin-right: 5px;">
+                                <label class="control-label">Ставка: </label>
+                                @Html.DropDownList("rate", Model.Rates as SelectList,
+                                            htmlAttributes: new { @class = "form-control", @style = "width:100%" })
+                            </li>
+                            <li class="nav-item" style="margin-right: 5px;">
+                                <label class="control-label" style="white-space:nowrap">График работы: </label>
+                                @Html.DropDownList("sche", Model.Work_Schedule as SelectList,
+                                            htmlAttributes: new { @class = "form-control" })
+                            </li>
+                            <li class="nav-item" style="margin-right: 5px;">
+                                <label class="control-label">Поиск: </label>
+                                <input type="text" name="search" value="@ViewBag.seo" class="form-control" />
+                            </li>
+                            <li class="nav-item" style="margin-right: 5px;">
+                                <label class="control-label text-success"> Применить </label>
+                                <input type="submit" value="Фильтр" class="form-control  btn-secondary" />
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </form>
+            <hr />
+            @try
+            {
+                if ((int)Session["Kadri"] != 0)
+                {
+                    @Html.ActionLink("Добавить нового сотрудника", "addnewrecord")
+                }
+            }
+            catch
+            {
 
-<div class="container">
-    <form method="get">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="mb-3" style="margin: 0 auto; width: auto;"><h3>Фильтрация данных</h3></div>
-            <div class="collapse navbar-collapse" id="navbarColor02">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item" style="margin-right: 5px;">
-                        <label class="control-label">Должность: </label>
-                        @Html.DropDownList("pos", Model.Positions as SelectList,
-                                    htmlAttributes: new { @class = "form-control" })
-                    </li>
-                    <li class="nav-item" style="margin-right: 5px;">
-                        <label class="control-label">Ставка: </label>
-                        @Html.DropDownList("rate", Model.Rates as SelectList,
-                                    htmlAttributes: new { @class = "form-control", @style = "width:100%" })
-                    </li>
-                    <li class="nav-item" style="margin-right: 5px;">
-                        <label class="control-label" style="white-space:nowrap">График работы: </label>
-                        @Html.DropDownList("sche", Model.Work_Schedule as SelectList,
-                                    htmlAttributes: new { @class = "form-control" })
-                    </li>
-                    <li class="nav-item" style="margin-right: 5px;">
-                        <label class="control-label">Поиск: </label>
-                        <input type="text" name="search" value="@ViewBag.seo" class="form-control" />
-                    </li>
-                    <li class="nav-item" style="margin-right: 5px;">
-                        <label class="control-label text-success"> Применить </label>
-                        <input type="submit" value="Фильтр" class="form-control  btn-secondary" />
-                    </li>
-                </ul>
+            }
+
+            <hr />
+
+            
+
+            <div class="row">
+                @foreach (var item in Model.Sotrs)
+                {
+                    if (item.otkl == true)
+                    {
+                        <div class="card mb-3 col-md-offset-2 bg-danger" style="margin: 0 auto; width: 350px;">
+                            <h4 class="card-header">@item.Full</h4>
+                            <div class="card-body">
+                                <h6 class="card-title">Должность</h6>
+                                <h7 class="card-subtitle text-muted ">@item.Positions.Naim_Posit</h7>
+                            </div>
+                            <img style="margin: 0 auto; height: 170px; width: 120px; display: block;" src="~/Content/Photo/st/@item.Photo" alt="Card image">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Номер телефона: <a href="tel:@item.Num_Phone"> @item.Num_Phone</a></li>
+                                <li class="list-group-item">Эл. почта: @Html.DisplayFor(modelItem => item.Email)</li>
+                                <li class="list-group-item">Дата принятия: @Html.DisplayFor(modelItem => item.Date_of_adoption)</li>
+                                @if (item.rezume != "-")
+                                {
+                                    <li class="list-group-item"><a href="~/Content/Files/@item.rezume" download>Скачать резюме</a></li>
+                                }
+                                else
+                                {
+                                    <li class="list-group-item">Резюме отсутствует</li>
+                                }
+                            </ul>
+                            @try
+                            {
+                                if ((int)Session["Kadri"] != 0)
+                                {
+                                    <div class="card-footer text-center">
+                                        @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
+                                        @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
+                                        @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Sotr }, new { @class = "compItem" })
+
+                                    </div>
+                                }
+                                else
+                                {
+
+                                    <div class="card-footer text-center">
+                                        @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }, new { @class = "compItem" })
+                                    </div>
+                                }
+                            }
+                            catch { }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="card mb-3 col-md-offset-2" style="margin: 0 auto; width: 350px;">
+                            <h4 class="card-header">@item.Full</h4>
+                            <div class="card-body">
+                                <h6 class="card-title">Должность</h6>
+                                <h7 class="card-subtitle text-muted ">@item.Positions.Naim_Posit</h7>
+                            </div>
+                            <img style="margin: 0 auto; height: 170px; width: 120px; display: block;" src="~/Content/Photo/st/@item.Photo" alt="Card image">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Номер телефона: <a href="tel:@item.Num_Phone"> @item.Num_Phone</a></li>
+                                <li class="list-group-item">Эл. почта: @Html.DisplayFor(modelItem => item.Email)</li>
+                                <li class="list-group-item">Дата принятия: @Html.DisplayFor(modelItem => item.Date_of_adoption)</li>
+                                @if (item.rezume != "-")
+                                {
+                                    <li class="list-group-item"><a href="~/Content/Files/@item.rezume" download>Скачать резюме</a></li>
+                                }
+                                else
+                                {
+                                    <li class="list-group-item">Резюме отсутствует</li>
+                                }
+                            </ul>
+                            @try
+                            {
+                                if ((int)Session["Kadri"] != 0)
+                                {
+                                    <div class="card-footer text-center">
+                                        @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
+                                        @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
+                                        @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Sotr }, new { @class = "compItem" })
+
+                                    </div>
+                                }
+                                else
+                                {
+
+                                    <div class="card-footer text-center">
+                                        @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }, new { @class = "compItem" })
+                                    </div>
+                                }
+                            }
+                            catch { }
+                        </div>
+                    }
+                }
             </div>
-        </nav>
-    </form>
-    <hr />
-    @try
-    {
-    if ((int)Session["Kadri"] != 0)
-    {
-        @Html.ActionLink("Добавить нового сотрудника", "addnewrecord")
-    }
-    }
-    catch
+        </div>
+    </div>
+    
+    <div id="menu1" class="container tab-pane">
+        <br>
+        <form method="get">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="mb-3" style="margin: 0 auto; width: auto;"><h3>Фильтрация данных</h3></div>
+                <div class="collapse navbar-collapse" id="navbarColor02">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item" style="margin-right: 5px;">
+                            <label class="control-label">Должность: </label>
+                            @Html.DropDownList("pos", Model.Positions as SelectList,
+                                        htmlAttributes: new { @class = "form-control" })
+                        </li>
+                        <li class="nav-item" style="margin-right: 5px;">
+                            <label class="control-label">Ставка: </label>
+                            @Html.DropDownList("rate", Model.Rates as SelectList,
+                                        htmlAttributes: new { @class = "form-control", @style = "width:100%" })
+                        </li>
+                        <li class="nav-item" style="margin-right: 5px;">
+                            <label class="control-label" style="white-space:nowrap">График работы: </label>
+                            @Html.DropDownList("sche", Model.Work_Schedule as SelectList,
+                                        htmlAttributes: new { @class = "form-control" })
+                        </li>
+                        <li class="nav-item" style="margin-right: 5px;">
+                            <label class="control-label">Поиск: </label>
+                            <input type="text" name="search" value="@ViewBag.seo" class="form-control" />
+                        </li>
+                        <li class="nav-item" style="margin-right: 5px;">
+                            <label class="control-label text-success"> Применить </label>
+                            <input type="submit" value="Фильтр" class="form-control  btn-secondary" />
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </form>
+        <hr />
+        @try
+        {
+            if ((int)Session["Kadri"] != 0)
+            {
+                @Html.ActionLink("Добавить нового сотрудника", "addnewrecord")
+            }
+        }
+        catch
         {
 
         }
 
-    <hr />
+    <table class="table">
+        <tr>
+            <th>
+                Должность
+            </th>
+            <th>
+                ФИО
+            </th>
+            <th>
+                Дата рождения
+            </th>
+            <th>
+                Почтовый адрес
+            </th>
+            <th>
+                Дата прихода
+            </th>
+            <th>
+                Резюме
+            </th>
+            <th></th>
+        </tr>
 
-    <div id="modDialog" class="modal fade">
-        <div id="dialogContent" class="modal-dialog modal-lg"></div>
-    </div>
-
-    <div class="row">
         @foreach (var item in Model.Sotrs)
         {
-            <div class="card mb-3 col-md-offset-2" style="margin: 0 auto; width: 350px;">
-                <h4 class="card-header">@item.Full</h4>
-                <div class="card-body">
-                    <h6 class="card-title">Должность</h6>
-                    <h7 class="card-subtitle text-muted ">@item.Positions.Naim_Posit</h7>
-                </div>
-                <img style="margin: 0 auto; height: 170px; width: 120px; display: block;" src="~/Content/Photo/st/@item.Photo" alt="Card image">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Номер телефона: <a href="tel:@item.Num_Phone"> @item.Num_Phone</a></li>
-                    <li class="list-group-item">Эл. почта: @Html.DisplayFor(modelItem => item.Email)</li>
-                    <li class="list-group-item">Дата принятия: @Html.DisplayFor(modelItem => item.Date_of_adoption)</li>
-                    @if (item.rezume != "-")
-                    {
-                        <li class="list-group-item"><a href="~/Content/Files/@item.rezume" download>Скачать резюме</a></li>
-                    }
-                    else
-                    {
-                        <li class="list-group-item">Резюме отсутствует</li>
-                    }
-                </ul>
-                @try
-                {
-                    if ((int)Session["Kadri"] != 0)
-                    {
-                    <div class="card-footer text-center">
+            if (item.otkl == true)
+            {
+                <tr class="bg-danger">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Positions.Naim_Posit)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Surname_Sot) @Html.DisplayFor(modelItem => item.Name_Sot) @Html.DisplayFor(modelItem => item.Petronumic_Sot)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Day_Of_Birth)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date_of_adoption)
+                    </td>
+                    <td>
+                        @if (item.rezume != "-")
+                        {
+                            <a href="~/Content/Files/@item.rezume" download>Скачать резюме</a>
+                        }
+                        else
+                        {
+                            <p>Резюме отсутствует</p>
+                        }
+                    </td>
+                    <td>
                         @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
                         @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
                         @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Sotr }, new { @class = "compItem" })
-
-                    </div>
-                    }
-                    else
-                    {
-
-                    <div class="card-footer text-center">
-                        @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }, new { @class = "compItem" })
-                    </div>
-                    }
-                }
-                catch { }
-            </div>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Positions.Naim_Posit)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Surname_Sot) @Html.DisplayFor(modelItem => item.Name_Sot) @Html.DisplayFor(modelItem => item.Petronumic_Sot)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Day_Of_Birth)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date_of_adoption)
+                    </td>
+                    <td>
+                        @if (item.rezume != "-")
+                        {
+                            <a href="~/Content/Files/@item.rezume" download>Скачать резюме</a>
+                        }
+                        else
+                        {
+                            <p>Резюме отсутствует</p>
+                        }
+                    </td>
+                    <td>
+                        @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
+                        @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
+                        @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Sotr }, new { @class = "compItem" })
+                    </td>
+                </tr>
+            }
         }
+
+    </table>
     </div>
 </div>
 
-@section scripts
+
+    @section scripts
 {
-    <script type="text/javascript">
+        <script type="text/javascript">
 
-        $(function () {
-            $.ajaxSetup({ cache: false });
-            $(".compItem").click(function (e) {
+            $(function () {
+                $.ajaxSetup({ cache: false });
+                $(".compItem").click(function (e) {
 
-                e.preventDefault();
-                $.get(this.href, function (data) {
-                    $('#dialogContent').html(data);
-                    $('#modDialog').modal('show');
+                    e.preventDefault();
+                    $.get(this.href, function (data) {
+                        $('#dialogContent').html(data);
+                        $('#modDialog').modal('show');
+                    });
                 });
-            });
-        })
-    </script>
-}
+            })
+        </script>
+    }

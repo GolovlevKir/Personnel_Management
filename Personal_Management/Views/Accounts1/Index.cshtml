@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Personal_Management.Models.Accounts>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Roles.Role_Naim)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sotrs.Surname_Sot)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Password)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Password2)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Roles.Role_Naim)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Sotrs.Surname_Sot)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Password)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Password2)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Login }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Login }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Login })
+        </td>
+    </tr>
+}
+
+</table>

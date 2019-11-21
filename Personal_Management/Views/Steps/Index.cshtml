@@ -22,58 +22,66 @@
             <div class="mb-3"><h4>@item.Sotrs.FullName | @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Step }) </h4> </div>
         </div>
     </div>
-    <div class="clear clear-fix">
-        <div class="progressbar-wrapper clearfix">
-            <ul class="progressbar">
-                @if (item.AddSotrInIS)
-                {
-                    <li class="active"><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Sotrs/Edit/@item.Sotr_ID"><abbr title="Добавление сотрудника в систему">Этап 1</abbr></a></li>
-                }
-                else
-                {
-                    <li><a href="~/Sotrs/Create"><abbr title="Добавление сотрудника в систему">Этап 1</abbr></a></li>
-                }
-                @if (item.AddRezume)
-                {
-                    <li class="active"><a href="~/Content/Files/@item.Sotrs.rezume" download><abbr title="Скачать резюме сотрудника">Этап 2</abbr></a></li>
-                }
-                else
-                {
-                    <li><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Steps/AddRezume/@item.Sotr_ID"><abbr title="Добавить резюме">Этап 2</abbr></a></li>
-                }
-                @if (item.AddSobesedovanie)
-                {
-                    <li class="active"><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Sotrs/Edit/@item.Sotr_ID"><abbr title="Просмотреть описание о сотруднике">Этап 3</abbr></a></li>
-                }
-                else
-                {
-                    <li><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Steps/AddOpisanie/@item.Sotr_ID"><abbr title="Добавить описания о сотруднике">Этап 3</abbr></a></li>
-                }
-                @if (item.AddIspSrok)
-                {
-                    <li class="active"><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Steps/UpdIsp/@item.Sotr_ID"><abbr title="Изменить испытательный срок">Этап 4</abbr></a></li>
-                }
-                else
-                {
-                    <li><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Steps/AddIsp/@item.Sotr_ID"><abbr title="Назначить испытательный срок">Этап 4</abbr></a></li>
-                }
-                @if (item.RezimOzidaniya)
-                {
-                    <li class="active"><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Steps/Ozidan/@item.Sotr_ID"><abbr title="Решение испытательного срока">Этап 5</abbr></a></li>
-                }
-                else
-                {
-                    <li><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Steps/Ozidan/@item.Sotr_ID"><abbr title="Назначить решение испытательного срока">Этап 5</abbr></a></li>
-                }
-                @if (item.Reshenie)
-                {
-                    <li class="active"><abbr title="Мы рады, что вы работаете вместе с нами в компании IT-Liga">Этап 6</abbr></li>
-                }
-                else
-                {
-                    <li>Этап 6</li>
-                }
-            </ul>
+    <div class="col-md-12">
+        <div class="custom-control col-md-12 custom-switch">
+            <input type="checkbox" class="custom-control-input ShowOrHide" value="myDivId_@item.ID_Step.ToString()" name="pis" id="customSwitch_@item.ID_Step.ToString()" />
+            <label class="custom-control-label" for="customSwitch_@item.ID_Step.ToString()">Раскрыть</label>
+        </div>
+    </div>
+    <div class="myDivId_@item.ID_Step.ToString() selectt">
+        <div class="clear clear-fix">
+            <div class="progressbar-wrapper clearfix">
+                <ul class="progressbar">
+                    @if (item.AddSotrInIS)
+                    {
+                        <li class="active"><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Sotrs/Edit/@item.Sotr_ID"><abbr title="Добавление сотрудника в систему">Этап 1</abbr></a></li>
+                    }
+                    else
+                    {
+                        <li><a href="~/Sotrs/Create"><abbr title="Добавление сотрудника в систему">Этап 1</abbr></a></li>
+                    }
+                    @if (item.AddRezume)
+                    {
+                        <li class="active"><a href="~/Content/Files/@item.Sotrs.rezume" download><abbr title="Скачать резюме сотрудника">Этап 2</abbr></a></li>
+                    }
+                    else
+                    {
+                        <li><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Steps/AddRezume/@item.Sotr_ID"><abbr title="Добавить резюме">Этап 2</abbr></a></li>
+                    }
+                    @if (item.AddSobesedovanie)
+                    {
+                        <li class="active"><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Sotrs/Edit/@item.Sotr_ID"><abbr title="Просмотреть описание о сотруднике">Этап 3</abbr></a></li>
+                    }
+                    else
+                    {
+                        <li><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Steps/AddOpisanie/@item.Sotr_ID"><abbr title="Добавить описания о сотруднике">Этап 3</abbr></a></li>
+                    }
+                    @if (item.AddIspSrok)
+                    {
+                        <li class="active"><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Steps/UpdIsp/@item.Sotr_ID"><abbr title="Изменить испытательный срок">Этап 4</abbr></a></li>
+                    }
+                    else
+                    {
+                        <li><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Steps/AddIsp/@item.Sotr_ID"><abbr title="Назначить испытательный срок">Этап 4</abbr></a></li>
+                    }
+                    @if (item.RezimOzidaniya)
+                    {
+                        <li class="active"><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Steps/Ozidan/@item.Sotr_ID"><abbr title="Решение испытательного срока">Этап 5</abbr></a></li>
+                    }
+                    else
+                    {
+                        <li><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Steps/Ozidan/@item.Sotr_ID"><abbr title="Назначить решение испытательного срока">Этап 5</abbr></a></li>
+                    }
+                    @if (item.Reshenie)
+                    {
+                        <li class="active"><abbr title="Мы рады, что вы работаете вместе с нами в компании IT-Liga">Этап 6</abbr></li>
+                    }
+                    else
+                    {
+                        <li>Этап 6</li>
+                    }
+                </ul>
+            </div>
         </div>
     </div>
     <hr />
@@ -99,3 +107,23 @@
         })
     </script>
 }
+<style type="text/css">
+    .selectt {
+        padding: 30px;
+        display: none;
+        margin-top: 30px;
+    }
+
+    label {
+        margin-right: 20px;
+    }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('input[type="checkbox"]').click(function () {
+            var inputValue = $(this).attr("value");
+            $("." + inputValue).toggle();
+        });
+    });
+</script>
