@@ -296,7 +296,7 @@ namespace Personal_Management.Controllers
         [HttpGet]
         public ActionResult AddIsp(int id)
         {
-            SelectList sot = new SelectList(db.Sotrs, "ID_Sotr", "Full",id);
+            SelectList sot = new SelectList(db.Sotrs, "ID_Sotr", "Full", id);
             ViewBag.Sotrs = sot;
             ViewBag.Status_ID = new SelectList(db.status_isp_sroka.Where(s => (s.ID_St == 1) || (s.ID_St == 2) || (s.ID_St == 4)), "ID_St", "Name_St");
             return View();
@@ -329,21 +329,28 @@ namespace Personal_Management.Controllers
         [HttpGet]
         public ActionResult UpdIsp(int id)
         {
-            SqlCommand command;
-            command = new SqlCommand(
-                "select ID_Isp from [dbo].[Isp_Sroki] where Sotr_ID = " + id.ToString(), Program.SqlConnection);
-            Program.SqlConnection.Open();
-            int i = (int)command.ExecuteScalar();
-            Program.SqlConnection.Close();
-            Isp_Sroki isp_Sroki = db.Isp_Sroki.Find(i);
-            if (isp_Sroki == null)
+            try
             {
-                return HttpNotFound();
+                SqlCommand command;
+                command = new SqlCommand(
+                    "select ID_Isp from [dbo].[Isp_Sroki] where Sotr_ID = " + id.ToString(), Program.SqlConnection);
+                Program.SqlConnection.Open();
+                int i = (int)command.ExecuteScalar();
+                Program.SqlConnection.Close();
+                Isp_Sroki isp_Sroki = db.Isp_Sroki.Find(i);
+                if (isp_Sroki == null)
+                {
+                    return HttpNotFound();
+                }
+                SelectList sot = new SelectList(db.Sotrs, "ID_Sotr", "Full", id);
+                ViewBag.Sotrs = sot;
+                ViewBag.Status_ID = new SelectList(db.status_isp_sroka.Where(s => (s.ID_St == 1) || (s.ID_St == 2) || (s.ID_St == 4)), "ID_St", "Name_St");
+                return View(isp_Sroki);
             }
-            SelectList sot = new SelectList(db.Sotrs, "ID_Sotr", "Full",id);
-            ViewBag.Sotrs = sot;
-            ViewBag.Status_ID = new SelectList(db.status_isp_sroka.Where(s => (s.ID_St == 1) || (s.ID_St == 2) || (s.ID_St == 4)), "ID_St", "Name_St");
-            return View(isp_Sroki);
+            catch
+            {
+                return Content("<div class=\"modal-content\" style=\"width: 100% \"><div class=\"modal-header\"><h4>Произошла ошибка!</h4> <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"> <span aria-hidden=\"true\">&times;</span> </button></div><div class=\"modal-body\"><h5>Возможно на данного сотрудника не назначен испытательный срок</h5><a href=\"/Isp_Sroki/Create/\">Перейти на вкладку с испытательными сроками</a></div></div>");
+            }
         }
 
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
@@ -368,22 +375,34 @@ namespace Personal_Management.Controllers
         [HttpGet]
         public ActionResult Ozidan(int id)
         {
-            SqlCommand command;
-            command = new SqlCommand(
-                "select ID_Isp from [dbo].[Isp_Sroki] where Sotr_ID = " + id.ToString(), Program.SqlConnection);
-            Program.SqlConnection.Open();
-            int i = (int)command.ExecuteScalar();
-            Program.SqlConnection.Close();
-            Isp_Sroki isp_Sroki = db.Isp_Sroki.Find(i);
-            if (isp_Sroki == null)
+            try
             {
-                return HttpNotFound();
+                SqlCommand command;
+                command = new SqlCommand(
+                    "select ID_Isp from [dbo].[Isp_Sroki] where Sotr_ID = " + id.ToString(), Program.SqlConnection);
+                Program.SqlConnection.Open();
+
+                int i = (int)command.ExecuteScalar();
+
+
+                Program.SqlConnection.Close();
+                Isp_Sroki isp_Sroki = db.Isp_Sroki.Find(i);
+                if (isp_Sroki == null)
+                {
+                    return HttpNotFound();
+                }
+                SelectList sot = new SelectList(db.Sotrs, "ID_Sotr", "Full", id);
+                ViewBag.Sotrs = sot;
+                ViewBag.Status_ID = new SelectList(db.status_isp_sroka.Where(s => (s.ID_St == 1) || (s.ID_St == 2) || (s.ID_St == 4)), "ID_St", "Name_St");
+                return View(isp_Sroki);
             }
-            SelectList sot = new SelectList(db.Sotrs, "ID_Sotr", "Full", id);
-            ViewBag.Sotrs = sot;
-            ViewBag.Status_ID = new SelectList(db.status_isp_sroka.Where(s => (s.ID_St == 1) || (s.ID_St == 2) || (s.ID_St == 4)), "ID_St", "Name_St");
-            return View(isp_Sroki);
+            catch
+            {
+                return Content("<div class=\"modal-content\" style=\"width: 100% \"><div class=\"modal-header\"><h4>Произошла ошибка!</h4> <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"> <span aria-hidden=\"true\">&times;</span> </button></div><div class=\"modal-body\"><h5>Возможно на данного сотрудника не назначен испытательный срок</h5><a href=\"/Isp_Sroki/Create/\">Перейти на вкладку с испытательными сроками</a></div></div>");
+            }
+
         }
+
 
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.

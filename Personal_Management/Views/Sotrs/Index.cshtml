@@ -6,9 +6,9 @@
     ViewBag.NameMeta = "AddAcc";
     ViewBag.ContentMeta = "На данном окне возможно просмотреть список сотрудников";
 }
-    <div id="modDialog" class="modal fade">
-        <div id="dialogContent" class="modal-dialog modal-lg"></div>
-    </div>
+<div id="modDialog" class="modal fade">
+    <div id="dialogContent" class="modal-dialog modal-lg"></div>
+</div>
 <h2>Сотрудники</h2>
 <hr />
 <ol class="breadcrumb">
@@ -17,7 +17,7 @@
         if ((int)Session["Kadri"] != 0)
         {
             <li class="breadcrumb-item">@Html.ActionLink("Посмотреть этапы принятия", "Index", "Steps")</li>
-        }      
+        }
     }
     catch
     { }
@@ -90,14 +90,14 @@
 
             <hr />
 
-            
+
 
             <div class="row">
                 @foreach (var item in Model.Sotrs)
                 {
                     if (item.otkl == true)
                     {
-                        <div class="card mb-3 col-md-offset-2 bg-danger" style="margin: 0 auto; width: 350px;">
+                        <div class="card mb-3 col-md-offset-2" style="margin: 0 auto; width: 350px;background-color: #FFDAB9">
                             <h4 class="card-header">@item.Full</h4>
                             <div class="card-body">
                                 <h6 class="card-title">Должность</h6>
@@ -187,7 +187,7 @@
             </div>
         </div>
     </div>
-    
+
     <div id="menu1" class="container tab-pane">
         <br>
         <form method="get">
@@ -238,122 +238,122 @@
 
         }
 
-    <table class="table">
-        <tr>
-            <th>
-                Должность
-            </th>
-            <th>
-                ФИО
-            </th>
-            <th>
-                Дата рождения
-            </th>
-            <th>
-                Почтовый адрес
-            </th>
-            <th>
-                Дата прихода
-            </th>
-            <th>
-                Резюме
-            </th>
-            <th></th>
-        </tr>
+        <table class="table" style="table-layout:fixed;word-wrap:break-word;">
+            <tr>
+                <th>
+                    Должность
+                </th>
+                <th>
+                    ФИО
+                </th>
+                <th>
+                    Дата рождения
+                </th>
+                <th>
+                    Почтовый адрес
+                </th>
+                <th>
+                    Дата прихода
+                </th>
+                <th>
+                    Резюме
+                </th>
+                <th></th>
+            </tr>
 
-        @foreach (var item in Model.Sotrs)
-        {
-            if (item.otkl == true)
+            @foreach (var item in Model.Sotrs)
             {
-                <tr class="bg-danger">
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Positions.Naim_Posit)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Surname_Sot) @Html.DisplayFor(modelItem => item.Name_Sot) @Html.DisplayFor(modelItem => item.Petronumic_Sot)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Day_Of_Birth)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date_of_adoption)
-                    </td>
-                    <td>
-                        @if (item.rezume != "-")
-                        {
-                            <a href="~/Content/Files/@item.rezume" download>Скачать резюме</a>
-                        }
-                        else
-                        {
-                            <p>Резюме отсутствует</p>
-                        }
-                    </td>
-                    <td>
-                        @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
-                        @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
-                        @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Sotr }, new { @class = "compItem" })
-                    </td>
-                </tr>
+                if (item.otkl == true)
+                {
+                    <tr style="background-color: #FFDAB9">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Positions.Naim_Posit)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Surname_Sot) @Html.DisplayFor(modelItem => item.Name_Sot) @Html.DisplayFor(modelItem => item.Petronumic_Sot)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Day_Of_Birth)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date_of_adoption)
+                        </td>
+                        <td>
+                            @if (item.rezume != "-")
+                            {
+                                <a href="~/Content/Files/@item.rezume" download>Скачать резюме</a>
+                            }
+                            else
+                            {
+                                <p>Резюме отсутствует</p>
+                            }
+                        </td>
+                        <td>
+                            @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
+                            @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
+                            @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Sotr }, new { @class = "compItem" })
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Positions.Naim_Posit)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Surname_Sot) @Html.DisplayFor(modelItem => item.Name_Sot) @Html.DisplayFor(modelItem => item.Petronumic_Sot)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Day_Of_Birth)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date_of_adoption)
+                        </td>
+                        <td>
+                            @if (item.rezume != "-")
+                            {
+                                <a href="~/Content/Files/@item.rezume" download>Скачать резюме</a>
+                            }
+                            else
+                            {
+                                <p>Резюме отсутствует</p>
+                            }
+                        </td>
+                        <td>
+                            @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
+                            @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
+                            @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Sotr }, new { @class = "compItem" })
+                        </td>
+                    </tr>
+                }
             }
-            else
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Positions.Naim_Posit)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Surname_Sot) @Html.DisplayFor(modelItem => item.Name_Sot) @Html.DisplayFor(modelItem => item.Petronumic_Sot)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Day_Of_Birth)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date_of_adoption)
-                    </td>
-                    <td>
-                        @if (item.rezume != "-")
-                        {
-                            <a href="~/Content/Files/@item.rezume" download>Скачать резюме</a>
-                        }
-                        else
-                        {
-                            <p>Резюме отсутствует</p>
-                        }
-                    </td>
-                    <td>
-                        @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
-                        @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
-                        @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Sotr }, new { @class = "compItem" })
-                    </td>
-                </tr>
-            }
-        }
 
-    </table>
+        </table>
     </div>
 </div>
 
 
-    @section scripts
+@section scripts
 {
-        <script type="text/javascript">
+    <script type="text/javascript">
 
-            $(function () {
-                $.ajaxSetup({ cache: false });
-                $(".compItem").click(function (e) {
+        $(function () {
+            $.ajaxSetup({ cache: false });
+            $(".compItem").click(function (e) {
 
-                    e.preventDefault();
-                    $.get(this.href, function (data) {
-                        $('#dialogContent').html(data);
-                        $('#modDialog').modal('show');
-                    });
+                e.preventDefault();
+                $.get(this.href, function (data) {
+                    $('#dialogContent').html(data);
+                    $('#modDialog').modal('show');
                 });
-            })
-        </script>
-    }
+            });
+        })
+    </script>
+}

@@ -527,6 +527,10 @@ namespace Personal_Management.Models
         public string Email { get; set; }
     }
 
-    
+    public class InputModel
+    {
+    public string Name { get; set; } // имя файла
+    public bool? Selected { get; set; } // выбран ли файл для загрузки
+    }
 
 }

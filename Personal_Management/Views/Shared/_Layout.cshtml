@@ -16,14 +16,14 @@
     {
         <link href="~/Content/@Session["style"].ToString()" rel="stylesheet" />
     }
-<script type="text/javascript">
-    var date = new Date(); // Получаем текущие дату и время
-    var h = date.getHours(); // Получаем текущий час
-    if (h < 8 || h > 20) {
-        document.getElementById("style").href = "/Content/bootstrap.min.css";
-    } // Если сейчас ночь, то меняем файл стилей
-    else document.getElementById("style").href = "/Content/bootstrap2.min.css";
-</script>
+    <script type="text/javascript">
+        var date = new Date(); // Получаем текущие дату и время
+        var h = date.getHours(); // Получаем текущий час
+        if (h < 8 || h > 20) {
+            document.getElementById("style").href = "/Content/bootstrap.min.css";
+        } // Если сейчас ночь, то меняем файл стилей
+        else document.getElementById("style").href = "/Content/bootstrap2.min.css";
+    </script>
     <link href="~/Content/Photo/fav.ico" rel="icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     @Scripts.Render("~/bundles/modernizr")
@@ -37,7 +37,7 @@
             $('#phone').mask('+7(999)999-99-99');
             $('#phone1').mask('+7(999)999-99-99');
         });
-        
+
     </script>
     <style>
         #gmap_canvas img {
@@ -45,12 +45,45 @@
             background: none !important
         }
     </style>
+    <style>
+
+        #top_nav {
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+    </style>
+    <script>
+        var h_hght = 0; // высота шапки
+        var h_mrg = 0;    // отступ когда шапка уже не видна
+
+        $(function () {
+
+            var elem = $('#top_nav');
+            var top = $(this).scrollTop();
+
+            if (top > h_hght) {
+                elem.css('top', h_mrg);
+            }
+
+            $(window).scroll(function () {
+                top = $(this).scrollTop();
+
+                if (top + h_mrg < h_hght) {
+                    elem.css('top', (h_hght - top));
+                } else {
+                    elem.css('top', h_mrg);
+                }
+            });
+
+        });
+    </script>
     <link href="~/Content/StyleSite2.css" rel="stylesheet" />
     <script src='https://kit.fontawesome.com/a076d05399.js'></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav id="top_nav" class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div id="logo" class="pull-left">
             <a href="#intro"><img src="~/Content/Photo/60.png" style="width: 200px; height:auto;" alt="" title="" /></a>
         </div>
@@ -153,7 +186,11 @@
 
         </div>
     </nav>
-
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
     <div class="container body-content ">
         <br />
         @RenderBody()
@@ -185,6 +222,7 @@
             <div class="container">
                 <div class="credits" style="color:white">
                     @DateTime.Now.Year <strong>IT Liga</strong> Все права защищены<br>
+                    <a href="~/Content/Photo.zip" download>Скачать</a>
                 </div>
             </div>
         </div>

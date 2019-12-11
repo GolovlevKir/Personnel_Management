@@ -102,8 +102,8 @@ namespace Personal_Management.Controllers
         {
             var m = new Sotrs();
             ViewBag.Positions_ID = new SelectList(db.Positions, "ID_Positions", "Naim_Posit");
-            ViewBag.Rate_ID = new SelectList(db.Rates, "ID_Rate", "Rate");
-            ViewBag.Schedule_ID = new SelectList(db.Work_Schedule, "ID_Schedule", "Naim_Sche");
+            ViewBag.Rate_ID = new SelectList(db.Rates, "ID_Rate", "Rate", 4);
+            ViewBag.Schedule_ID = new SelectList(db.Work_Schedule, "ID_Schedule", "Naim_Sche", 1);
             m.Date_of_adoption = DateTime.Now.ToString("ddMMyyyy");
             return View(m);
         }
@@ -113,8 +113,8 @@ namespace Personal_Management.Controllers
         public ActionResult addnewrecord(Sotrs sotrs, HttpPostedFileBase imgfile, HttpPostedFileBase doc)
         {
             ViewBag.Positions_ID = new SelectList(db.Positions, "ID_Positions", "Naim_Posit");
-            ViewBag.Rate_ID = new SelectList(db.Rates, "ID_Rate", "Rate");
-            ViewBag.Schedule_ID = new SelectList(db.Work_Schedule, "ID_Schedule", "Naim_Sche");
+            ViewBag.Rate_ID = new SelectList(db.Rates, "ID_Rate", "Rate", 4);
+            ViewBag.Schedule_ID = new SelectList(db.Work_Schedule, "ID_Schedule", "Naim_Sche", 1);
             Sotrs sot = new Sotrs();
             //Загрузка изображения
             string path = uploadimage(imgfile);
@@ -122,8 +122,7 @@ namespace Personal_Management.Controllers
             string pathrez = uploaddoc(doc);
             //Осуществление добавления данных
             try
-            { 
-
+            {
                 if (pathrez.Equals("-1") && path.Equals("-1"))
                 {
                     sot.Surname_Sot = sotrs.Surname_Sot;

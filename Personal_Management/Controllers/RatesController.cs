@@ -9,41 +9,7 @@ namespace Personal_Management.Controllers
     public class RatesController : Controller
     {
         private PersonalContext db = new PersonalContext();
-        //IReposit repo;
-
-        //public RatesController(IReposit r)
-        //{
-        //    repo = r;
-        //}
-
-        //public RatesController()
-        //{
-        //    repo = new ComputerRepository();
-        //}
-
-
-        //public ActionResult Index()
-        //{
-        //    var model = repo.GetComputerList();
-        //    if (model.Count > 0)
-        //        ViewBag.Message = String.Format("В базе данных {0} объект", model.Count);
-        //    return View(model);
-        //}
-
-        //// GET: Rates/Create
-        //public ActionResult Create()
-        //{
-        //    return View();
-        //}
-        //[HttpPost]
-        //public ActionResult Create(Rates c)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View("Create");
-        //}
+        
 
         // GET: Rates
         [Authorize]

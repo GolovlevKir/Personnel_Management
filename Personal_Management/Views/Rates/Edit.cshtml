@@ -16,7 +16,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Ставки</h4>
         <hr />
@@ -26,7 +26,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Rate, htmlAttributes: new { @class = "control-label col-md-5" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Rate, new { htmlAttributes = new { @class = "form-control", @pattern=@"\d+(,\d{2})?", @type="number", @step="0.01", @min="0" } })
+                @Html.EditorFor(model => model.Rate, new { htmlAttributes = new { @class = "form-control", @pattern = @"\d+(,\d{2})?", @type = "number", @step = "0.01", @min = "0" } })
                 @Html.ValidationMessageFor(model => model.Rate, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -41,4 +41,23 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="~/Scripts/jquery.maskedinput.min.js"></script>
+    <script>
+        jQuery(function ($) {
+            $.mask.definitions['~'] = '[+-]';
+            $('#date').mask('99.99.9999');
+            $('#date2').mask('99.99.9999');
+            $('#phone').mask('+7(999)999-99-99');
+            $('#phone1').mask('+7(999)999-99-99');
+        });
+
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    @RenderSection("JavaScript", required: false)
+
 }

@@ -1,5 +1,11 @@
-﻿using System;
+﻿
+using Ionic.Zip;
+using Personal_Management.Models;
+using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace Personal_Management.Controllers
@@ -69,6 +75,7 @@ namespace Personal_Management.Controllers
             }
         }
 
+
         [Authorize]
         [HttpPost]
         public ActionResult Index(string password, string password1, string password2)
@@ -121,10 +128,32 @@ namespace Personal_Management.Controllers
             }
         }
 
+
+
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
-            return View();
+            string path = Server.MapPath("~/Content/Photo/");
+            List<string> files = new List<string>();
+            DirectoryInfo dir = new DirectoryInfo(path);
+
+            files.AddRange(dir.GetDirectories().Select(f => f.Name));
+
+            return View(files);
+        }
+
+        [HttpPost]
+        public ActionResult About(List<InputModel> files)
+        {
+            //Для начала в nuget установить DotNetZip
+            //Затем объявить using Ionic.Zip;
+            using (ZipFile zip = new ZipFile())
+            {
+                zip.AddDirectory(Server.MapPath("~/Content"));
+
+                MemoryStream output = new MemoryStream();
+                zip.Save(output);
+                return File(output.ToArray(), "application/zip", "sample.zip");
+            }
         }
     }
 }

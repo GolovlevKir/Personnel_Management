@@ -1,9 +1,5 @@
 ﻿using Personal_Management.Models;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Security;
 
@@ -91,8 +87,13 @@ namespace Personal_Management.Controllers
             //Выход из аккаунта
             Session.Abandon();
             FormsAuthentication.SignOut();
+            Session["admin"] = 0;
+            Session["Kadri"] = 0;
+            Session["Otdeli"] = 0;
+            Session["Buh"] = 0;
             return RedirectToAction("Login", "Account");
         }
+
         public ActionResult Them()
         {
             //Смена стилей

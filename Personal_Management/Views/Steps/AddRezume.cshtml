@@ -14,7 +14,7 @@
     <div class="modal-body">
         <div class="dl-horizontal">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"> @Html.ActionLink("Вернуться к списку сотрудников", "Index")</li>
+                <li class="breadcrumb-item"> @Html.ActionLink("Вернуться к списку этапов приема", "Index")</li>
             </ol>
             <hr />
             @using (Html.BeginForm("AddRezume", "Steps", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -43,7 +43,7 @@
                     <div class="form-group">
                         @Html.LabelFor(model => model.rezume, "Резюме", htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-12">
-                            <input type="file" id="doc" name="doc" class="btn badge-info">
+                            <input type="file" id="doc" name="doc" class="btn btn-primary control" style="width:100%">
                             @Html.ValidationMessageFor(model => model.rezume, "", new { @class = "text-danger" })
                         </div>
                     </div>

@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Personal_Management.Hubs;
 using Personal_Management.Models;
@@ -16,7 +17,7 @@ namespace Personal_Management.Controllers
 
         // GET: Isp_Sroki
         [Authorize]
-        public ActionResult Index(string search)
+        public async Task<ActionResult> Index(string search)
         {
             Program.update();
             var isp_Sroki = db.Isp_Sroki.Include(i => i.Sotrs).Include(i => i.status_isp_sroka);
@@ -26,13 +27,13 @@ namespace Personal_Management.Controllers
             {
                 isp_Sroki = isp_Sroki.Where(s => (s.Sotrs.Surname_Sot.Contains(search)) || (s.Sotrs.Name_Sot.Contains(search)) || (s.Sotrs.Petronumic_Sot.Contains(search)) || (s.Sotrs.Positions.Naim_Posit.Contains(search)));
             }
-            return View(isp_Sroki.ToList());
+            return View(await isp_Sroki.ToListAsync());
         }
 
-        public ActionResult GetEmployeeData()
+        public async Task<ActionResult> GetEmployeeData()
         {
             var pass_Dannie = db.Isp_Sroki.Include(i => i.Sotrs).Include(i => i.status_isp_sroka);
-            return PartialView("_EmployeeData", pass_Dannie.ToList());
+            return PartialView("_EmployeeData", await pass_Dannie.ToListAsync());
         }
 
         // GET: Isp_Sroki/Create
@@ -127,9 +128,9 @@ namespace Personal_Management.Controllers
             }
             else
             {
-                ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full",isp_Sroki.Sotr_ID);
+                ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full", isp_Sroki.Sotr_ID);
             }
-            ViewBag.Status_ID = new SelectList(db.status_isp_sroka.Where(s => (s.ID_St == 1) || (s.ID_St == 2) || (s.ID_St == 4)), "ID_St", "Name_St");
+            ViewBag.Status_ID = new SelectList(db.status_isp_sroka.Where(s => (s.ID_St == 1) || (s.ID_St == 2) || (s.ID_St == 4)), "ID_St", "Name_St", isp_Sroki.Status_ID);
             return View(isp_Sroki);
         }
 
@@ -152,8 +153,8 @@ namespace Personal_Management.Controllers
                 EmployeesHub.BroadcastData();
                 return RedirectToAction("Index");
             }
-            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Surname_Sot", isp_Sroki.Sotr_ID);
-            ViewBag.Status_ID = new SelectList(db.status_isp_sroka.Where(s => (s.ID_St == 1) || (s.ID_St == 2) || (s.ID_St == 4)), "ID_St", "Name_St");
+            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Surname_Sot");
+            ViewBag.Status_ID = new SelectList(db.status_isp_sroka.Where(s => (s.ID_St == 1) || (s.ID_St == 2) || (s.ID_St == 4)), "ID_St", "Name_St", isp_Sroki.Status_ID);
             List<Positions> pos = db.Positions.ToList();
             //Добавляем все
             pos.Insert(0, new Positions { ID_Positions = 0, Naim_Posit = "Все" });
