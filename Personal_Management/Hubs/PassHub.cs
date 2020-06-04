@@ -8,6 +8,7 @@ namespace Personal_Management.Hubs
     {
         public static void BroadcastData()
         {
+            //обновление у всех пользователей
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<EmployeesHub>();
             context.Clients.All.refreshEmployeeData();
         }

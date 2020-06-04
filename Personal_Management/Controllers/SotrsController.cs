@@ -1,461 +1,280 @@
 ﻿using Personal_Management.Models;
+using Shifr;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace Personal_Management.Controllers
 {
+    [Authorize]
     public class SotrsController : Controller
     {
         private PersonalContext db = new PersonalContext();
 
         // GET: Sotrs
-        [Authorize]
-        public ActionResult Index(int? pos, int? rate, int? sche, string search)
+        public async Task<ActionResult> Index()
         {
-            //Проверка на испытательные сроки
-            Program.update();
-            //Фильтрация
-            IQueryable<Sotrs> sotrs = db.Sotrs.Include(s => s.Positions).Include(s => s.Rates).Include(s => s.Work_Schedule);
-            if (pos != null && pos != 0)
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                //Проверка на выбранную должность
-                sotrs = sotrs.Where(s => s.Positions_ID == pos);
+                //Получение всех пользователей
+                var sotrs = db.Sotrs.Include(s => s.Accounts);
+                return View(await sotrs.ToListAsync());
             }
-            if (rate != null && rate != 0)
+            else
             {
-                //Проверка на выбранную ставку
-                sotrs = sotrs.Where(s => s.Rate_ID == rate);
+                return Redirect("/Error/NotRight");
             }
-            if (sche != null && sche != 0)
-            {
-                //Проверка на выбранный график работы
-                sotrs = sotrs.Where(s => s.Schedule_ID == sche);
-            }
-            ViewBag.seo = search;
-            //Поиск по значениям
-            if (search != null && search != "")
-            {
-                sotrs = sotrs.Where(s => (s.Surname_Sot.Contains(search)) || (s.Name_Sot.Contains(search)) || (s.Petronumic_Sot.Contains(search)) || (s.Positions.Naim_Posit.Contains(search)) || (s.Num_Phone.Contains(search)) || (s.Opisanie.Contains(search)) || (s.Email.Contains(search)) || (s.Day_Of_Birth.Contains(search)) || s.Date_of_adoption.Contains(search) || s.Surname_Sot.Contains(search) && s.Name_Sot.Contains(search));
-            }
-            //Лист должностей
-            List<Positions> posit = db.Positions.ToList();
-            //Добавление значения со значением 0
-            posit.Insert(0, new Positions { Naim_Posit = "Все", ID_Positions = 0 });
-            //Лист ставок
-            List<Rates> rates = db.Rates.ToList();
-            //Добавление значения со значением 0
-            rates.Insert(0, new Rates { Rate = "Все", ID_Rate = 0 });
-            //Лист рабочих графиков
-            List<Work_Schedule> sch = db.Work_Schedule.ToList();
-            //Добавление значения со значением 0
-            sch.Insert(0, new Work_Schedule { Naim_Sche = "Все", ID_Schedule = 0 });
-            //Осуществление фильтрации
-            SotrsListViewModel plvm = new SotrsListViewModel
-            {
-                Sotrs = sotrs.ToList(),
-                Positions = new SelectList(posit, "ID_Positions", "Naim_Posit"),
-                Rates = new SelectList(rates, "ID_Rate", "Rate"),
-                Work_Schedule = new SelectList(sch, "ID_Schedule", "Naim_Sche"),
-            };
-            return View(plvm);
         }
 
-        // GET: Sotrs/Details/5
-        [Authorize]
-        public ActionResult Details(int? id)
+        public ActionResult Polz()
         {
-            //Осуществление подробных данных о сотруднике
-            if (id == null)
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                //Получение исключительно клиентов
+                var sotrs = db.Sotrs.Include(s => s.Accounts).Where(s => s.Guest.Equals(true) && s.Logical_Delete.Equals(false));
+                return View(sotrs.ToList());
             }
-            Sotrs sotrs = db.Sotrs.Find(id);
-            if (sotrs == null)
+            else
             {
-                return HttpNotFound();
+                return Redirect("/Error/NotRight");
             }
-            return View(sotrs);
         }
 
-        [Authorize]
-        [HttpGet]
-        // GET: Sotrs/Create
-        public ActionResult Create()
+        public ActionResult Sotr()
         {
-            ViewBag.Positions_ID = new SelectList(db.Positions, "ID_Positions", "Naim_Posit");
-            ViewBag.Rate_ID = new SelectList(db.Rates, "ID_Rate", "Rate");
-            ViewBag.Schedule_ID = new SelectList(db.Work_Schedule, "ID_Schedule", "Naim_Sche");
-            
-            return View();
-        }
-
-        [Authorize]
-        [HttpGet]
-        public ActionResult addnewrecord()
-        {
-            var m = new Sotrs();
-            ViewBag.Positions_ID = new SelectList(db.Positions, "ID_Positions", "Naim_Posit");
-            ViewBag.Rate_ID = new SelectList(db.Rates, "ID_Rate", "Rate", 4);
-            ViewBag.Schedule_ID = new SelectList(db.Work_Schedule, "ID_Schedule", "Naim_Sche", 1);
-            m.Date_of_adoption = DateTime.Now.ToString("ddMMyyyy");
-            return View(m);
-        }
-
-        [Authorize]
-        [HttpPost]
-        public ActionResult addnewrecord(Sotrs sotrs, HttpPostedFileBase imgfile, HttpPostedFileBase doc)
-        {
-            ViewBag.Positions_ID = new SelectList(db.Positions, "ID_Positions", "Naim_Posit");
-            ViewBag.Rate_ID = new SelectList(db.Rates, "ID_Rate", "Rate", 4);
-            ViewBag.Schedule_ID = new SelectList(db.Work_Schedule, "ID_Schedule", "Naim_Sche", 1);
-            Sotrs sot = new Sotrs();
-            //Загрузка изображения
-            string path = uploadimage(imgfile);
-            //Загрузка документа
-            string pathrez = uploaddoc(doc);
-            //Осуществление добавления данных
-            try
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                if (pathrez.Equals("-1") && path.Equals("-1"))
+                //Получение сотрудников
+                var sotrs = db.Sotrs.Include(s => s.Accounts).Where(s => s.Guest.Equals(false) && s.Logical_Delete.Equals(false));
+                return View(sotrs.ToList());
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
+        }
+
+        public ActionResult Vse()
+        {
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
+            {
+                //Получение всех пользователей
+                var sotrs = db.Sotrs.Include(s => s.Accounts).Where(s => s.Logical_Delete.Equals(false));
+                return View(sotrs.ToList());
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
+        }
+
+        //Отчет "ШАБЛОН ЛИЧНОГО ДЕЛА"
+        public async Task<ActionResult> Details(int? id)
+        {
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
+            {
+                if (id == null)
                 {
-                    sot.Surname_Sot = sotrs.Surname_Sot;
-                    sot.Name_Sot = sotrs.Name_Sot;
-                    sot.Petronumic_Sot = sotrs.Petronumic_Sot;
-                    sot.Day_Of_Birth = sotrs.Day_Of_Birth;
-                    sot.Address = sotrs.Address;
-                    sot.Num_Phone = sotrs.Num_Phone;
-                    sot.Email = sotrs.Email;
-                    sot.Photo = "-";
-                    sot.Positions_ID = sotrs.Positions_ID;
-                    sot.Rate_ID = sotrs.Rate_ID;
-                    sot.Schedule_ID = sotrs.Schedule_ID;
-                    sot.Date_of_adoption = sotrs.Date_of_adoption;
-                    sot.Opisanie = sotrs.Opisanie;
-                    sot.rezume = "-";
-                    db.Sotrs.Add(sot);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
+                    //400 ошибка
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                //поиск по ключу
+                Sotrs sotrs = await db.Sotrs.FindAsync(id);
+                if (sotrs == null)
+                {
+                    //404 ошибка
+                    return HttpNotFound();
+                }
+                return View(sotrs);
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
+        }
+
+        // Отчет "ПОЛНЫЙ ОТЧЕТ ПО СОТРУДНИКУ"
+        public async Task<ActionResult> Details2(int? id)
+        {
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
+            {
+                if (id == null)
+                {
+                    //400 ошибка
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                //поиск по ключу
+                Sotrs sotrs = await db.Sotrs.FindAsync(id);
+                if (sotrs == null)
+                {
+                    //404 ошибка
+                    return HttpNotFound();
+                }
+                //Получение данных штатного сотрудника
+                var pos = db.Posit_Responsibilities.Where(p => p.Sotr_ID == id).FirstOrDefault();
+                if (pos != null)
+                {
+                    //Отдел
+                    ViewBag.dep = pos.Positions.Departments.Naim_Depart;
+                    //Должность
+                    ViewBag.posit = pos.Positions.Naim_Posit;
+                    //Ставка
+                    ViewBag.rate = pos.Rates.Rate;
                 }
                 else
                 {
-                    if (path.Equals("-1"))
+                    //Дефолтные значения
+                    ViewBag.dep = "Не назначено";
+                    ViewBag.posit = "Не назначено";
+                    ViewBag.rate = "Не назначено";
+                }
+                if (pos != null)
+                {
+                    //Данные испытательного срока
+                    var isp = db.Isp_Sroki.Where(p => p.Pos_Res_ID == pos.ID_Pos_Res).ToList();
+                    if (isp != null)
                     {
-                        sot.Surname_Sot = sotrs.Surname_Sot;
-                        sot.Name_Sot = sotrs.Name_Sot;
-                        sot.Petronumic_Sot = sotrs.Petronumic_Sot;
-                        sot.Day_Of_Birth = sotrs.Day_Of_Birth;
-                        sot.Address = sotrs.Address;
-                        sot.Num_Phone = sotrs.Num_Phone;
-                        sot.Email = sotrs.Email;
-                        sot.Photo = "-";
-                        sot.Positions_ID = sotrs.Positions_ID;
-                        sot.Rate_ID = sotrs.Rate_ID;
-                        sot.Schedule_ID = sotrs.Schedule_ID;
-                        sot.Date_of_adoption = sotrs.Date_of_adoption;
-                        sot.Opisanie = sotrs.Opisanie;
-                        sot.rezume = pathrez;
-                        db.Sotrs.Add(sot);
-                        db.SaveChanges();
-                        return RedirectToAction("Index");
+                        ViewBag.isp = isp.ToList();
                     }
                     else
                     {
-                        if (pathrez.Equals("-1"))
-                        {
-                            sot.Surname_Sot = sotrs.Surname_Sot;
-                            sot.Name_Sot = sotrs.Name_Sot;
-                            sot.Petronumic_Sot = sotrs.Petronumic_Sot;
-                            sot.Day_Of_Birth = sotrs.Day_Of_Birth;
-                            sot.Address = sotrs.Address;
-                            sot.Num_Phone = sotrs.Num_Phone;
-                            sot.Email = sotrs.Email;
-                            sot.Photo = path;
-                            sot.Positions_ID = sotrs.Positions_ID;
-                            sot.Rate_ID = sotrs.Rate_ID;
-                            sot.Schedule_ID = sotrs.Schedule_ID;
-                            sot.Date_of_adoption = sotrs.Date_of_adoption;
-                            sot.Opisanie = sotrs.Opisanie;
-                            sot.rezume = "-";
-                            db.Sotrs.Add(sot);
-                            db.SaveChanges();
-                            return RedirectToAction("Index");
-                        }
-
-                        else
-                        {
-                            sot.Surname_Sot = sotrs.Surname_Sot;
-                            sot.Name_Sot = sotrs.Name_Sot;
-                            sot.Petronumic_Sot = sotrs.Petronumic_Sot;
-                            sot.Day_Of_Birth = sotrs.Day_Of_Birth;
-                            sot.Address = sotrs.Address;
-                            sot.Num_Phone = sotrs.Num_Phone;
-                            sot.Email = sotrs.Email;
-                            sot.Photo = path;
-                            sot.Positions_ID = sotrs.Positions_ID;
-                            sot.Rate_ID = sotrs.Rate_ID;
-                            sot.Schedule_ID = sotrs.Schedule_ID;
-                            sot.Date_of_adoption = sotrs.Date_of_adoption;
-                            sot.Opisanie = sotrs.Opisanie;
-                            sot.rezume = pathrez;
-                            db.Sotrs.Add(sot);
-                            db.SaveChanges();
-                            return RedirectToAction("Index");
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                ModelState.AddModelError("", "Возраст сотрудника должен быть больше 18 лет");
-            }
-            return View(sotrs);
-        }
-
-        public string uploadimage(HttpPostedFileBase file)
-        {
-            //Переменная с путем
-            string path = "-1";
-            if (file != null && file.ContentLength > 0)
-            {
-                string extension = Path.GetExtension(file.FileName);
-                if (extension.ToLower().Equals(".jpg") || extension.ToLower().Equals(".jpeg") || extension.ToLower().Equals(".png"))
-                {
-                    try
-                    {
-                        //Изменение пути
-                        path = Path.Combine(Server.MapPath("~/Content/Photo/st/"), DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName));
-                        //Сохранение 
-                        file.SaveAs(path);
-                        //Наименование файла
-                        path = DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName);
-                    }
-                    catch
-                    {
-                        path = "-1";
+                        ViewBag.isp = null;
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Возможны форматы для изображения только: *.jpg/*.jpeg/*.png");
+                    ViewBag.isp = null;
                 }
+                //Данные реестра документов сотрудника
+                var doc = db.Sbor_Docum.Where(p => p.Sotr_ID == id).ToList();
+                ViewBag.doc = doc;
+                var step = db.Steps.Where(p => p.Sotr_ID == id).ToList();
+                ViewBag.step = step;
+                return View(sotrs);
             }
-            return path;
-        }
-
-        public string uploaddoc(HttpPostedFileBase file)
-        {
-            Random r = new Random();
-            string path = "-1";
-            int random = r.Next();
-            if (file != null && file.ContentLength > 0)
+            else
             {
-                string extension = Path.GetExtension(file.FileName);
-                if (extension.ToLower().Equals(".doc") || extension.ToLower().Equals(".docx") || extension.ToLower().Equals(".pdf"))
-                {
-                    try
-                    {
-                        //Изменение пути
-                        path = Path.Combine(Server.MapPath("~/Content/Files/"), DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName));
-                        //Сохранение документа
-                        file.SaveAs(path);
-                        //Наименование файла
-                        path = DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName);
-                    }
-                    catch
-                    {
-                        path = "-1";
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Форматы резюме только doc ,docx или pdf");
-                }
+                return Redirect("/Error/NotRight");
             }
-            return path;
         }
 
-        [Authorize]
-        [HttpGet]
-        public ActionResult Edit(int? id)
+        // Отчет "ГРАФИК РАБОТЫ"
+        public async Task<ActionResult> Details3(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Sotrs sotrs = db.Sotrs.Find(id);
+            //получение данных сотрудника
+            Sotrs sotrs = await db.Sotrs.FindAsync(id);
             if (sotrs == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.Positions_ID = new SelectList(db.Positions, "ID_Positions", "Naim_Posit", sotrs.Positions_ID);
-            ViewBag.Rate_ID = new SelectList(db.Rates, "ID_Rate", "Rate", sotrs.Rate_ID);
-            ViewBag.Schedule_ID = new SelectList(db.Work_Schedule, "ID_Schedule", "Naim_Sche", sotrs.Schedule_ID);
+            //Получение графика работы сотрудника
+            var wk = db.Work_Schedule.Where(p => p.Sotr_ID == id).OrderBy(p => p.DaysOfWeek.ID_Day).ToList();
+            //Добавление в виртуальную таблицу
+            ViewBag.wk = wk;
             return View(sotrs);
         }
 
-        // POST: Sotrs/Edit/5
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
-        [HttpPost]
-        public ActionResult Edit(Sotrs sotrs, HttpPostedFileBase imgfile, HttpPostedFileBase doc)
+
+        public async Task<ActionResult> Delete(int? id)
         {
-            ViewBag.Positions_ID = new SelectList(db.Positions, "ID_Positions", "Naim_Posit", sotrs.Positions_ID);
-            ViewBag.Rate_ID = new SelectList(db.Rates, "ID_Rate", "Rate", sotrs.Rate_ID);
-            ViewBag.Schedule_ID = new SelectList(db.Work_Schedule, "ID_Schedule", "Naim_Sche", sotrs.Schedule_ID);
-            SqlCommand command;
-            string path = uploadimage(imgfile);
-            string pathrez = uploaddoc(doc);
-            //Изменение данных
-            if (pathrez.Equals("-1") && path.Equals("-1"))
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                command = new SqlCommand(
-                        "update Sotrs " +
-                        "set " +
-                        "Surname_Sot = '" + sotrs.Surname_Sot + "', " +
-                        "Name_Sot = '" + sotrs.Name_Sot + "', " +
-                        "Petronumic_Sot = '" + sotrs.Petronumic_Sot + "', " +
-                        "Day_Of_Birth = '" + sotrs.Day_Of_Birth + "', " +
-                        "Address = '" + sotrs.Address + "'," +
-                        "Num_Phone = '" + sotrs.Num_Phone + "', " +
-                        "Email = '" + sotrs.Email + "', " +
-                        "Positions_ID = " + sotrs.Positions_ID + ", " +
-                        "Rate_ID = " + sotrs.Rate_ID + "," +
-                        "Schedule_ID = " + sotrs.Schedule_ID + ", " +
-                        "Date_of_adoption = '" + sotrs.Date_of_adoption + "', " +
-                        "Opisanie = '" + sotrs.Opisanie + "'," +
-                        "Photo = Photo, " +
-                        "rezume = rezume " +
-                        "where ID_Sotr = " + sotrs.ID_Sotr,
-                        Program.SqlConnection);
-                Program.SqlConnection.Open();
-                command.ExecuteScalar();
-                Program.SqlConnection.Close();
+                if (id == null)
+                {
+                    //400 ошибка
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                //Поиск по ключу
+                Sotrs sotrs = await db.Sotrs.FindAsync(id);
+                if (sotrs == null)
+                {
+                    //404 ошибка
+                    return HttpNotFound();
+                }
+                return View(sotrs);
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
+        }
+
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmed(int id)
+        {
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
+            {
+                Sotrs sotrs = await db.Sotrs.FindAsync(id);
+                //Удаление 
+                db.Sotrs.Remove(sotrs);
+                //Сохранение 
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             else
             {
-                if (path.Equals("-1"))
-                {
-                    command = new SqlCommand(
-                        "update Sotrs " +
-                        "set " +
-                        "Surname_Sot = '" + sotrs.Surname_Sot + "', " +
-                        "Name_Sot = '" + sotrs.Name_Sot + "', " +
-                        "Petronumic_Sot = '" + sotrs.Petronumic_Sot + "', " +
-                        "Day_Of_Birth = '" + sotrs.Day_Of_Birth + "', " +
-                        "Address = '" + sotrs.Address + "'," +
-                        "Num_Phone = '" + sotrs.Num_Phone + "', " +
-                        "Email = '" + sotrs.Email + "', " +
-                        "Positions_ID = " + sotrs.Positions_ID + ", " +
-                        "Rate_ID = " + sotrs.Rate_ID + "," +
-                        "Schedule_ID = " + sotrs.Schedule_ID + ", " +
-                        "Date_of_adoption = '" + sotrs.Date_of_adoption + "', " +
-                        "Opisanie = '" + sotrs.Opisanie + "'," +
-                        "Photo = Photo, " +
-                        "rezume = '" + pathrez + "' " +
-                        "where ID_Sotr = " + sotrs.ID_Sotr,
-                        Program.SqlConnection);
-                    Program.SqlConnection.Open();
-                    command.ExecuteScalar();
-                    Program.SqlConnection.Close();
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    if (pathrez.Equals("-1"))
-                    {
-                        command = new SqlCommand(
-                            "update Sotrs " +
-                            "set " +
-                            "Surname_Sot = '" + sotrs.Surname_Sot + "', " +
-                            "Name_Sot = '" + sotrs.Name_Sot + "', " +
-                            "Petronumic_Sot = '" + sotrs.Petronumic_Sot + "', " +
-                            "Day_Of_Birth = '" + sotrs.Day_Of_Birth + "', " +
-                            "Address = '" + sotrs.Address + "'," +
-                            "Num_Phone = '" + sotrs.Num_Phone + "', " +
-                            "Email = '" + sotrs.Email + "', " +
-                            "Positions_ID = " + sotrs.Positions_ID + ", " +
-                            "Rate_ID = " + sotrs.Rate_ID + "," +
-                            "Schedule_ID = " + sotrs.Schedule_ID + ", " +
-                            "Date_of_adoption = '" + sotrs.Date_of_adoption + "', " +
-                            "Opisanie = '" + sotrs.Opisanie + "'," +
-                            "Photo = '" + path + "', " +
-                            "rezume = rezume " +
-                            "where ID_Sotr = " + sotrs.ID_Sotr,
-                            Program.SqlConnection);
-                        Program.SqlConnection.Open();
-                        command.ExecuteScalar();
-                        Program.SqlConnection.Close();
-                        return RedirectToAction("Index");
-                    }
-                    else
-                    {
-                        command = new SqlCommand(
-                            "update Sotrs " +
-                            "set " +
-                            "Surname_Sot = '" + sotrs.Surname_Sot + "', " +
-                            "Name_Sot = '" + sotrs.Name_Sot + "', " +
-                            "Petronumic_Sot = '" + sotrs.Petronumic_Sot + "', " +
-                            "Day_Of_Birth = '" + sotrs.Day_Of_Birth + "', " +
-                            "Address = '" + sotrs.Address + "'," +
-                            "Num_Phone = '" + sotrs.Num_Phone + "', " +
-                            "Email = '" + sotrs.Email + "', " +
-                            "Positions_ID = " + sotrs.Positions_ID + ", " +
-                            "Rate_ID = " + sotrs.Rate_ID + "," +
-                            "Schedule_ID = " + sotrs.Schedule_ID + ", " +
-                            "Date_of_adoption = '" + sotrs.Date_of_adoption + "', " +
-                            "Opisanie = '" + sotrs.Opisanie + "'," +
-                            "Photo = '" + path + "', " +
-                            "rezume = '" + pathrez + "' " +
-                            "where ID_Sotr = " + sotrs.ID_Sotr,
-                            Program.SqlConnection);
-                        Program.SqlConnection.Open();
-                        command.ExecuteScalar();
-                        Program.SqlConnection.Close();
-                        return RedirectToAction("Index");
-                    }
-                }
+                return Redirect("/Error/NotRight");
             }
-
         }
 
-        // GET: Sotrs/Delete/5
-        [Authorize]
-        public ActionResult Delete(int? id)
+
+        public async Task<ActionResult> DeleteLogic(int? id)
         {
-            if (id == null)
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    //400 ошибка
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                //Поиск по ключу
+                Sotrs sotrs = await db.Sotrs.FindAsync(id);
+                if (sotrs == null)
+                {
+                    //404 ошибка
+                    return HttpNotFound();
+                }
+                return View(sotrs);
             }
-            Sotrs sotrs = db.Sotrs.Find(id);
-            if (sotrs == null)
+            else
             {
-                return HttpNotFound();
+                return Redirect("/Error/NotRight");
             }
-            return View(sotrs);
         }
 
-        // POST: Sotrs/Delete/5
-        [Authorize]
-        [HttpPost, ActionName("Delete")]
+
+        [HttpPost, ActionName("DeleteLogic")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmedLog(int id)
         {
-            Sotrs sotrs = db.Sotrs.Find(id);
-            //Удаление данных
-            db.Sotrs.Remove(sotrs);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
+            {
+                Sotrs sotrs = await db.Sotrs.FindAsync(id);
+                //Логическое удаление
+                sotrs.Logical_Delete = true;
+                db.Entry(sotrs).State = EntityState.Modified;
+                //Сохранение 
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
         }
 
+        //Очистка мусора
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -465,5 +284,184 @@ namespace Personal_Management.Controllers
             base.Dispose(disposing);
         }
 
+
+        public ActionResult AddOrEdit(int id = 0)
+        {
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
+            {
+                Sotrs sotrs = new Sotrs();
+                //Если ключ = 0
+                if (id == 0)
+                {
+                    //Список аккаунтов
+                    ViewBag.Login_Acc = new SelectList(db.Accounts.Where(a => a.Block == false), "Login", "Login");
+                    return View(sotrs);
+                }
+                else
+                {
+                    //Поиск по ключу
+                    sotrs = db.Sotrs.Find(id);
+                    if (sotrs == null)
+                    {
+                        //404 ошибка
+                        return HttpNotFound();
+                    }
+                    sotrs.Address = Shifrovanie.Decryption(sotrs.Address);
+                    //Список аккаунтов
+                    ViewBag.Login_Acc = new SelectList(db.Accounts.Where(a => a.Block == false), "Login", "Login", sotrs.Login_Acc);
+                    if (sotrs == null)
+                    {
+                        //404 ошибка
+                        return HttpNotFound();
+                    }
+                    return View(sotrs);
+                }
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
+        }
+
+        public ActionResult LichKab(int? id = 0)
+        {
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
+            {
+                //Получение данных о сотруднике
+                var sotrs = db.Sotrs.Where(s => s.ID_Sotr == id).ToList();
+                ViewBag.dannie = sotrs;
+                //Получение ключа сотрудника
+                var sotid = db.Sotrs.Where(s => s.ID_Sotr == id).FirstOrDefault();
+                ViewBag.id = sotid.ID_Sotr;
+                //Получение данных штатного сотрудника
+                var pos = db.Posit_Responsibilities.Where(p => p.Sotr_ID == id).FirstOrDefault();
+                if (pos != null)
+                {
+                    //Наименование отдела
+                    ViewBag.dep = pos.Positions.Departments.Naim_Depart;
+                    //Наименование должности
+                    ViewBag.posit = pos.Positions.Naim_Posit;
+                    //Наименование трудовой ставки
+                    ViewBag.rate = pos.Rates.Rate;
+                }
+                else
+                {
+                    //Дефолтные значения
+                    ViewBag.dep = "Не назначено";
+                    ViewBag.posit = "Не назначено";
+                    ViewBag.rate = "Не назначено";
+                }
+                if (pos != null)
+                {
+                    //Данные по испытательному сроку
+                    var isp = db.Isp_Sroki.Where(p => p.Pos_Res_ID == pos.ID_Pos_Res).ToList();
+                    if (isp != null)
+                    {
+                        ViewBag.isp = isp.ToList();
+                    }
+                    else
+                    {
+                        ViewBag.isp = null;
+                    }
+                }
+                else
+                {
+                    ViewBag.isp = null;
+                }
+                //Данные реестра документов
+                var doc = db.Sbor_Docum.Where(p => p.Sotr_ID == id).ToList();
+                ViewBag.doc = doc;
+                //Данные этапов принятия
+                var step = db.Steps.Where(p => p.Sotr_ID == id).ToList();
+                ViewBag.step = step;
+                return View();
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult AddOrEdit(Sotrs sotrs)
+        {
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
+            {
+                if (sotrs.Guest == false && sotrs.Date_of_adoption == null)
+                {
+                    //Если значение гость = false, необходимо указать дату принятия
+                    ViewBag.Login_Acc = new SelectList(db.Accounts, "Login", "Login", sotrs.Login_Acc);
+                    ModelState.AddModelError("Date_of_adoption", "Необходимо указать дату приема данного сотрудника");
+                    return View(sotrs);
+                }
+                SqlCommand command = new SqlCommand("", Program.SqlConnection);
+                //Запрос на получение возраста
+                command.CommandText = "select Datediff(year, '" + sotrs.Day_Of_Birth + "', getdate())";
+                int? voz = 0;
+                Program.SqlConnection.Open();
+                //Получение позраста
+                voz = (int)command.ExecuteScalar();
+                Program.SqlConnection.Close();
+                if (voz < 16)
+                {
+                    //Сообщение о возрастных ограничениях
+                    ViewBag.Login_Acc = new SelectList(db.Accounts.Where(a => a.Block == false), "Login", "Login", sotrs.Login_Acc);
+                    ModelState.AddModelError("Day_Of_Birth", "Возрастные ограничения 18+");
+                    return View(sotrs);
+                }
+                if (sotrs.ImageUpload != null)
+                {
+                    //Загрузка фото пользователя
+                    string filename = Path.GetFileNameWithoutExtension(sotrs.ImageUpload.FileName);
+                    string extension = Path.GetExtension(sotrs.ImageUpload.FileName);
+                    filename = filename + DateTime.Now.ToString("yymmssfff") + extension;
+                    sotrs.Photo = "/Content/Photo/st/" + filename;
+                    sotrs.ImageUpload.SaveAs(Path.Combine(Server.MapPath("~/Content/Photo/st/"), filename));
+                }
+                if (sotrs.ID_Sotr.Equals(0))
+                {
+                    try
+                    {
+                        //Добавление пользователя
+                        sotrs.Address = Shifrovanie.Encryption(sotrs.Address);
+                        db.Sotrs.Add(sotrs);
+                        //Сохранение 
+                        db.SaveChanges();
+                        return Redirect(Session["perehod"].ToString());
+
+                    }
+                    catch
+                    {
+                        //Список аккаунтов
+                        ViewBag.Login_Acc = new SelectList(db.Accounts.Where(a => a.Block == false), "Login", "Login", sotrs.Login_Acc);
+                        return View(sotrs);
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        //Изменение данных
+                        sotrs.Address = Shifrovanie.Encryption(sotrs.Address);
+                        db.Entry(sotrs).State = EntityState.Modified;
+                        //Сохранение данных
+                        db.SaveChanges();
+                        //Список аккаунтов
+                        ViewBag.Login_Acc = new SelectList(db.Accounts.Where(a => a.Block == false), "Login", "Login", sotrs.Login_Acc);
+                        return Redirect(Session["perehod"].ToString());
+                    }
+                    catch
+                    {
+                        //Список аккаунтов
+                        ViewBag.Login_Acc = new SelectList(db.Accounts.Where(a => a.Block == false), "Login", "Login", sotrs.Login_Acc);
+                        return View(sotrs);
+                    }
+                }
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
+        }
     }
 }

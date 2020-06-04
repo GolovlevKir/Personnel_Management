@@ -1,0 +1,136 @@
+﻿@model Personal_Management.Models.newPass
+
+@{
+    ViewBag.Title = "Смена пароля";
+}
+    <div class="container">
+        @if (ViewBag.Suc == true)
+        {
+            <div class="alert alert-dismissible alert-success">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <h4 class="alert-heading">Сохранено!</h4>
+                <p class="mb-0">@ViewBag.SucMes</p>
+            </div>
+        }
+        @using (Html.BeginForm(Html.BeginForm()))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <h2>Смена пароля</h2>
+            <hr />
+            <div class="form-horizontal">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.password, "Cтарый пароль", htmlAttributes: new { @class = "control-label col-md-9" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control", @id = "password-input1", @type = "password" } })
+                        <a href="#" class="password-control1"></a>
+                        @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+                        <p>@ViewBag.OldPass</p>
+                        <p>@ViewBag.Mes</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.password1, "Новый пароль", htmlAttributes: new { @class = "control-label col-md-9" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.password1, new { htmlAttributes = new { @class = "form-control", @id = "password-input2", @type = "password" } })
+                        <a href="#" class="password-control2"></a>
+                        @Html.ValidationMessageFor(model => model.password1, "", new { @class = "text-danger" })
+                        <p>@ViewBag.New</p>
+                        <p>@ViewBag.Mes</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.password2, "Повторный ввод нового пароля", htmlAttributes: new { @class = "control-label col-md-9" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.password2, new { htmlAttributes = new { @class = "form-control", @id = "password-input3", @type = "password" } })
+                        <a href="#" class="password-control3"></a>
+                        @Html.ValidationMessageFor(model => model.password2, "", new { @class = "text-danger" })
+                        <p>@ViewBag.New</p>
+                        <p>@ViewBag.Mes</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Сменить пароль" class="btn btn-outline-success" />
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+<style>
+    .password-control1 {
+        position: absolute;
+        top: 11px;
+        right: 30px;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background: url(https://snipp.ru/demo/495/view.svg) 0 0 no-repeat;
+    }
+    .password-control2 {
+        position: absolute;
+        top: 11px;
+        right: 30px;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background: url(https://snipp.ru/demo/495/view.svg) 0 0 no-repeat;
+    }
+    .password-control3 {
+        position: absolute;
+        top: 11px;
+        right: 30px;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background: url(https://snipp.ru/demo/495/view.svg) 0 0 no-repeat;
+    }
+
+        .password-control1.view {
+            background: url(https://snipp.ru/demo/495/no-view.svg) 0 0 no-repeat;
+        }
+        .password-control2.view {
+            background: url(https://snipp.ru/demo/495/no-view.svg) 0 0 no-repeat;
+        }
+        .password-control3.view {
+            background: url(https://snipp.ru/demo/495/no-view.svg) 0 0 no-repeat;
+        }
+</style>
+
+<script>
+    $('body').on('click', '.password-control1', function () {
+        if ($('#password-input1').attr('type') == 'password') {
+            $(this).addClass('view');
+            $('#password-input1').attr('type', 'text');
+        } else {
+            $(this).removeClass('view');
+            $('#password-input1').attr('type', 'password');
+        }
+        return false;
+    });
+    $('body').on('click', '.password-control2', function () {
+        if ($('#password-input2').attr('type') == 'password') {
+            $(this).addClass('view');
+            $('#password-input2').attr('type', 'text');
+        } else {
+            $(this).removeClass('view');
+            $('#password-input2').attr('type', 'password');
+        }
+        return false;
+    });
+    $('body').on('click', '.password-control3', function () {
+        if ($('#password-input3').attr('type') == 'password') {
+            $(this).addClass('view');
+            $('#password-input3').attr('type', 'text');
+        } else {
+            $(this).removeClass('view');
+            $('#password-input3').attr('type', 'password');
+        }
+        return false;
+    });
+</script>

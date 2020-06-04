@@ -4,94 +4,159 @@
     ViewBag.Title = "Этапы принятия сотрудников";
     ViewBag.NameMeta = "Steps";
     ViewBag.ContentMeta = "На данном окне возможно просмотреть список этапов принятия каждого сотрудника компании";
+    Session["perehod"] = "/Steps/Index";
+    Session["pred"] = "/Steps/Index";
 }
+<style>
+    [data-tooltip] {
+        position: relative; /* Относительное позиционирование */
+    }
 
-<h2>Этапы принятия сотрудников</h2>
-<hr />
-<ol class="breadcrumb">
-    <li class="breadcrumb-item"> @Html.ActionLink("Испытательные сроки", "Index", "Isp_Sroki")</li>
-    <li class="breadcrumb-item">@Html.ActionLink("Сбор документов", "Index", "Sbor_Docum")</li>
-    <li class="breadcrumb-item">@Html.ActionLink("Список сотрудников", "Index", "Sotrs")</li>
-</ol>
-<hr />
+        [data-tooltip]::after {
+            z-index:1001;
+            content: attr(data-tooltip); /* Выводим текст */
+            position: absolute; /* Абсолютное позиционирование */
+            width: 300px; /* Ширина подсказки */
+            left: 0;
+            top: 0; /* Положение подсказки */
+            background: #3989c9; /* Синий цвет фона */
+            color: #fff; /* Цвет текста */
+            padding: 0.5em; /* Поля вокруг текста */
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Параметры тени */
+            pointer-events: none; /* Подсказка */
+            opacity: 0; /* Подсказка невидима */
+            transition: 1s; /* Время появления подсказки */
+        }
 
-@foreach (var item in Model)
-{
-    <div class="container bootstrap snippet ">
-        <div class="row ">
-            <div class="mb-3"><h4>@item.Sotrs.FullName | @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Step }) </h4> </div>
-        </div>
-    </div>
-    <div class="col-md-12">
-        <div class="custom-control col-md-12 custom-switch">
-            <input type="checkbox" class="custom-control-input ShowOrHide" value="myDivId_@item.ID_Step.ToString()" name="pis" id="customSwitch_@item.ID_Step.ToString()" />
-            <label class="custom-control-label" for="customSwitch_@item.ID_Step.ToString()">Раскрыть</label>
-        </div>
-    </div>
-    <div class="myDivId_@item.ID_Step.ToString() selectt">
-        <div class="clear clear-fix">
-            <div class="progressbar-wrapper clearfix">
-                <ul class="progressbar">
-                    @if (item.AddSotrInIS)
-                    {
-                        <li class="active"><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Sotrs/Edit/@item.Sotr_ID"><abbr title="Добавление сотрудника в систему">Этап 1</abbr></a></li>
-                    }
-                    else
-                    {
-                        <li><a href="~/Sotrs/Create"><abbr title="Добавление сотрудника в систему">Этап 1</abbr></a></li>
-                    }
-                    @if (item.AddRezume)
-                    {
-                        <li class="active"><a href="~/Content/Files/@item.Sotrs.rezume" download><abbr title="Скачать резюме сотрудника">Этап 2</abbr></a></li>
-                    }
-                    else
-                    {
-                        <li><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Steps/AddRezume/@item.Sotr_ID"><abbr title="Добавить резюме">Этап 2</abbr></a></li>
-                    }
-                    @if (item.AddSobesedovanie)
-                    {
-                        <li class="active"><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Sotrs/Edit/@item.Sotr_ID"><abbr title="Просмотреть описание о сотруднике">Этап 3</abbr></a></li>
-                    }
-                    else
-                    {
-                        <li><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Steps/AddOpisanie/@item.Sotr_ID"><abbr title="Добавить описания о сотруднике">Этап 3</abbr></a></li>
-                    }
-                    @if (item.AddIspSrok)
-                    {
-                        <li class="active"><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Steps/UpdIsp/@item.Sotr_ID"><abbr title="Изменить испытательный срок">Этап 4</abbr></a></li>
-                    }
-                    else
-                    {
-                        <li><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Steps/AddIsp/@item.Sotr_ID"><abbr title="Назначить испытательный срок">Этап 4</abbr></a></li>
-                    }
-                    @if (item.RezimOzidaniya)
-                    {
-                        <li class="active"><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Steps/Ozidan/@item.Sotr_ID"><abbr title="Решение испытательного срока">Этап 5</abbr></a></li>
-                    }
-                    else
-                    {
-                        <li><a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Steps/Ozidan/@item.Sotr_ID"><abbr title="Назначить решение испытательного срока">Этап 5</abbr></a></li>
-                    }
-                    @if (item.Reshenie)
-                    {
-                        <li class="active"><abbr title="Мы рады, что вы работаете вместе с нами в компании IT-Liga">Этап 6</abbr></li>
-                    }
-                    else
-                    {
-                        <li>Этап 6</li>
-                    }
-                </ul>
-            </div>
-        </div>
-    </div>
+        [data-tooltip]:hover::after {
+            opacity: 1; /* Показываем подсказку */
+            top: 2.5em; /* Положение подсказки */
+            left:0px
+        }
+</style>
+<div class="container">
+    <h2>Этапы принятия сотрудников</h2>
+    <hr />
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"> @Html.ActionLink("Испытательные сроки", "Index", "Isp_Sroki")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Сбор документов", "Index", "Sbor_Docum")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Штатный состав", "Index", "Posit_Responsibilities")</li>
+    </ol>
     <hr />
 
-}
+    @foreach (var item in Model)
+    {
+        <div class="container bootstrap snippet ">
+            <div class="row ">
+                <div class="mb-3"><h4><a href="~/Sotrs/LichKab/@item.Sotrs.ID_Sotr">@item.Sotrs.FullName </a> @if (item.Sobesedovanie == true && item.Dolznost == true && item.Grafik_Raboti == true && item.Sbor_Documentov == true && item.Isp_Srok == true) { 
+                                      <svg class="bi bi-check-all" width="1em" height="1em" viewBox="0 0 16 16" style="color:green" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                          <path fill-rule="evenodd" d="M12.354 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd" />
+                                          <path d="M6.25 8.043l-.896-.897a.5.5 0 10-.708.708l.897.896.707-.707zm1 2.414l.896.897a.5.5 0 00.708 0l7-7a.5.5 0 00-.708-.708L8.5 10.293l-.543-.543-.707.707z" />
+                                      </svg>
+                }
+                     </h4> </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="custom-control col-md-12 custom-switch">
+                <input type="checkbox" class="custom-control-input ShowOrHide" value="myDivId_@item.ID_Step.ToString()" name="pis" id="customSwitch_@item.ID_Step.ToString()" />
+                <label class="custom-control-label" for="customSwitch_@item.ID_Step.ToString()">Раскрыть</label>
+            </div>
+        </div>
+        <div class="myDivId_@item.ID_Step.ToString() selectt" style="margin-top: 0px;">
+            <div class="clear clear-fix">
+                <div class="containerb">
+                    <div class="wrapper" style="padding: 0px 0px;">
+                        <div class="arrow-steps clearfix">
+
+                            @switch (item.Sobesedovanie)
+                            {
+                                case false:
+                                    <div class="step current"><span><a href="~/ZayavkaNaSobes/CreateSob/@item.Sotr_ID" style="color:white" data-tooltip="Отсутствует решение по собеседованию">Этап 1</a></span> </div>
+                                    <div class="step"><span>Этап 2</span></div>
+                                    <div class="step"><span>Этап 3</span></div>
+                                    <div class="step"><span>Этап 4</span></div>
+                                    <div class="step"><span>Этап 5</span></div>
+                                    break;
+                                case true:
+                                    switch (item.Dolznost)
+                                    {
+                                        case false:
+                                            <div class="step current done"><span data-tooltip="Собеседование пройдено">Этап 1</span></div>
+                                            <div class="step current"><a href="~/Posit_Responsibilities/Create/@item.Sotr_ID" style="color:white" data-tooltip="Необходимо назначить на сотрудника должность"><span>Этап 2</span></a></div>
+                                            <div class="step"><span>Этап 3</span></div>
+                                            <div class="step"><span>Этап 4</span></div>
+                                            <div class="step"><span>Этап 5</span></div>
+                                            break;
+                                        case true:
+                                            switch (item.Grafik_Raboti)
+                                            {
+                                                case false:
+                                                    <div class="step current done"><span data-tooltip="Собеседование пройдено">Этап 1</span></div>
+                                                    <div class="step current done"><span data-tooltip="Должность назначена">Этап 2</span></div>
+                                                    <div class="step current "><a href="~/Work_Schedule/Create/@item.Sotr_ID" style="color:white" data-tooltip="Необходимо назначить график работы на неделю"><span>Этап 3</span></a></div>
+                                                    <div class="step"><span>Этап 4</span></div>
+                                                    <div class="step"><span>Этап 5</span></div>
+                                                    break;
+                                                case true:
+                                                    switch (item.Sbor_Documentov)
+                                                    {
+                                                        case false:
+                                                            <div class="step current done"><span data-tooltip="Собеседование пройдено">Этап 1</span></div>
+                                                            <div class="step current done"><span data-tooltip="Должность назначена">Этап 2</span></div>
+                                                            <div class="step current done"><span data-tooltip="График работы создан">Этап 3</span></div>
+                                                            <div class="step current "><a href="~/Sbor_Docum/Index/@item.Sotr_ID" style="color:white" data-tooltip="Сотрудник сдал еще не все документы"><span>Этап 4</span></a></div>
+                                                            <div class="step"><span>Этап 5</span></div>
+                                                            break;
+                                                        case true:
+                                                            switch (item.Isp_Srok)
+                                                            {
+                                                                case false:
+                                                                    <div class="step current done"><span data-tooltip="Собеседование пройдено">Этап 1</span></div>
+                                                                    <div class="step current done"><span data-tooltip="Должность назначена">Этап 2</span></div>
+                                                                    <div class="step current done"><span data-tooltip="График работы создан">Этап 3</span></div>
+                                                                    <div class="step current done"><span data-tooltip="Все документы сданы">Этап 4</span></div>
+                                                                    <div class="step current "><a href="~/Isp_Sroki/Index/@item.Sotr_ID" style="color:white" data-tooltip="Сотрудник проходит испытательный срок"><span>Этап 5</span></a></div>
+                                                                    break;
+                                                                case true:
+                                                                    <div class="step current done"><span data-tooltip="Собеседование пройдено">Этап 1</span></div>
+                                                                    <div class="step current done"><span data-tooltip="Должность назначена">Этап 2</span></div>
+                                                                    <div class="step current done"><span data-tooltip="График работы создан">Этап 3</span></div>
+                                                                    <div class="step current done"><span data-tooltip="Все документы сданы">Этап 4</span></div>
+                                                                    <div class="step current done"><span data-tooltip="Сотрудник прошел испытательный срок и принят в организацию на постоянную основу">Этап 5</span></div>
+                                                                    break;
+                                                            }
+                                                            break;
+                                                    }
+                                                    break;
+                                            }
+                                            break;
+                                    }
+                                    break;
+                            }
+
+
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <h5><a style="color:orange" href="~/Steps/Edit/@item.ID_Step"><i class="fa fa-cogs" aria-hidden="true"></i> Изменить</a></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+
+
+    }
+</div>
 <div id="modDialog" class="modal fade">
     <div id="dialogContent" class="modal-dialog modal-lg"></div>
 </div>
 @section scripts
-{
+                            {
     <script type="text/javascript">
 
         $(function () {
@@ -126,4 +191,10 @@
             $("." + inputValue).toggle();
         });
     });
+    $(function () {
+        $("a").click(function () {
+            $('input:checked').prop('checked', false);
+        });
+    });
 </script>
+

@@ -1,7 +1,7 @@
 ﻿@model Personal_Management.Models.Steps
 
 @{
-    ViewBag.Title = "Изменение данных принятия";
+    ViewBag.Title = "Изменение данных этапов";
     ViewBag.NameMeta = "UpdStep";
     ViewBag.ContentMeta = "На данном окне возможно изменение данных этапов принятия сотрудника на работу";
 }
@@ -19,84 +19,73 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>Этапы принятия сотрудника</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.ID_Step)
+<div class="form-horizontal">
+    <h4>Этапы принятия сотрудника</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.ID_Step)
+    @Html.HiddenFor(model => model.Logical_Delete)
+    @Html.HiddenFor(model => model.Sotr_ID)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Sotr_ID, "ФИО сотрудника", htmlAttributes: new { @class = "control-label col-md-5" })
-            <div class="col-md-10">
-                @Html.DropDownList("Sotr_ID", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Sotr_ID, "", new { @class = "text-danger" })
-            </div>
-        </div>
+    <div class="form-group">
+        <label class = "control-label col-md-10"><b>ФИО сотрудника</b> @Html.DisplayFor(model => model.Sotrs.Full)</label>
+        
+    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.AddSotrInIS, htmlAttributes: new { @class = "control-label col-md-5" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.AddSotrInIS)
-                    @Html.ValidationMessageFor(model => model.AddSotrInIS, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.AddRezume, htmlAttributes: new { @class = "control-label col-md-5" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.AddRezume)
-                    @Html.ValidationMessageFor(model => model.AddRezume, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.AddSobesedovanie, htmlAttributes: new { @class = "control-label col-md-5" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.AddSobesedovanie)
-                    @Html.ValidationMessageFor(model => model.AddSobesedovanie, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.AddIspSrok, htmlAttributes: new { @class = "control-label col-md-5" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.AddIspSrok)
-                    @Html.ValidationMessageFor(model => model.AddIspSrok, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.RezimOzidaniya, htmlAttributes: new { @class = "control-label col-md-5" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.RezimOzidaniya)
-                    @Html.ValidationMessageFor(model => model.RezimOzidaniya, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Reshenie, htmlAttributes: new { @class = "control-label col-md-5" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Reshenie)
-                    @Html.ValidationMessageFor(model => model.Reshenie, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Сохранить изменения" class="btn btn-outline-success" />
+    <div class="form-group">
+        @Html.LabelFor(model => model.Sobesedovanie, htmlAttributes: new { @class = "control-label col-md-10" })
+        <div class="col-md-12">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.Sobesedovanie)
+                @Html.ValidationMessageFor(model => model.Sobesedovanie, "", new { @class = "text-danger" })
             </div>
         </div>
     </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Dolznost, htmlAttributes: new { @class = "control-label col-md-10" })
+        <div class="col-md-12">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.Dolznost)
+                @Html.ValidationMessageFor(model => model.Dolznost, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Grafik_Raboti, htmlAttributes: new { @class = "control-label col-md-10" })
+        <div class="col-md-12">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.Grafik_Raboti)
+                @Html.ValidationMessageFor(model => model.Grafik_Raboti, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Sbor_Documentov, htmlAttributes: new { @class = "control-label col-md-10" })
+        <div class="col-md-12">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.Sbor_Documentov)
+                @Html.ValidationMessageFor(model => model.Sbor_Documentov, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Isp_Srok, htmlAttributes: new { @class = "control-label col-md-10" })
+        <div class="col-md-12">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.Isp_Srok)
+                @Html.ValidationMessageFor(model => model.Isp_Srok, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Сохранить изменения" class="btn btn-outline-success" />
+        </div>
+    </div>
+</div>
 }

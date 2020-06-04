@@ -5,75 +5,102 @@
     ViewBag.NameMeta = "AddPos";
     ViewBag.ContentMeta = "На данном окне возможно добавление новых должностей";
 }
+    <div class="container">
+        <h2>Добавление записи</h2>
 
-<h2>Добавление записи</h2>
-<hr />
-<ol class="breadcrumb mb-3">
-    <li class="breadcrumb-item">@Html.ActionLink("Вернуться к списку должностей", "Index")</li>
-    <li class="breadcrumb-item">@Html.ActionLink("Отделы", "Index", "Departments")</li>
-</ol>
-<hr />
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
         <h4>Должность</h4>
         <hr />
+        <ol class="breadcrumb mb-3">
+            <li class="breadcrumb-item">@Html.ActionLink("Вернуться к списку должностей", "Index")</li>
+            <li class="breadcrumb-item">@Html.ActionLink("Отделы", "Index", "Departments")</li>
+            <li class="breadcrumb-item">@Html.ActionLink("Штатный состав", "Index", "Posit_Responsibilities")</li>
+        </ol>
+        <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             @Html.LabelFor(model => model.Naim_Posit, htmlAttributes: new { @class = "control-label col-md-5" })
-            <div class="col-md-10">
+            <div class="col-md-12">
                 @Html.EditorFor(model => model.Naim_Posit, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Naim_Posit, "", new { @class = "text-danger" })
                 <p class="text-danger">@ViewBag.m</p>
             </div>
         </div>
-
+        <div class="form-group">
+            <label class = "control-label col-md-10">Для автоматического рассчета почасовой оплаты, введите оклад</label>
+            <div class="col-md-12">
+                <input type="number" onkeyup="pochas()" class = "form-control" id="oklad" step = "0.01" min = "0" />
+            </div>
+        </div>
         <div class="form-group">
             @Html.LabelFor(model => model.Salary, htmlAttributes: new { @class = "control-label col-md-5" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Salary, new { htmlAttributes = new { @class = "form-control", @type="number", @step="0.01", @min="0" } })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.Salary, new { htmlAttributes = new { @class = "form-control", @type = "number", @step = "0.01", @min = "0",@id = "poch" } })
                 @Html.ValidationMessageFor(model => model.Salary, "", new { @class = "text-danger" })
             </div>
         </div>
         @if (Convert.ToInt32(ViewBag.u) == 0)
         {
-        <div class="form-group">
-            @Html.LabelFor(model => model.Depart_ID, "Наименование отдела", htmlAttributes: new { @class = "control-label col-md-5" })
-            <div class="col-md-10">
-                @Html.DropDownList("Depart_ID", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Depart_ID, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Depart_ID, "Наименование отдела", htmlAttributes: new { @class = "control-label col-md-5" })
+                <div class="col-md-12">
+                    @Html.DropDownList("Depart_ID", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Depart_ID, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
         }
 
         <div class="form-group">
             @Html.LabelFor(model => model.Kol_Vo_Pers, htmlAttributes: new { @class = "control-label col-md-5" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Kol_Vo_Pers, new { htmlAttributes = new { @class = "form-control" } })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.Kol_Vo_Pers, new { htmlAttributes = new { @class = "form-control", @min = "1" } })
                 @Html.ValidationMessageFor(model => model.Kol_Vo_Pers, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.Kol_Vo_On_Isp, htmlAttributes: new { @class = "control-label col-md-5" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Kol_Vo_On_Isp, new { htmlAttributes = new { @class = "form-control" } })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.Kol_Vo_On_Isp, new { htmlAttributes = new { @class = "form-control", @min = "0" } })
                 @Html.ValidationMessageFor(model => model.Kol_Vo_On_Isp, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Vak_Mest, htmlAttributes: new { @class = "control-label col-md-5" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.Vak_Mest, new { htmlAttributes = new { @class = "form-control", @min = "0" } })
+                @Html.ValidationMessageFor(model => model.Vak_Mest, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group" hidden>
+            @Html.LabelFor(model => model.Logical_Delete, htmlAttributes: new { @class = "control-label col-md-5" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.Logical_Delete, new { htmlAttributes = new { @class = "form-control", @min = "0" } })
+                @Html.ValidationMessageFor(model => model.Logical_Delete, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
+            <div class="col-md-offset-2 col-md-12">
                 <input type="submit" value="Добавить должность" class="btn btn-outline-success" />
             </div>
         </div>
     </div>
-}
-
+        }
+    </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+
+<script>
+    function pochas() {
+        var n1 = document.getElementById('oklad').value;
+        document.getElementById('poch').value = Math.round(Number(n1) / 21 / 8 * 100) / 100;
+    }
+</script>

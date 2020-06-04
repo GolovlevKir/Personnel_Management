@@ -1,0 +1,64 @@
+﻿@model Personal_Management.Models.Obrabotka
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Удаление</h2>
+
+<h3>Вы действительно хотите удалить данные собеседования?</h3>
+<div>
+    <h4>Данные</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Sotrs.Surname_Sot)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sotrs.Surname_Sot)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Data_Sob)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Data_Sob)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Vremya_Sob)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Vremya_Sob)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Kommnt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Kommnt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.reshenie)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.reshenie)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

@@ -1,35 +1,82 @@
 ﻿@model IEnumerable<Personal_Management.Models.Sbor_Docum>
 @using System.Data.SqlClient;
 @{
-    ViewBag.Title = "Сбор документов";
+    ViewBag.Title = "Реестр документов";
     ViewBag.NameMeta = "Sbori";
     ViewBag.ContentMeta = "На данном окне возможно просмотреть данные сбора документов";
+    Session["perehod"] = "/Sbor_Docum/Index";
+    Session["pred"] = "/Sbor_Docum/Index";
+
+    string poluch (int id)
+    {
+
+        SqlCommand command = new SqlCommand("", Program.SqlConnection);
+        command.CommandText = "SELECT dbo.Positions.Naim_Posit FROM dbo.Sotrs JOIN dbo.Posit_Responsibilities ON dbo.Sotrs.ID_Sotr = dbo.Posit_Responsibilities.Sotr_ID INNER JOIN dbo.Positions ON dbo.Posit_Responsibilities.Positions_ID = dbo.Positions.ID_Positions where id_Sotr = " + id.ToString();
+        Program.SqlConnection.Open();
+        string d = command.ExecuteScalar().ToString();
+        Program.SqlConnection.Close();
+        if (d != null && d != "")
+            ViewBag.Dolj = "Должноть: " + d;
+        else
+            ViewBag.Dolj = "";
+        return ViewBag.Dolj;
+    }
 }
-
-<h2>Сбор данных документов сотрудников</h2>
-<ol class="breadcrumb">
-    <li class="breadcrumb-item"> @Html.ActionLink("Документы", "Index", "Documents")</li>
-</ol>
-
-@foreach (var group in Model.GroupBy(item => item.Sotrs.FullName))
-{
-    <h3>@Html.Encode(group.Key)</h3>
-    <div class="row">
-        @foreach (var item in group)
-        {
-            <div class="card mb-3 col-md-offset-2" style="margin: 0 auto; width: 350px;">
-                <h4 class="card-header">@Html.Encode(item.Documents.Doc_Naim)</h4>
-                <img style="margin: 0 auto; height: 340px; width: 260px; display: block;" src="~/Content/Photo/dok/@Html.Encode(item.Photo_Doc)" alt="Card image">
-
-                <div class="card-footer text-center">
-                    @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sbora }) |
-                    <a href="~/Content/Photo/dok/@Html.Encode(item.Photo_Doc)" download>Скачать</a> |
-                    @Html.ActionLink("Очистить", "Delete", new { id = item.ID_Sbora }, new { @class = "compItem" })
-                </div>
+    <div class="container">
+        <h2>Реестр документов сотрудников</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"> @Html.ActionLink("Документы", "Index", "Documents")</li>
+        </ol>
+        <form method="get">
+            <div style="text-align:right">
+                <label class="control-label">Поиск: </label>
+                <input type="text" name="search" style="width:20%" value="@ViewBag.seo" />
+                <input type="submit" value="Найти" class="btn btn-secondary" />
             </div>
-        }
+            </form>
+            <br />
+            @foreach (var group in Model.GroupBy(item => item.Sotrs))
+            {
+                <h3><a href="~/Sotrs/LichKab/@group.Key.ID_Sotr">@Html.Encode(group.Key.Full)</a> (@poluch(group.Key.ID_Sotr))</h3>
+                <ul class="list-group">
+                    @foreach (var item in group)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @item.Documents.Doc_Naim
+                            <div class="form-group">
+                                @if (item.Itog == true)
+                                {
+                                    <a href="~/Content/Photo/dok/@item.Photo_Doc" download="">
+                                        <svg class="bi bi-download" style="color:green" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M.5 8a.5.5 0 01.5.5V12a1 1 0 001 1h12a1 1 0 001-1V8.5a.5.5 0 011 0V12a2 2 0 01-2 2H2a2 2 0 01-2-2V8.5A.5.5 0 01.5 8z" clip-rule="evenodd" />
+                                            <path fill-rule="evenodd" d="M5 7.5a.5.5 0 01.707 0L8 9.793 10.293 7.5a.5.5 0 11.707.707l-2.646 2.647a.5.5 0 01-.708 0L5 8.207A.5.5 0 015 7.5z" clip-rule="evenodd" />
+                                            <path fill-rule="evenodd" d="M8 1a.5.5 0 01.5.5v8a.5.5 0 01-1 0v-8A.5.5 0 018 1z" clip-rule="evenodd" />
+                                        </svg>
+                                    </a>
+                                }
+                                <a href="~/Sbor_Docum/Edit/@item.ID_Sbora">
+                                    <span class="badge  badge-pill">
+                                        <svg class="bi bi-pencil-square" width="2em" height="2em" style="color:orange" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z" />
+                                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-6a.5.5 0 00-1 0v6a.5.5 0 01-.5.5h-11a.5.5 0 01-.5-.5v-11a.5.5 0 01.5-.5H9a.5.5 0 000-1H2.5A1.5 1.5 0 001 2.5v11z" clip-rule="evenodd" />
+                                        </svg>
+                                    </span>
+                                </a>
+                                <a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Sbor_Docum/Delete/@item.ID_Sbora">
+                                    <span class="badge badge-pill">
+                                        <svg class="bi bi-trash" width="2em" height="2em" viewBox="0 0 16 16" style="color:red" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z" />
+                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" clip-rule="evenodd" />
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </li>
+                    }
+                </ul>
+                <br />
+            }
     </div>
-}
 <div id="modDialog" class="modal fade">
     <div id="dialogContent" class="modal-dialog modal-lg"></div>
 </div>

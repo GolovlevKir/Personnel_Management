@@ -1,45 +1,123 @@
 ﻿@model Personal_Management.Models.Work_Schedule
 
 @{
-    ViewBag.Title = "Добавление рабочего графика";
-    ViewBag.NameMeta = "AddChe";
-    ViewBag.ContentMeta = "На данном окне возможно добавление новых графиков работы";
+    ViewBag.Title = "Добавление графика работы";
 }
+    <div class="container">
+        <h2>Добавить график работы</h2>
 
-<h2>Создание</h2>
-<hr />
-<ol class="breadcrumb">
-    <li class="breadcrumb-item">@Html.ActionLink("Вернуться к списку графиков работы", "Index")</li>
-    <li class="breadcrumb-item">@Html.ActionLink("Список сотрудников", "Index", "Sotrs")</li>
-</ol>
-<hr />
-
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            
     <div class="form-horizontal">
-        <h4>График работы</h4>
+        <h4>Новый график работы</h4>
         <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.Naim_Sche, htmlAttributes: new { @class = "control-label col-md-5" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Naim_Sche, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Naim_Sche, "", new { @class = "text-danger" })
+        <p class="control-label col-md-12">Выберите рабочие и выходные дни</p>
+        <table class="table">
+            <tr>
+                <th>
+                    Выберите рабочие дни
+                </th>
+                <th>
+                    Выберите выходные дни
+                </th>
+            </tr>
 
+            @foreach (Personal_Management.Models.DaysOfWeek item in ViewBag.item)
+            {
+                <tr>
+                    <td>
+                        <input type="checkbox" name="deleteInputs" id="@item.Naim_Day" value="@item.ID_Day" />
+                        <label class="label" for="@item.Naim_Day">@item.Naim_Day</label>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="deleteInputs2" id="Two_@item.Naim_Day" value="@item.ID_Day" />
+                        <label class="label" for="Two_@item.Naim_Day">@item.Naim_Day</label>
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Vremya_Start, htmlAttributes: new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.Vremya_Start, new { htmlAttributes = new { @class = "form-control", @id = "time" } })
+                @Html.ValidationMessageFor(model => model.Vremya_Start, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Vremya_End, htmlAttributes: new { @class = "control-label col-md-10" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.Vremya_End, new { htmlAttributes = new { @class = "form-control", @id = "time2" } })
+                @Html.ValidationMessageFor(model => model.Vremya_End, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Break_time, htmlAttributes: new { @class = "control-label col-md-10" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.Break_time, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Break_time, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Break_Start, htmlAttributes: new { @class = "control-label col-md-10" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.Break_Start, new { htmlAttributes = new { @class = "form-control", @id = "time3" } })
+                @Html.ValidationMessageFor(model => model.Break_Start, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Break_End, htmlAttributes: new { @class = "control-label col-md-10" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.Break_End, new { htmlAttributes = new { @class = "form-control", @id = "time4" } })
+                @Html.ValidationMessageFor(model => model.Break_End, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Sotr_ID, "ФИО сотрудника", htmlAttributes: new { @class = "control-label col-md-10" })
+            <div class="col-md-12">
+                @Html.DropDownList("Sotr_ID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Sotr_ID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group" hidden>
+            @Html.LabelFor(model => model.Vih, "Является выходным", htmlAttributes: new { @class = "control-label col-md-10" })
+            <div class="col-md-12">
+                @Html.EditorFor(model => model.Vih, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Vih, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Добавить" class="btn btn-outline-success" />
+                <input type="submit" value="Добавить график работы для сотрудника" class="btn btn-outline-success" />
             </div>
         </div>
     </div>
-}
+        }
+    </div>
 
+<script src="~/Scripts/jquery.maskedinput.min.js"></script>
+<script>
+    jQuery(function ($) {
+        $.mask.definitions['~'] = '[+-]';
+        $('#date').mask('99.99.9999');
+        $('#time').mask('99:99');
+        $('#time2').mask('99:99');
+        $('#time4').mask('99:99');
+        $('#time3').mask('99:99');
+        $('#phone').mask('+7(999)999-99-99');
+        $('#phone1').mask('+7(999)999-99-99');
+    });
+</script>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}

@@ -1,0 +1,91 @@
+﻿@model Personal_Management.Models.Obrabotka
+
+@{
+    ViewBag.Title = "Планирование нового собеседования";
+}
+
+<div class="container">
+    <h2>Планирование собеседований</h2>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>Новое собеседование</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Sotr_ID)
+    <div class="form-group">
+        @Html.LabelFor(model => model.Sotr_ID, "ФИО соискателя", htmlAttributes: new { @class = "control-label col-md-10" })
+        <div class="col-md-12">
+            @Html.DropDownList("Sotr_ID", null, htmlAttributes: new { @class = "form-control disabled", @disabled="" })
+            @Html.ValidationMessageFor(model => model.Sotr_ID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Data_Sob, htmlAttributes: new { @class = "control-label col-md-10" })
+        <div class="col-md-12">
+            <fieldset>
+                @Html.EditorFor(model => model.Data_Sob, new { htmlAttributes = new { @class = "form-control", @id = "date" } })
+                @Html.ValidationMessageFor(model => model.Data_Sob, "", new { @class = "text-danger" })
+            </fieldset>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Vremya_Sob, htmlAttributes: new { @class = "control-label col-md-10" })
+        <div class="col-md-12">
+            @Html.EditorFor(model => model.Vremya_Sob, new { htmlAttributes = new { @class = "form-control", @id = "time" } })
+            @Html.ValidationMessageFor(model => model.Vremya_Sob, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Kommnt, htmlAttributes: new { @class = "control-label col-md-10" })
+        <div class="col-md-12">
+            @Html.EditorFor(model => model.Kommnt, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Kommnt, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.reshenie, htmlAttributes: new { @class = "control-label col-md-10" })
+        <div class="col-md-12">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.reshenie)
+                @Html.ValidationMessageFor(model => model.reshenie, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.nomerzay, htmlAttributes: new { @class = "control-label col-md-10" })
+        <div class="col-md-12">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.nomerzay, new { htmlAttributes = new { @class = "form-control", @readonly = "", @id = "readOnlyInput" } })
+                @Html.ValidationMessageFor(model => model.nomerzay, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Запланировать собеседование" class="btn btn-outline-success" />
+        </div>
+    </div>
+</div>
+    }
+</div>
+
+<script src="~/Scripts/jquery.maskedinput.min.js"></script>
+<script>
+    jQuery(function ($) {
+        $.mask.definitions['~'] = '[+-]';
+        $('#date').mask('99.99.9999');
+        $('#time').mask('99:99');
+        $('#time2').mask('99:99');
+        $('#phone').mask('+7(999)999-99-99');
+        $('#phone1').mask('+7(999)999-99-99');
+    });
+</script>

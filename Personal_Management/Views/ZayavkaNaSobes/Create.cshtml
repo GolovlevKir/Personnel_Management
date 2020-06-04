@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Personal_Management.Models.Questions>
+
+@{
+    ViewBag.Title = "Создание заявки";
+}
+@if (ViewBag.Suc == true)
+{
+    <div class="alert alert-dismissible alert-success">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <h4 class="alert-heading">Заявка подана!</h4>
+        <p class="mb-0">@ViewBag.SucMes</p>
+    </div>
+
+}
+else
+{
+    if (ViewBag.Suc != true && ViewBag.Suc == null)
+    {
+        <div class="container">
+            <h2>Составление заявки</h2>
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-horizontal">
+                    <h4>Анкета для заявки</h4>
+                    <hr />
+                    <h5>Ваши данные:</h5>
+                    <p style=" margin-bottom: 0.5rem;"><b>Заявка:</b> №@Session["NumZ"].ToString() </p>
+                    <p style=" margin-bottom: 0.5rem;"><b>Ваше ФИО:</b> @ViewBag.FIO</p>
+                    <p style=" margin-bottom: 0.5rem;"><b>Email:</b> @ViewBag.Im</p>
+                    <p><b>Дата:</b> @Session["dataz"].ToString() </p>
+                    <hr />
+                    @foreach (Personal_Management.Models.Questions i in @ViewBag.item)
+                    {
+                        <div class="form-group">
+                            <label class="control-label col-md-9">@i.Quest_Naim</label>
+                            <div class="col-md-12">
+                                <input type="text" name="Doc" id="Doc[@i.ID_Quest]" class="form-control" />
+                                <input hidden class="form-control" value="@i.ID_Quest" name="idqu" />
+                            </div>
+                        </div>
+                    }
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Отправить заявку" class="btn btn-success" />
+                        </div>
+                    </div>
+                    <p style="padding-top: 20px">
+                        ВНИМАНИЕ! После отправки заявки, Вам придет письмо на адрес электронной почты об успешной отправке.
+                    </p>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <img src="https://appstickers-cdn.appadvice.com/492224193/835674985/4e8b67825cecb2fdeab6a5eedcbb1d6f-0.png" />
+    }
+}
+

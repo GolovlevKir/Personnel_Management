@@ -1,0 +1,114 @@
+﻿@model Personal_Management.Models.Sotrs
+
+@{
+    ViewBag.Title = "График работы";
+}
+<div class="container">
+
+    <h2>Данные по графику работы | <a href="#" id="btn-export" onclick="generatePDF('');">СКАЧАТЬ</a> | <a href="@Session["perehod"].ToString()">Вернуться назад</a></h2>
+    <hr />
+    <div style="text-align:center; margin: 0 auto; background-color:lightgray; width:90%; margin-bottom:50px; font-family:'Times New Roman'">
+        <div style="text-align:center; padding: 10px 10px 10px 10px; font-family:'Times New Roman'; color:black" id="source-html">
+            <h3 style="font-weight: 1;font-family:'Times New Roman'">
+                Общество с ограниченной ответственностью<br />
+                «Си эМ эС»
+            </h3>
+            <p style="        margin-bottom: 0rem;">ОГРН 0000000000000 ИНН 0000000000 КПП 000000000</p>
+            <br />
+            <p style="margin-bottom: 0rem;">108840, город Москва, город Троицк, улица Промышленная, дом 19, офис 33</p>
+            <hr />
+
+            <h2 style="margin-top:20px; font-family:'Times New Roman'">ГРАФИК РАБОТЫ</h2>
+            <dl class="dl-horizontal">
+                <dd>
+                    <h3 style="font-weight: 1; margin-top:50px; font-family:'Times New Roman'">ФИО сотрудника: @Model.Surname_Sot @Model.Name_Sot @Model.Petronumic_Sot</h3>
+                </dd>
+                <dd>
+                    <h3 style="font-weight: 1; margin-top:10px; font-family:'Times New Roman'">Должность: Директор</h3>
+                </dd>
+                <dd>
+                    <h3 style="font-weight: 1; margin-top:40px; margin-bottom:20px; font-family:'Times New Roman'">График работы</h3>
+                </dd>
+                <dd>
+                    @if (ViewBag.wk != null && ViewBag.wk.Count != 0)
+                    {
+                        <table class="table" id="info-table2" style="color:black">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        День недели
+                                    </th>
+                                    <th>
+                                        Время работы
+                                    </th>
+                                    <th>
+                                        Перерыв
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (Personal_Management.Models.Work_Schedule item in ViewBag.wk)
+                                {
+                                    if (item.Vih == true)
+                                    {
+                                        <tr style="background-color:lightgray">
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.DaysOfWeek.Naim_Day)
+                                            </td>
+                                            <td colspan="2" style="text-align:center; color:white">
+                                                ВЫХОДНОЙ ДЕНЬ
+                                            </td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.DaysOfWeek.Naim_Day)
+                                            </td>
+                                            <td>
+                                                C @Html.DisplayFor(modelItem => item.Vremya_Start) до @Html.DisplayFor(modelItem => item.Vremya_End)
+                                            </td>
+                                            <td>
+                                                С @Html.DisplayFor(modelItem => item.Break_Start) до @Html.DisplayFor(modelItem => item.Break_End)
+                                            </td>
+                                        </tr>
+                                    }
+
+
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p>Данные отсутствуют</p>
+                    }
+
+                </dd>
+
+
+            </dl>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.1.min.js"></script>
+<script type="text/javascript" src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+<script type="text/javascript">
+    function generatePDF() {
+        // Choose the element that our invoice is rendered in.
+        const element = document.getElementById("source-html");
+        element.style.display = 'block'
+        var opt = {
+            margin: [0.5, 1, 1, 1] ,
+            filename: 'myfile.pdf',
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        // Choose the element and save the PDF for our user.
+        html2pdf().from(element).set(opt).save();
+    }
+</script>

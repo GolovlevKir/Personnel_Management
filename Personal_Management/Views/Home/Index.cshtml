@@ -10,167 +10,246 @@
     ViewBag.Title = "Личный кабинет";
     ViewBag.NameMeta = "LichKab";
     ViewBag.ContentMeta = "На данной странице предоставлены данные, вошедшего в систему, пользователя";
+    Session["perehod"] = "/Home/Index";
 }
-@using (Html.BeginForm("Index", "Home", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
-    <div class="container bootstrap snippet ">
-        <div class="row ">
-            <div class="mb-3" style="margin: 0 auto; width: auto;"><h2>@Session["log"].ToString()</h2></div>
-        </div>
+<div class="container">
+    @if (User.Identity.IsAuthenticated)
+    {
         <div class="row">
-            <div class="col-sm-3">
-                <!--left col-->
-                <div class="text-center">
-                    <img src="~/Content/Photo/st/@Session["photo"].ToString()" class="avatar img-circle img-thumbnail" alt="avatar">
+
+            <br />
+
+            <div class="container bootstrap snippet ">
+                <div class="row ">
+                    <div class="mb-3" style="margin: 0 auto; width: auto;"><h2>@Session["log"].ToString()</h2></div>
                 </div>
-            </div><!--/col-3-->
-            <div class="col-sm-8">
-                <div class="tab-content">
-                    <div class="tab-pane active" id="home">
-                        <div class="form-group">
-                            <div class="col-xs-6">
-                                <h4>ФИО: @Session["FIO"].ToString()</h4>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-xs-6">
-                                <h4>Должность: @Session["Pos"].ToString()</h4>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-xs-6">
-                                <h4>Номер телефона: @Session["Phone"].ToString()</h4>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-xs-6">
-                                <h4>Email: <a href="mailto:@Session["Em"].ToString()">@Session["Em"].ToString()</a></h4>
-                            </div>
-                        </div>
-                        <div class="form-group">
+                <div class="row" style="display:flex">
+                    <div class="col-sm-3">
+                        <!--left col-->
+                        <div class="text-center">
+                            @if (Session["Photo"].ToString() == "" || Session["Photo"].ToString() == "-")
+                            {
+                                <img src="~/Content/Photo/st/default.png" class="avatar img-circle img-thumbnail" alt="avatar">
+                            }
+                            else
+                            {
+                                <img src="@Session["Photo"].ToString()" class="avatar img-circle img-thumbnail" alt="avatar">
+                            }
 
-                            <div class="col-xs-6">
-                                <h4>Описание:</h4>
-                                <p class="text-muted">@Session["Opis"].ToString()</p>
+                        </div>
+                    </div><!--/col-3-->
+                    <div class="col-sm-8">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="home">
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                        <h4>ФИО: @Session["FIO"].ToString()</h4>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                        <h4>Дата рождения: @Session["Day_Of_Birth"].ToString()</h4>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                        <h4>@Session["Dolj"].ToString()</h4>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                        <h4>Адрес: @Session["Address"].ToString()</h4>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                        <h4>Номер телефона: @Session["Num_Phone"].ToString()</h4>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                        <h4>Email: <a href="mailto:@Session["Email"].ToString()">@Session["Email"].ToString()</a></h4>
+                                    </div>
+                                </div>
+
+                                @*<div class="form-group">
+
+                                        <div class="col-xs-6">
+                                            <h4>Описание:</h4>
+                                            <p class="text-muted">@Session["Opis"].ToString()</p>
+                                        </div>
+                                    </div>*@
+
+
+
+                            </div>
+                        </div><!--/tab-pane-->
+
+                    </div><!--/tab-content-->
+                </div><!--/col-9-->
+                <br />
+                @if ((bool)Session["Guest"] == false)
+                {
+                    if (ViewBag.steps != null)
+                    {
+                        <div class="row ">
+                            <div class="mb-3" style="margin: 0 auto; width: auto;"><h2>Статистика</h2></div>
+
+                        </div>
+                        <p style="margin-bottom: 0.5rem;">Процент завершения испытательного срока</p>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: @ViewBag.isp%;" aria-valuenow="@ViewBag.isp" aria-valuemin="0" aria-valuemax="100">@ViewBag.isp%</div>
+                        </div>
+                        <br />
+                        <p style="margin-bottom: 0.5rem;">Этапы принятия</p>
+                        <div class="containerb">
+                            <div class="wrapper" style="padding: 0px 0px;">
+                                <div class="arrow-steps clearfix">
+
+                                    @foreach (Personal_Management.Models.Steps item in ViewBag.steps)
+                                    {
+                                        switch (item.Sobesedovanie)
+                                        {
+                                            case false:
+                                                <div class="step current"><span data-tooltip="В ближайшее время примется решение собеседования">Этап 1</span> </div>
+                                                <div class="step"><span>Этап 2</span></div>
+                                                <div class="step"><span>Этап 3</span></div>
+                                                <div class="step"><span>Этап 4</span></div>
+                                                <div class="step"><span>Этап 5</span></div>
+                                                break;
+                                            case true:
+                                                switch (item.Dolznost)
+                                                {
+                                                    case false:
+                                                        <div class="step current done"><span data-tooltip="Собеседование пройдено">Этап 1</span></div>
+                                                        <div class="step current"><span data-tooltip="Скоро на вас будет назначена должность">Этап 2</span></div>
+                                                        <div class="step"><span>Этап 3</span></div>
+                                                        <div class="step"><span>Этап 4</span></div>
+                                                        <div class="step"><span>Этап 5</span></div>
+                                                        break;
+                                                    case true:
+                                                        switch (item.Grafik_Raboti)
+                                                        {
+                                                            case false:
+                                                                <div class="step current done"><span data-tooltip="Собеседование пройдено">Этап 1</span></div>
+                                                                <div class="step current done"><span data-tooltip="Должность назначена">Этап 2</span></div>
+                                                                <div class="step current "><span data-tooltip="Скоро для вас сформируют график работы">Этап 3</span></div>
+                                                                <div class="step"><span>Этап 4</span></div>
+                                                                <div class="step"><span>Этап 5</span></div>
+                                                                break;
+                                                            case true:
+                                                                switch (item.Sbor_Documentov)
+                                                                {
+                                                                    case false:
+                                                                        <div class="step current done"><span data-tooltip="Собеседование пройдено">Этап 1</span></div>
+                                                                        <div class="step current done"><span data-tooltip="Должность назначена">Этап 2</span></div>
+                                                                        <div class="step current done"><span data-tooltip="График работы создан">Этап 3</span></div>
+                                                                        <div class="step current "><span data-tooltip="Вы сдали еще не все документы">Этап 4</span></div>
+                                                                        <div class="step"><span>Этап 5</span></div>
+                                                                        break;
+                                                                    case true:
+                                                                        switch (item.Isp_Srok)
+                                                                        {
+                                                                            case false:
+                                                                                <div class="step current done"><span data-tooltip="Собеседование пройдено">Этап 1</span></div>
+                                                                                <div class="step current done"><span data-tooltip="Должность назначена">Этап 2</span></div>
+                                                                                <div class="step current done"><span data-tooltip="График работы создан">Этап 3</span></div>
+                                                                                <div class="step current done"><span data-tooltip="Все документы сданы">Этап 4</span></div>
+                                                                                <div class="step current "><span data-tooltip="Вы только проходите испытательный срок">Этап 5</span></div>
+                                                                                break;
+                                                                            case true:
+                                                                                <div class="step current done"><span data-tooltip="Собеседование пройдено">Этап 1</span></div>
+                                                                                <div class="step current done"><span data-tooltip="Должность назначена">Этап 2</span></div>
+                                                                                <div class="step current done"><span data-tooltip="График работы создан">Этап 3</span></div>
+                                                                                <div class="step current done"><span data-tooltip="Все документы сданы">Этап 4</span></div>
+                                                                                <div class="step current done"><span data-tooltip="Поздравляем Вас, вы прошли все этапы принятия на работу">Этап 5</span></div>
+                                                                                break;
+                                                                        }
+                                                                        break;
+                                                                }
+                                                                break;
+                                                        }
+                                                        break;
+                                                }
+                                                break;
+                                        }
+                                    }
+
+
+                                    @*<div class="step current done"><span data-tooltip="Собеседование пройдено">Этап 1</span> </div>
+                                        <div class="step current"><span data-tooltip="Скоро на вас будет назначена должность">Этап 2</span> </div>
+                                        <div class="step"> <span>Этап 3</span> </div>
+                                        <div class="step"> <span>Этап 4</span> </div>
+                                        <div class="step"> <span>Этап 5</span> </div>
+                                        <div class="step"> <span>Этап 6</span> </div>*@
+                                </div>
                             </div>
                         </div>
-
-                        <div class="form-group">
-
-                            <div class="col-xs-6">
-                                <h4>Старый пароль</h4>
-                                <input type="password" class="form-control" name="password" id="password" placeholder="Введите старый пароль">
-                                <p class="text-danger">@ViewBag.Mes</p>
-                                <p class="text-danger">@ViewBag.Old</p>
-                                <p class="text-danger">@ViewBag.New</p>
+                        if (Session["ID_S"] != null && (int)Session["ID_S"] > 0)
+                        {
+                            <div class="row ">
+                                <div class="mb-3" style="margin: 0 auto; width: auto;margin-top:30px"><h2>График работы</h2></div>
                             </div>
-                        </div>
-                        <div class="form-group">
-
-                            <div class="col-xs-6">
-                                <h4>Новый пароль</h4>
-                                <input type="password" class="form-control" name="password1" id="password1" placeholder="Введите новый пароль">
-                                <p class="text-danger">@ViewBag.Mes</p>
-                                <p class="text-danger">@ViewBag.New</p>
+                            <div class="list-group" style="margin-top:5px; background-color:lightgray" id="list-tab" role="tablist">
+                                <a class="list-group-item list-group-item-action" href="/Sotrs/Details3/@Session["ID_S"].ToString()"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> График работы</a>
                             </div>
-                        </div>
-                        <div class="form-group">
+                        }
 
-                            <div class="col-xs-6">
-                                <h4>Повтор нового пароля</h4>
-                                <input type="password" class="form-control" name="password2" id="password2" placeholder="Повторите ввод пароля">
-                                <p class="text-danger">@ViewBag.Mes</p>
-                                <p class="text-danger">@ViewBag.New</p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-xs-12">
-                                <input type="submit" value="Сменить пароль" class="btn btn-success" />
-                            </div>
-                        </div>
+                    }
+                    else
+                    {
+                        <h3>К сожалению вы являетесь уволенным сотрудником</h3>
+                    }
+                }
+            </div><!--/row-->
 
-                    </div>
-                </div><!--/tab-pane-->
-            </div><!--/tab-content-->
-        </div><!--/col-9-->
 
-    </div><!--/row-->
-    <div class="row ">
-        <div class="mb-3" style="margin: 0 auto; width: auto;"><h2>Этапы приема</h2></div>
-    </div>
 
-    <div class="clear clear-fix">
-        <div class="progressbar-wrapper clearfix">
-            <ul class="progressbar">
-                @if ((bool)Session["step1"])
-                {
-                    <li class="active"><abbr title="Ваши данные занесены в базе данных">Этап 1</abbr></li>
-                }
-                else
-                {
-                    <li><abbr title="Ваших данных еще нет в базе данных">Этап 1</abbr></li>
-                }
-                @if ((bool)Session["step2"])
-                {
-                    <li class="active"><abbr title="Ваше резюме успешно загружено">Этап 2</abbr></li>
-                }
-                else
-                {
-                    <li><abbr title="Ваше резюме еще не загружено">Этап 2</abbr></li>
-                }
-                @if ((bool)Session["step3"])
-                {
-                    <li class="active"><abbr title="Ваши данные с собеседования добавлены">Этап 3</abbr></li>
-                }
-                else
-                {
-                    <li><abbr title="Ваши данные с собеседования пока что еще не добавлены">Этап 3</abbr></li>
-                }
-                @if ((bool)Session["step4"])
-                {
-                    <li class="active"><abbr title="Для вас назначен испытательный срок">Этап 4</abbr></li>
-                }
-                else
-                {
-                    <li><abbr title="В ближайшее время для вас назначат испытательный срок">Этап 4</abbr></li>
-                }
-                @if ((bool)Session["step5"])
-                {
-                    <li class="active"><abbr title="Испытательный срок окончен. Ожидайте результат, который будет отправлен на почту">Этап 5</abbr></li>
-                }
-                else
-                {
-                    <li><abbr style="background-color" title="Данный этап предполагает ожидание решения по пройденному испытательному сроку">Этап 5</abbr></li>
-                }
-                @if ((bool)Session["step6"])
-                {
-                    <li class="active"><abbr title="Поздравляем! Теперь вы сотрудник компании It-Liga">Этап 6</abbr></li>
-                }
-                else
-                {
-                    <li><abbr title="Вы еще не прошли все этапы принятия">Этап 6</abbr></li>
-                }
-            </ul>
+
         </div>
-    </div>
-    <br />
-    <br />
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2241.990151719183!2d37.602140944912165!3d55.810771358934204!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b5360508910f91%3A0x530ae94ad90580bc!2z0J7Qs9C-0YDQvtC00L3Ri9C5INC_0YAt0LQsIDnQkCDRgdGC0YDQvtC10L3QuNC1IDEsINCc0L7RgdC60LLQsCwgMTI3MjU0!5e0!3m2!1sru!2sru!4v1571645768049!5m2!1sru!2sru" height="450" style="border:0; width:100%" allowfullscreen=""></iframe>
-    <input type="file" name="file" id="File" multiple>
-    <script>
-    $(function () {
-        $('#File').fileupload({
-            dataType: 'json',
-            url: '/Progress/Index',
-            dropZone: $('#dropzone')
-        }).on('fileuploadprogressall', function (e, data) {
-            var progress = parseInt(data.loaded / data.total * 100, 10);
-            $('.progress .progress-bar').css('width', progress + '%');
-        });
-    });
-    </script>
-}
+    }
+    else
+    {
+
+        <div style="margin:0 auto; text-align:center">
+            <h1 style="margin-bottom: -16px;">Ошибка!</h1>
+            <img style="width:40%" src="~/Content/Photo/грусть2.png" />
+            <h2>Вам необходимо войти в систему</h2>
+            <h3><a href="~/Account/Login">Войти в систему</a> | <a href="~/Account/Register">Зарегистрироваться</a></h3>
+        </div>
+
+    }
+</div>
+<style>
+    [data-tooltip] {
+        position: relative; /* Относительное позиционирование */
+    }
+
+        [data-tooltip]::after {
+            z-index: 1001;
+            content: attr(data-tooltip); /* Выводим текст */
+            position: absolute; /* Абсолютное позиционирование */
+            width: 300px; /* Ширина подсказки */
+            left: 0;
+            top: 0; /* Положение подсказки */
+            background: #3989c9; /* Синий цвет фона */
+            color: #fff; /* Цвет текста */
+            padding: 0.5em; /* Поля вокруг текста */
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Параметры тени */
+            pointer-events: none; /* Подсказка */
+            opacity: 0; /* Подсказка невидима */
+            transition: 1s; /* Время появления подсказки */
+        }
+
+        [data-tooltip]:hover::after {
+            opacity: 1; /* Показываем подсказку */
+            top: 2.5em; /* Положение подсказки */
+            left: 0px
+        }
+</style>
+
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
 }

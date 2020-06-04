@@ -1,0 +1,227 @@
+﻿@model IEnumerable<Personal_Management.Models.Obrabotka>
+@using System.Data.SqlClient;
+@{
+    ViewBag.Title = "Запланированные собеседования";
+    int dat(string data)
+    {
+        int razn = 0;
+        SqlCommand command = new SqlCommand("select DATEDIFF(DAY, GETDATE(), CONVERT(date,'" + data + "',104))", Program.SqlConnection);
+        Program.SqlConnection.Open();
+        razn = (int)command.ExecuteScalar();
+        Program.SqlConnection.Close();
+        return razn;
+    }
+
+}
+
+    <div class="container">
+        <h2>Список запланированных собеседований</h2>
+        <hr />
+        <ol class="breadcrumb mb-3">
+            <li class="breadcrumb-item">@Html.ActionLink("Заявки пользователей", "Index", "ZayavkaNaSobes")</li>
+            <li class="breadcrumb-item">@Html.ActionLink("Вопросы для заявок", "Index", "Questions")</li>
+        </ol>
+        <hr />
+        <h2>Запланированные</h2>
+        <input class="form-control" type="text" placeholder="Поиск по запланированным" style="margin-top: 15px;
+        margin-bottom: 15px
+    " id="search-text" onkeyup="tableSearch()">
+        <div style="overflow-x:auto;">
+            <table class="table" id="info-table">
+                <thead>
+                    <tr>
+                        <th>
+                            ФИО соискателя
+                        </th>
+                        <th>
+                            Дата проведения
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Kommnt)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        if (dat(item.Data_Sob) >= 0)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Sotrs.Full)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Data_Sob) @Html.DisplayFor(modelItem => item.Vremya_Sob)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Kommnt)
+                                </td>
+                                <td>
+                                    <a href="~/Obrabotkas/Edit/@item.ID_Obr">
+                                        <svg class="bi bi-pencil-square" width="2em" height="2em" style="color:orange" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z" />
+                                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-6a.5.5 0 00-1 0v6a.5.5 0 01-.5.5h-11a.5.5 0 01-.5-.5v-11a.5.5 0 01.5-.5H9a.5.5 0 000-1H2.5A1.5 1.5 0 001 2.5v11z" clip-rule="evenodd" />
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <hr />
+        <h2>Прошедшие</h2>
+        <input class="form-control" type="text" placeholder="Поиск по пройденным" style="margin-top: 15px;
+        margin-bottom: 15px
+    " id="search-text2" onkeyup="tableSearch2()">
+        <div style="overflow-x:auto;">
+            <table class="table" id="info-table2">
+                <thead>
+                    <tr>
+                        <th>
+                            ФИО соискателя
+                        </th>
+                        <th>
+                            Дата проведения
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Kommnt)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        if (dat(item.Data_Sob) < 0)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Sotrs.Full)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Data_Sob) @Html.DisplayFor(modelItem => item.Vremya_Sob)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Kommnt)
+                                </td>
+                                <td>
+                                    <a href="~/Obrabotkas/Edit/@item.ID_Obr">
+                                        <svg class="bi bi-pencil-square" width="2em" height="2em" style="color:orange" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z" />
+                                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-6a.5.5 0 00-1 0v6a.5.5 0 01-.5.5h-11a.5.5 0 01-.5-.5v-11a.5.5 0 01.5-.5H9a.5.5 0 000-1H2.5A1.5 1.5 0 001 2.5v11z" clip-rule="evenodd" />
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+<div id="modDialog" class="modal fade">
+    <div id="dialogContent" class="modal-dialog modal-lg"></div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(function () {
+            $.ajaxSetup({ cache: false });
+            $(".compItem").click(function (e) {
+
+                e.preventDefault();
+                $.get(this.href, function (data) {
+                    $('#dialogContent').html(data);
+                    $('#modDialog').modal('show');
+                });
+            });
+        })
+    </script>
+}
+<script>
+    function tableSearch() {
+        var phrase = document.getElementById('search-text');
+        var table = document.getElementById('info-table');
+        var regPhrase = new RegExp(phrase.value, 'i');
+        var flag = false;
+        for (var i = 1; i < table.rows.length; i++) {
+            flag = false;
+            for (var j = table.rows[i].cells.length - 1; j >= 0; j--) {
+                flag = regPhrase.test(table.rows[i].cells[j].innerHTML);
+                if (flag) break;
+            }
+            if (flag) {
+                table.rows[i].style.display = "";
+            } else {
+                table.rows[i].style.display = "none";
+            }
+
+        }
+    }
+    function tableSearch2() {
+        var phrase = document.getElementById('search-text2');
+        var table = document.getElementById('info-table2');
+        var regPhrase = new RegExp(phrase.value, 'i');
+        var flag = false;
+        for (var i = 1; i < table.rows.length; i++) {
+            flag = false;
+            for (var j = table.rows[i].cells.length - 1; j >= 0; j--) {
+                flag = regPhrase.test(table.rows[i].cells[j].innerHTML);
+                if (flag) break;
+            }
+            if (flag) {
+                table.rows[i].style.display = "";
+            } else {
+                table.rows[i].style.display = "none";
+            }
+
+        }
+    }
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.1.0/tablesort.min.js"></script>
+<script>
+    new Tablesort(document.getElementById('info-table'));
+    new Tablesort(document.getElementById('info-table2'));
+</script>
+<style>
+    th[role=columnheader]:not(.no-sort) {
+        cursor: pointer;
+    }
+
+        th[role=columnheader]:not(.no-sort):after {
+            content: '';
+            float: right;
+            margin-top: 7px;
+            border-width: 0 4px 4px;
+            border-style: solid;
+            border-color: #404040 transparent;
+            visibility: hidden;
+            opacity: 0;
+            -ms-user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+    th[aria-sort=ascending]:not(.no-sort):after {
+        border-bottom: none;
+        border-width: 4px 4px 0;
+    }
+
+    th[aria-sort]:not(.no-sort):after {
+        visibility: visible;
+        opacity: 0.4;
+    }
+
+    th[role=columnheader]:not(.no-sort):hover:after {
+        visibility: visible;
+        opacity: 1;
+    }
+</style>

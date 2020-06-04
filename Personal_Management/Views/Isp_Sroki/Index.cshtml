@@ -2,74 +2,181 @@
 
 @{
     ViewBag.Title = "Испытательные сроки";
-    ViewBag.NameMeta = "Isp";
-    ViewBag.ContentMeta = "На данном окне возможно просмотреть список испытательных сроков";
+    Session["perehod"] = "/Isp_Sroki/Index";
+    Session["pred"] = "/Isp_Sroki/Index";
 }
+    <div class="container">
+        <h2>Испытательные сроки</h2>
+        <hr />
+        <ol class="breadcrumb mb-3">
+            <li class="breadcrumb-item">@Html.ActionLink("Отделы организации", "Index", "Departments")</li>
+            <li class="breadcrumb-item"><a href="/Positions/Index/0">Должности</a></li>
+            <li class="breadcrumb-item">@Html.ActionLink("Штатный состав", "Index", "Posit_Responsibilities")</li>
+        </ol>
+        <hr />
+        <p>
+            <a style="color:green" href="~/Isp_Sroki/Create">
+                <svg class="bi bi-plus-circle" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M8 3.5a.5.5 0 01.5.5v4a.5.5 0 01-.5.5H4a.5.5 0 010-1h3.5V4a.5.5 0 01.5-.5z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M7.5 8a.5.5 0 01.5-.5h4a.5.5 0 010 1H8.5V12a.5.5 0 01-1 0V8z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z" clip-rule="evenodd" />
+                </svg>
+                Добавить испытательный срок
+            </a>
+        </p>
+        <input class="form-control" type="text" placeholder="Поиск по испытательным срокам" style="margin-top: 15px;
+        margin-bottom: 15px
+    " id="search-text" onkeyup="tableSearch()">
 
-<h2>Испытательные сроки</h2>
-<hr />
-<ol class="breadcrumb mb-3">
-    <li class="breadcrumb-item">@Html.ActionLink("Сотрудники", "Index", "Sotrs")</li>
-    <li class="breadcrumb-item"><a href="/Positions/Index/0">Просмотреть должности</a></li>
-</ol>
-<hr />
-<form method="get" class="form-inline mr-auto" style="margin: 0 auto; width:80%">
-    <input class="form-control" style="width:85%" type="text" value="@ViewBag.seo" placeholder="Поиск..." name="search" aria-label="Search">
-    <button class="btn bg-dark" type="submit"><i class="fas fa-search" aria-hidden="true"></i></button>
-</form>
-<hr />
-<p>
-    @Html.ActionLink("Добавить новый испытательный срок", "Create")
-</p>
-<hr />
+        <div style="overflow-x:auto;">
+            <table class="table" id="info-table">
+                <thead>
+                    <tr>
+                        <th>
+                            ФИО сотрудника
+                        </th>
+                        <th>
+                            Период
+                        </th>
+                        <th>
+                            Статус
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <a href="~/Sotrs/LichKab/@item.Posit_Responsibilities.Sotrs.ID_Sotr">@Html.DisplayFor(modelItem => item.Posit_Responsibilities.Sotrs.Full)</a> (@Html.DisplayFor(modelItem => item.Posit_Responsibilities.Positions.Naim_Posit))
+</td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Date_Start) - @Html.DisplayFor(modelItem => item.Date_Finish)
 
-<ul class="nav nav-tabs">
-    <li class="nav-item">
-        <a class="nav-link active" data-toggle="tab" href="#home">Все</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#menu1">В ожидании</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#menu2">Принятые</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#menu3">Отклоненные</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#menu4">В процессе</a>
-    </li>
-</ul>
-
-<div id="dataModel"></div>
-
+                            </td>
+                            @switch (item.Status_ID)
+                            {
+                                case (1):
+                                    <td style="color:#3CB371">
+                                        <b>@Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St)</b>
+                                    </td>
+                                    break;
+                                case 2:
+                                    <td style="color:#48D1CC">
+                                        <b>@Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St)</b>
+                                    </td>
+                                    break;
+                                case 3:
+                                    <td style="color:#FF8C00">
+                                        <b>@Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St) </b>
+                                    </td>
+                                    break;
+                                case 4:
+                                    <td style="color:#FF4500">
+                                        <b>@Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St) </b>
+                                    </td>
+                                    break;
+                            }
+                            <td>
+                                <a href="~/Isp_Sroki/Edit/@item.ID_Isp">
+                                    <svg class="bi bi-pencil-square" width="2em" height="2em" style="color:orange" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z" />
+                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-6a.5.5 0 00-1 0v6a.5.5 0 01-.5.5h-11a.5.5 0 01-.5-.5v-11a.5.5 0 01.5-.5H9a.5.5 0 000-1H2.5A1.5 1.5 0 001 2.5v11z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+                                <a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Isp_Sroki/Delete/@item.ID_Isp">
+                                    <svg class="bi bi-trash" width="2em" height="2em" viewBox="0 0 16 16" style="color:red" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z" />
+                                        <path fill-rule="evenodd" d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+<div id="modDialog" class="modal fade">
+    <div id="dialogContent" class="modal-dialog modal-lg"></div>
+</div>
 
 @section scripts
 {
-    <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
-    <script src="/signalr/hubs"></script>
-    <script>
+    <script type="text/javascript">
+
         $(function () {
-            var hubNotify = $.connection.employeesHub;
+            $.ajaxSetup({ cache: false });
+            $(".compItem").click(function (e) {
 
-            $.connection.hub.start().done(function () {
-                getAll();
+                e.preventDefault();
+                $.get(this.href, function (data) {
+                    $('#dialogContent').html(data);
+                    $('#modDialog').modal('show');
+                });
             });
-
-            hubNotify.client.refreshEmployeeData = function () {
-                getAll();
-            };
-        });
-
-        function getAll() {
-            var model = $('#dataModel');
-            $.ajax({
-                url: '/Isp_Sroki/GetEmployeeData',
-                contentType: 'application/html ; charset:utf-8',
-                type: 'GET',
-                dataType: 'html',
-                success: function (result) { model.empty().append(result); }
-            });
-        }
+        })
     </script>
 }
+<script>
+    function tableSearch() {
+        var phrase = document.getElementById('search-text');
+        var table = document.getElementById('info-table');
+        var regPhrase = new RegExp(phrase.value, 'i');
+        var flag = false;
+        for (var i = 1; i < table.rows.length; i++) {
+            flag = false;
+            for (var j = table.rows[i].cells.length - 1; j >= 0; j--) {
+                flag = regPhrase.test(table.rows[i].cells[j].innerHTML);
+                if (flag) break;
+            }
+            if (flag) {
+                table.rows[i].style.display = "";
+            } else {
+                table.rows[i].style.display = "none";
+            }
+
+        }
+    }
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.1.0/tablesort.min.js"></script>
+<script>
+    new Tablesort(document.getElementById('info-table'));
+</script>
+<style>
+    th[role=columnheader]:not(.no-sort) {
+        cursor: pointer;
+    }
+
+        th[role=columnheader]:not(.no-sort):after {
+            content: '';
+            float: right;
+            margin-top: 7px;
+            border-width: 0 4px 4px;
+            border-style: solid;
+            border-color: #404040 transparent;
+            visibility: hidden;
+            opacity: 0;
+            -ms-user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+    th[aria-sort=ascending]:not(.no-sort):after {
+        border-bottom: none;
+        border-width: 4px 4px 0;
+    }
+
+    th[aria-sort]:not(.no-sort):after {
+        visibility: visible;
+        opacity: 0.4;
+    }
+
+    th[role=columnheader]:not(.no-sort):hover:after {
+        visibility: visible;
+        opacity: 1;
+    }
+</style>

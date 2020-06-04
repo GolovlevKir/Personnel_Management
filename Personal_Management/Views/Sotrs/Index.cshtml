@@ -1,345 +1,77 @@
-﻿@model Personal_Management.Models.SotrsListViewModel
+﻿@model IEnumerable<Personal_Management.Models.Sotrs>
 
 @{
-    ViewBag.Title = "Сотрудники";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.NameMeta = "AddAcc";
-    ViewBag.ContentMeta = "На данном окне возможно просмотреть список сотрудников";
+    ViewBag.Title = "Список пользователей";
+    Session["perehod"] = "/Sotrs/Index";
+    Session["pred"] = "/Sotrs/Index";
 }
+
+    <div class="container">
+        <h2>Пользователи</h2>
+        <hr />
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"> @Html.ActionLink("Список прав доступа", "Index")</li>
+            <li class="breadcrumb-item"> @Html.ActionLink("Аккаунты", "Index", "Accounts")</li>
+        </ol>
+        <hr />
+        @*<p>
+            <a style="color:green" href="~/Sotrs/AddOrEdit">
+                <svg class="bi bi-plus-circle" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M8 3.5a.5.5 0 01.5.5v4a.5.5 0 01-.5.5H4a.5.5 0 010-1h3.5V4a.5.5 0 01.5-.5z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M7.5 8a.5.5 0 01.5-.5h4a.5.5 0 010 1H8.5V12a.5.5 0 01-1 0V8z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z" clip-rule="evenodd" />
+                </svg>
+                Добавить пользователя
+            </a>
+        </p>*@
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="home2-tab" data-toggle="tab" href="#home2" role="tab" aria-controls="home2" aria-selected="true">
+                    <svg class="bi bi-person-lines-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 100-6 3 3 0 000 6zm7 1.5a.5.5 0 01.5-.5h2a.5.5 0 010 1h-2a.5.5 0 01-.5-.5zm-2-3a.5.5 0 01.5-.5h4a.5.5 0 010 1h-4a.5.5 0 01-.5-.5zm0-3a.5.5 0 01.5-.5h4a.5.5 0 010 1h-4a.5.5 0 01-.5-.5zm2 9a.5.5 0 01.5-.5h2a.5.5 0 010 1h-2a.5.5 0 01-.5-.5z" clip-rule="evenodd" />
+                    </svg>
+                    Все пользователи
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">
+                    <svg class="bi bi-people-circle" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 008 15a6.987 6.987 0 005.468-2.63z" />
+                        <path fill-rule="evenodd" d="M8 9a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
+                        <path fill-rule="evenodd" d="M8 1a7 7 0 100 14A7 7 0 008 1zM0 8a8 8 0 1116 0A8 8 0 010 8z" clip-rule="evenodd" />
+                    </svg>
+                    Сотрудники
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">
+                    <svg class="bi bi-people-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 100-6 3 3 0 000 6zm-5.784 6A2.238 2.238 0 015 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 005 9c-4 0-5 3-5 4s1 1 1 1h4.216zM4.5 8a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" clip-rule="evenodd" />
+                    </svg>
+                    Гости
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home2" role="tabpanel" aria-labelledby="home2-tab">
+                @Html.Action("Vse")
+            </div>
+            <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+                @Html.Action("Sotr")
+            </div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                @Html.Action("Polz")
+            </div>
+        </div>
+
+    </div>
+<br>
+
+
 <div id="modDialog" class="modal fade">
     <div id="dialogContent" class="modal-dialog modal-lg"></div>
 </div>
-<h2>Сотрудники</h2>
-<hr />
-<ol class="breadcrumb">
-    @try
-    {
-        if ((int)Session["Kadri"] != 0)
-        {
-            <li class="breadcrumb-item">@Html.ActionLink("Посмотреть этапы принятия", "Index", "Steps")</li>
-        }
-    }
-    catch
-    { }
-
-    <li class="breadcrumb-item"> @Html.ActionLink("Данные ставок", "Index", "Rates")</li>
-    <li class="breadcrumb-item">@Html.ActionLink("Список рабочих графиков", "Index", "Work_Schedule")</li>
-</ol>
-
-<hr />
-
-<ul class="nav nav-tabs">
-    <li class="nav-item">
-        <a class="nav-link active" data-toggle="tab" href="#home"><i class="fa fa-th-large" aria-hidden="true"></i></a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#menu1"><i class="fa fa-bars" aria-hidden="true"></i></a>
-    </li>
-</ul>
-<div class="tab-content">
-    <div id="home" class="container tab-pane active">
-        <br>
-        <div class="container">
-            <form method="get">
-                <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="mb-3" style="margin: 0 auto; width: auto;"><h3>Фильтрация данных</h3></div>
-                    <div class="collapse navbar-collapse" id="navbarColor02">
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item" style="margin-right: 5px;">
-                                <label class="control-label">Должность: </label>
-                                @Html.DropDownList("pos", Model.Positions as SelectList,
-                                            htmlAttributes: new { @class = "form-control" })
-                            </li>
-                            <li class="nav-item" style="margin-right: 5px;">
-                                <label class="control-label">Ставка: </label>
-                                @Html.DropDownList("rate", Model.Rates as SelectList,
-                                            htmlAttributes: new { @class = "form-control", @style = "width:100%" })
-                            </li>
-                            <li class="nav-item" style="margin-right: 5px;">
-                                <label class="control-label" style="white-space:nowrap">График работы: </label>
-                                @Html.DropDownList("sche", Model.Work_Schedule as SelectList,
-                                            htmlAttributes: new { @class = "form-control" })
-                            </li>
-                            <li class="nav-item" style="margin-right: 5px;">
-                                <label class="control-label">Поиск: </label>
-                                <input type="text" name="search" value="@ViewBag.seo" class="form-control" />
-                            </li>
-                            <li class="nav-item" style="margin-right: 5px;">
-                                <label class="control-label text-success"> Применить </label>
-                                <input type="submit" value="Фильтр" class="form-control  btn-secondary" />
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-            </form>
-            <hr />
-            @try
-            {
-                if ((int)Session["Kadri"] != 0)
-                {
-                    @Html.ActionLink("Добавить нового сотрудника", "addnewrecord")
-                }
-            }
-            catch
-            {
-
-            }
-
-            <hr />
-
-
-
-            <div class="row">
-                @foreach (var item in Model.Sotrs)
-                {
-                    if (item.otkl == true)
-                    {
-                        <div class="card mb-3 col-md-offset-2" style="margin: 0 auto; width: 350px;background-color: #FFDAB9">
-                            <h4 class="card-header">@item.Full</h4>
-                            <div class="card-body">
-                                <h6 class="card-title">Должность</h6>
-                                <h7 class="card-subtitle text-muted ">@item.Positions.Naim_Posit</h7>
-                            </div>
-                            <img style="margin: 0 auto; height: 170px; width: 120px; display: block;" src="~/Content/Photo/st/@item.Photo" alt="Card image">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">Номер телефона: <a href="tel:@item.Num_Phone"> @item.Num_Phone</a></li>
-                                <li class="list-group-item">Эл. почта: @Html.DisplayFor(modelItem => item.Email)</li>
-                                <li class="list-group-item">Дата принятия: @Html.DisplayFor(modelItem => item.Date_of_adoption)</li>
-                                @if (item.rezume != "-")
-                                {
-                                    <li class="list-group-item"><a href="~/Content/Files/@item.rezume" download>Скачать резюме</a></li>
-                                }
-                                else
-                                {
-                                    <li class="list-group-item">Резюме отсутствует</li>
-                                }
-                            </ul>
-                            @try
-                            {
-                                if ((int)Session["Kadri"] != 0)
-                                {
-                                    <div class="card-footer text-center">
-                                        @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
-                                        @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
-                                        @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Sotr }, new { @class = "compItem" })
-
-                                    </div>
-                                }
-                                else
-                                {
-
-                                    <div class="card-footer text-center">
-                                        @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }, new { @class = "compItem" })
-                                    </div>
-                                }
-                            }
-                            catch { }
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="card mb-3 col-md-offset-2" style="margin: 0 auto; width: 350px;">
-                            <h4 class="card-header">@item.Full</h4>
-                            <div class="card-body">
-                                <h6 class="card-title">Должность</h6>
-                                <h7 class="card-subtitle text-muted ">@item.Positions.Naim_Posit</h7>
-                            </div>
-                            <img style="margin: 0 auto; height: 170px; width: 120px; display: block;" src="~/Content/Photo/st/@item.Photo" alt="Card image">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">Номер телефона: <a href="tel:@item.Num_Phone"> @item.Num_Phone</a></li>
-                                <li class="list-group-item">Эл. почта: @Html.DisplayFor(modelItem => item.Email)</li>
-                                <li class="list-group-item">Дата принятия: @Html.DisplayFor(modelItem => item.Date_of_adoption)</li>
-                                @if (item.rezume != "-")
-                                {
-                                    <li class="list-group-item"><a href="~/Content/Files/@item.rezume" download>Скачать резюме</a></li>
-                                }
-                                else
-                                {
-                                    <li class="list-group-item">Резюме отсутствует</li>
-                                }
-                            </ul>
-                            @try
-                            {
-                                if ((int)Session["Kadri"] != 0)
-                                {
-                                    <div class="card-footer text-center">
-                                        @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
-                                        @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
-                                        @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Sotr }, new { @class = "compItem" })
-
-                                    </div>
-                                }
-                                else
-                                {
-
-                                    <div class="card-footer text-center">
-                                        @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }, new { @class = "compItem" })
-                                    </div>
-                                }
-                            }
-                            catch { }
-                        </div>
-                    }
-                }
-            </div>
-        </div>
-    </div>
-
-    <div id="menu1" class="container tab-pane">
-        <br>
-        <form method="get">
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="mb-3" style="margin: 0 auto; width: auto;"><h3>Фильтрация данных</h3></div>
-                <div class="collapse navbar-collapse" id="navbarColor02">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item" style="margin-right: 5px;">
-                            <label class="control-label">Должность: </label>
-                            @Html.DropDownList("pos", Model.Positions as SelectList,
-                                        htmlAttributes: new { @class = "form-control" })
-                        </li>
-                        <li class="nav-item" style="margin-right: 5px;">
-                            <label class="control-label">Ставка: </label>
-                            @Html.DropDownList("rate", Model.Rates as SelectList,
-                                        htmlAttributes: new { @class = "form-control", @style = "width:100%" })
-                        </li>
-                        <li class="nav-item" style="margin-right: 5px;">
-                            <label class="control-label" style="white-space:nowrap">График работы: </label>
-                            @Html.DropDownList("sche", Model.Work_Schedule as SelectList,
-                                        htmlAttributes: new { @class = "form-control" })
-                        </li>
-                        <li class="nav-item" style="margin-right: 5px;">
-                            <label class="control-label">Поиск: </label>
-                            <input type="text" name="search" value="@ViewBag.seo" class="form-control" />
-                        </li>
-                        <li class="nav-item" style="margin-right: 5px;">
-                            <label class="control-label text-success"> Применить </label>
-                            <input type="submit" value="Фильтр" class="form-control  btn-secondary" />
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </form>
-        <hr />
-        @try
-        {
-            if ((int)Session["Kadri"] != 0)
-            {
-                @Html.ActionLink("Добавить нового сотрудника", "addnewrecord")
-            }
-        }
-        catch
-        {
-
-        }
-
-        <table class="table" style="table-layout:fixed;word-wrap:break-word;">
-            <tr>
-                <th>
-                    Должность
-                </th>
-                <th>
-                    ФИО
-                </th>
-                <th>
-                    Дата рождения
-                </th>
-                <th>
-                    Почтовый адрес
-                </th>
-                <th>
-                    Дата прихода
-                </th>
-                <th>
-                    Резюме
-                </th>
-                <th></th>
-            </tr>
-
-            @foreach (var item in Model.Sotrs)
-            {
-                if (item.otkl == true)
-                {
-                    <tr style="background-color: #FFDAB9">
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Positions.Naim_Posit)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Surname_Sot) @Html.DisplayFor(modelItem => item.Name_Sot) @Html.DisplayFor(modelItem => item.Petronumic_Sot)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Day_Of_Birth)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Email)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Date_of_adoption)
-                        </td>
-                        <td>
-                            @if (item.rezume != "-")
-                            {
-                                <a href="~/Content/Files/@item.rezume" download>Скачать резюме</a>
-                            }
-                            else
-                            {
-                                <p>Резюме отсутствует</p>
-                            }
-                        </td>
-                        <td>
-                            @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
-                            @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
-                            @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Sotr }, new { @class = "compItem" })
-                        </td>
-                    </tr>
-                }
-                else
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Positions.Naim_Posit)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Surname_Sot) @Html.DisplayFor(modelItem => item.Name_Sot) @Html.DisplayFor(modelItem => item.Petronumic_Sot)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Day_Of_Birth)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Email)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Date_of_adoption)
-                        </td>
-                        <td>
-                            @if (item.rezume != "-")
-                            {
-                                <a href="~/Content/Files/@item.rezume" download>Скачать резюме</a>
-                            }
-                            else
-                            {
-                                <p>Резюме отсутствует</p>
-                            }
-                        </td>
-                        <td>
-                            @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
-                            @Html.ActionLink("Подробности", "Details", new { id = item.ID_Sotr }, new { @class = "compItem" }) |
-                            @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Sotr }, new { @class = "compItem" })
-                        </td>
-                    </tr>
-                }
-            }
-
-        </table>
-    </div>
-</div>
-
-
 @section scripts
 {
     <script type="text/javascript">
@@ -357,3 +89,45 @@
         })
     </script>
 }
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.1.0/tablesort.min.js"></script>
+<script>
+    new Tablesort(document.getElementById('info-table3'));
+    new Tablesort(document.getElementById('info-table2'));
+    new Tablesort(document.getElementById('info-table'));
+</script>
+<style>
+    th[role=columnheader]:not(.no-sort) {
+        cursor: pointer;
+    }
+
+        th[role=columnheader]:not(.no-sort):after {
+            content: '';
+            float: right;
+            margin-top: 7px;
+            border-width: 0 4px 4px;
+            border-style: solid;
+            border-color: #404040 transparent;
+            visibility: hidden;
+            opacity: 0;
+            -ms-user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+    th[aria-sort=ascending]:not(.no-sort):after {
+        border-bottom: none;
+        border-width: 4px 4px 0;
+    }
+
+    th[aria-sort]:not(.no-sort):after {
+        visibility: visible;
+        opacity: 0.4;
+    }
+
+    th[role=columnheader]:not(.no-sort):hover:after {
+        visibility: visible;
+        opacity: 1;
+    }
+</style>

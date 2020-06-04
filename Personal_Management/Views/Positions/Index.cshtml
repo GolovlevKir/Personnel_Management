@@ -1,73 +1,213 @@
 ﻿@model IEnumerable<Personal_Management.Models.Positions>
 
 @{
-    ViewBag.Title = "Должности";
+    ViewBag.Title = "Должности организации";
     ViewBag.NameMeta = "Pos";
     ViewBag.ContentMeta = "На данном окне возможно просмотреть список должностей компании";
+    Session["perehod"] = "/Positions/Index";
 }
-
-<h2>Должности</h2>
-<hr />
-<ol class="breadcrumb mb-3">
-    <li class="breadcrumb-item">@Html.ActionLink("Отделы", "Index", "Departments")</li>
-    <li class="breadcrumb-item">@Html.ActionLink("Сотрудники", "Index", "Sotrs")</li>
-</ol>
-<hr />
-<p>
-    @Html.ActionLink("Добавить", "Create")
-</p>
-<table class="table">
-    <tr>
-        @if (Personal_Management.Controllers.PositionsController.idpos == 0)
-        {
-            <th>
-                @Html.DisplayNameFor(model => model.Departments.Naim_Depart)
-            </th>
-        }
-        <th>
-            @Html.DisplayNameFor(model => model.Naim_Posit)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            @if (Personal_Management.Controllers.PositionsController.idpos == 0)
+    <div class="container">
+        <h2>Должности</h2>
+        <hr />
+        <ol class="breadcrumb mb-3">
+            <li class="breadcrumb-item">@Html.ActionLink("Отделы", "Index", "Departments")</li>
+            <li class="breadcrumb-item">@Html.ActionLink("Штатный состав", "Index", "Posit_Responsibilities")</li>
+            <li class="breadcrumb-item"><a href="/Positions/OtchVak"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Отчет по вакантным метам</a></li>
+        </ol>
+        <hr />
+        <p>
+            <a style="color:green" title="" href="~/Positions/Create">
+                <svg class="bi bi-plus-circle" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M8 3.5a.5.5 0 01.5.5v4a.5.5 0 01-.5.5H4a.5.5 0 010-1h3.5V4a.5.5 0 01.5-.5z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M7.5 8a.5.5 0 01.5-.5h4a.5.5 0 010 1H8.5V12a.5.5 0 01-1 0V8z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z" clip-rule="evenodd" />
+                </svg>
+                Добавить должность
+            </a>
+        </p>
+        <input class="form-control" type="text" placeholder="Поиск по должностям" style="margin-top: 15px;
+        margin-bottom: 15px
+    " id="search-text" onkeyup="tableSearch()">
+        <div style="overflow-x:auto;">
+            <table class="table" id="info-table">
+                <thead>
+                    <tr>
+                        @if (Personal_Management.Controllers.PositionsController.idpos == 0)
+                        {
+                            <th>
+                                @Html.DisplayNameFor(model => model.Departments.Naim_Depart)
+                            </th>
+                        }
+                        <th>
+                            @Html.DisplayNameFor(model => model.Naim_Posit)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        if (item.Logical_Delete == false)
+                        {
+                            <tr>
+                                @if (Personal_Management.Controllers.PositionsController.idpos == 0)
+                                {
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Departments.Naim_Depart)
+                                    </td>
+                                }
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Naim_Posit)
+                                </td>
+                                <td>
+                                    <a href="~/Positions/Edit/@item.ID_Positions">
+                                        <svg class="bi bi-pencil-square" width="2em" height="2em" style="color:orange" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z" />
+                                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-6a.5.5 0 00-1 0v6a.5.5 0 01-.5.5h-11a.5.5 0 01-.5-.5v-11a.5.5 0 01.5-.5H9a.5.5 0 000-1H2.5A1.5 1.5 0 001 2.5v11z" clip-rule="evenodd" />
+                                        </svg>
+                                    </a>
+                                    <a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Positions/DeleteLogic/@item.ID_Positions">
+                                        <svg class="bi bi-trash" width="2em" height="2em" viewBox="0 0 16 16" style="color:red" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z" />
+                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" clip-rule="evenodd" />
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            @if (Session["Manip_Roles"] != null && (bool)Session["Manip_Roles"] == true)
             {
-                <td>
-                    @Html.DisplayFor(modelItem => item.Departments.Naim_Depart)
-                </td>
+                <h3>Удаленные</h3>
+                <table class="table">
+                    <tr>
+                        @if (Personal_Management.Controllers.PositionsController.idpos == 0)
+                        {
+                            <th>
+                                @Html.DisplayNameFor(model => model.Departments.Naim_Depart)
+                            </th>
+                        }
+                        <th>
+                            @Html.DisplayNameFor(model => model.Naim_Posit)
+                        </th>
+                        <th></th>
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                        if (item.Logical_Delete == true)
+                        {
+                            <tr>
+                                @if (Personal_Management.Controllers.PositionsController.idpos == 0)
+                                {
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Departments.Naim_Depart)
+                                    </td>
+                                }
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Naim_Posit)
+                                </td>
+                                <td>
+                                    <a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Positions/VozvLogic/@item.ID_Positions">
+                                        <svg class="bi bi-folder-symlink-fill" style="color:dodgerblue" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M13.81 3H9.828a2 2 0 01-1.414-.586l-.828-.828A2 2 0 006.172 1H2.5a2 2 0 00-2 2l.04.87a1.99 1.99 0 00-.342 1.311l.637 7A2 2 0 002.826 14h10.348a2 2 0 001.991-1.819l.637-7A2 2 0 0013.81 3zM2.19 3c-.24 0-.47.042-.684.12L1.5 2.98a1 1 0 011-.98h3.672a1 1 0 01.707.293L7.586 3H2.19zm9.608 5.271l-3.182 1.97c-.27.166-.616-.036-.616-.372V9.1s-2.571-.3-4 2.4c.571-4.8 3.143-4.8 4-4.8v-.769c0-.336.346-.538.616-.371l3.182 1.969c.27.166.27.576 0 .742z" clip-rule="evenodd" />
+                                        </svg>
+                                    </a>
+                                    <a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Positions/Delete/@item.ID_Positions">
+                                        <svg class="bi bi-trash" width="2em" height="2em" viewBox="0 0 16 16" style="color:red" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z" />
+                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" clip-rule="evenodd" />
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                </table>
             }
-            <td>
-                @Html.DisplayFor(modelItem => item.Naim_Posit)
-            </td>
-            <td>
-                @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Positions }) |
-                @Html.ActionLink("Детали", "Details", new { id = item.ID_Positions }) |
-                @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Positions }, new { @class = "compItem" })
-            </td>
-        </tr>
-    }
 
-</table>
-<div id="modDialog" class="modal fade">
-    <div id="dialogContent" class="modal-dialog modal-lg"></div>
-</div>
-@section scripts
+            <div id="modDialog" class="modal fade">
+                <div id="dialogContent" class="modal-dialog modal-lg"></div>
+            </div>
+        </div>
+    </div>
+        @section scripts
 {
-    <script type="text/javascript">
+            <script type="text/javascript">
 
-        $(function () {
-            $.ajaxSetup({ cache: false });
-            $(".compItem").click(function (e) {
+                $(function () {
+                    $.ajaxSetup({ cache: false });
+                    $(".compItem").click(function (e) {
 
-                e.preventDefault();
-                $.get(this.href, function (data) {
-                    $('#dialogContent').html(data);
-                    $('#modDialog').modal('show');
-                });
-            });
-        })
-    </script>
-}
+                        e.preventDefault();
+                        $.get(this.href, function (data) {
+                            $('#dialogContent').html(data);
+                            $('#modDialog').modal('show');
+                        });
+                    });
+                })
+            </script>
+        }
+        <script>
+            function tableSearch() {
+                var phrase = document.getElementById('search-text');
+                var table = document.getElementById('info-table');
+                var regPhrase = new RegExp(phrase.value, 'i');
+                var flag = false;
+                for (var i = 1; i < table.rows.length; i++) {
+                    flag = false;
+                    for (var j = table.rows[i].cells.length - 1; j >= 0; j--) {
+                        flag = regPhrase.test(table.rows[i].cells[j].innerHTML);
+                        if (flag) break;
+                    }
+                    if (flag) {
+                        table.rows[i].style.display = "";
+                    } else {
+                        table.rows[i].style.display = "none";
+                    }
+
+                }
+            }
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.1.0/tablesort.min.js"></script>
+        <script>
+            new Tablesort(document.getElementById('info-table'));
+        </script>
+        <style>
+            th[role=columnheader]:not(.no-sort) {
+                cursor: pointer;
+            }
+
+                th[role=columnheader]:not(.no-sort):after {
+                    content: '';
+                    float: right;
+                    margin-top: 7px;
+                    border-width: 0 4px 4px;
+                    border-style: solid;
+                    border-color: #404040 transparent;
+                    visibility: hidden;
+                    opacity: 0;
+                    -ms-user-select: none;
+                    -webkit-user-select: none;
+                    -moz-user-select: none;
+                    user-select: none;
+                }
+
+            th[aria-sort=ascending]:not(.no-sort):after {
+                border-bottom: none;
+                border-width: 4px 4px 0;
+            }
+
+            th[aria-sort]:not(.no-sort):after {
+                visibility: visible;
+                opacity: 0.4;
+            }
+
+            th[role=columnheader]:not(.no-sort):hover:after {
+                visibility: visible;
+                opacity: 1;
+            }
+        </style>

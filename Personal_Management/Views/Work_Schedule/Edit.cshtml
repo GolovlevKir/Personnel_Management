@@ -1,46 +1,98 @@
 ﻿@model Personal_Management.Models.Work_Schedule
 
 @{
-    ViewBag.Title = "Изменение данных рабочего графика";
-    ViewBag.NameMeta = "UpdChe";
-    ViewBag.ContentMeta = "На данном окне возможно изменение данных рабочего графика";
+    ViewBag.Title = "Изменение времени работы";
 }
+<div class="container">
+    <h2>Изменение времени работы сотрудника</h2>
 
-<h2>Изменение данных</h2>
-<hr />
-<ol class="breadcrumb">
-    <li class="breadcrumb-item">@Html.ActionLink("Вернуться к списку графиков работы", "Index")</li>
-    <li class="breadcrumb-item">@Html.ActionLink("Список сотрудников", "Index", "Sotrs")</li>
-</ol>
-<hr />
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+<div class="form-horizontal">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.ID_Schedule)
+    @Html.HiddenFor(model => model.Day_ID)
+    @Html.HiddenFor(model => model.Sotr_ID)
 
-    <div class="form-horizontal">
-        <h4>Рабочий график</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.ID_Schedule)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Naim_Sche, htmlAttributes: new { @class = "control-label col-md-5" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Naim_Sche, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Naim_Sche, "", new { @class = "text-danger" })
-            </div>
-        </div>
+    <div class="form-group">
+        <p class="col-md-10">День недели: @Model.DaysOfWeek.Naim_Day</p>
+    </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Сохранить данные" class="btn btn-outline-success" />
-            </div>
+    <div class="form-group">
+        <p class="col-md-10">ФИО сотрудника: @Model.Sotrs.Full</p>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Vremya_Start, htmlAttributes: new { @class = "control-label col-md-10" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Vremya_Start, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Vremya_Start, "", new { @class = "text-danger" })
         </div>
     </div>
-}
 
+    <div class="form-group">
+        @Html.LabelFor(model => model.Vremya_End, htmlAttributes: new { @class = "control-label col-md-10" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Vremya_End, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Vremya_End, "", new { @class = "text-danger" })
+        </div>
+    </div>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+    <div class="form-group">
+        @Html.LabelFor(model => model.Break_time, htmlAttributes: new { @class = "control-label col-md-10" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Break_time, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Break_time, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Break_Start, htmlAttributes: new { @class = "control-label col-md-10" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Break_Start, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Break_Start, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Break_End, htmlAttributes: new { @class = "control-label col-md-10" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Break_End, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Break_End, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Vih, htmlAttributes: new { @class = "control-label col-md-10" })
+        <div class="col-md-10">
+            @Html.CheckBoxFor(model => model.Vih)
+            @Html.ValidationMessageFor(model => model.Vih, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Сохранить изменения" class="btn btn-outline-success" />
+        </div>
+    </div>
+</div>
+    }
+</div>
+
+<script src="~/Scripts/jquery.maskedinput.min.js"></script>
+<script>
+    jQuery(function ($) {
+        $.mask.definitions['~'] = '[+-]';
+        $('#date').mask('99.99.9999');
+        $('#time').mask('99:99');
+        $('#time2').mask('99:99');
+        $('#time4').mask('99:99');
+        $('#time3').mask('99:99');
+        $('#phone').mask('+7(999)999-99-99');
+        $('#phone1').mask('+7(999)999-99-99');
+    });
+</script>

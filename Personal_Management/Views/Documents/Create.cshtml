@@ -5,40 +5,62 @@
     ViewBag.NameMeta = "AddDoc";
     ViewBag.ContentMeta = "На данном окне возможно добавление новых документов для сбора";
 }
+    <div class="container">
+        <h2>Добавление записи</h2>
+        <hr />
+        <ol class="breadcrumb mb-3" style="display:flex">
+            <li class="breadcrumb-item">@Html.ActionLink("Вернуться к списку документов", "Index")</li>
+            <li class="breadcrumb-item">@Html.ActionLink("Cбор документов", "Index", "Sbor_Docum")</li>
+        </ol>
+        <hr />
 
-<h2>Добавление записи</h2>
-<hr />
-<ol class="breadcrumb mb-3">
-    <li class="breadcrumb-item">@Html.ActionLink("Вернуться к списку документов", "Index")</li>
-    <li class="breadcrumb-item">@Html.ActionLink("Cбор документов", "Index","Sbor_Docum")</li>
-</ol>
-<hr />
-
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
         <h4>Документы</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.Doc_Naim, htmlAttributes: new { @class = "control-label col-md-5" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Doc_Naim, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Doc_Naim, "", new { @class = "text-danger" })
-                <p class="text-danger">@ViewBag.m</p>
-            </div>
-        </div>
+            @Html.LabelFor(model => model.Doc_Naim, htmlAttributes: new { @class = "control-label col-md-9" })
+            <div id="booksBlock">
+                <div class="bookItem" id="bookItem" name="bookItem">
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Добавить запись" class="btn btn-outline-success" />
+                    <div class="col-md-10">
+                        <h5>Документ №1</h5>
+                        <input type="text" name="Doc[0]" id="Doc" class="form-control" />
+                    </div>
+                </div>
             </div>
         </div>
+        <div class="col-md-10">
+            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group mr-2" role="group" aria-label="First group">
+                    <p><a class="addLink btn btn-outline-secondary">Добавить новый элемент</a></p>
+                </div>
+                <div class="btn-group mr-2" role="group" aria-label="Second group">
+                    <input type="submit" value="Добавить запись" style="height:38px" class="btn btn-outline-success" />
+                </div>
+            </div>
+        </div>
+        </div>
+        }
     </div>
-}
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+        @section Scripts {
+            <script>
+                $(function () {
+                    var i = 0;
+                    $('.addLink').click(function () {
+                        i++;
+                        var html2Add = "<br/><div class='bookItem' id='bookItem' name='bookItem'>" +
+                            
+                            "<div class='col-md-10'>" +
+                            "<h5>Документ №" + (i + 1) + "</h5>" +
+                            "<input type='text' name='Doc[" + (i) + "]' id = 'Doc' class='form-control'/>" +
+                            "</div></div>";
+                        $('#booksBlock').append(html2Add);
+                    })
+                })
+            </script>
+        }

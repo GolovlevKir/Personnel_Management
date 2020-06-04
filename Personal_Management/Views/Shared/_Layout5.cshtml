@@ -1,0 +1,237 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="@ViewBag.NameMeta" content="@ViewBag.ContentMeta">
+    <meta name="yandex-verification" content="f23e027a6cefd8c9" />
+    <meta name="google-site-verification" content="lFxRzrVPLrPmmzKY1pD2h4RBxIuDvyGufYBvSxdsPok" />
+
+    <title>@ViewBag.Title</title>
+    @if (@Session["style"] == null)
+    {
+        <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" id="style" />
+    }
+    else
+    {
+        <link href="~/Content/@Session["style"].ToString()" rel="stylesheet" />
+    }
+    <script type="text/javascript">
+        var date = new Date(); // Получаем текущие дату и время
+        var h = date.getHours(); // Получаем текущий час
+        if (h < 8 || h > 20) {
+            document.getElementById("style").href = "/Content/bootstrap.min.css";
+        } // Если сейчас ночь, то меняем файл стилей
+        else document.getElementById("style").href = "/Content/bootstrap2.min.css";
+    </script>
+    <link href="~/Content/Photo/fav.ico" rel="icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    @Scripts.Render("~/bundles/modernizr")
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="~/Scripts/jquery.maskedinput.min.js"></script>
+    <script>
+        jQuery(function ($) {
+            $.mask.definitions['~'] = '[+-]';
+            $('#date').mask('99.99.9999');
+            $('#date2').mask('99.99.9999');
+            $('#phone').mask('+7(999)999-99-99');
+            $('#phone1').mask('+7(999)999-99-99');
+        });
+
+    </script>
+    <style>
+        #gmap_canvas img {
+            max-width: none !important;
+            background: none !important
+        }
+    </style>
+    <style>
+
+        #top_nav {
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+    </style>
+    <script>
+        var h_hght = 0; // высота шапки
+        var h_mrg = 0;    // отступ когда шапка уже не видна
+
+        $(function () {
+
+            var elem = $('#top_nav');
+            var top = $(this).scrollTop();
+
+            if (top > h_hght) {
+                elem.css('top', h_mrg);
+            }
+
+            $(window).scroll(function () {
+                top = $(this).scrollTop();
+
+                if (top + h_mrg < h_hght) {
+                    elem.css('top', (h_hght - top));
+                } else {
+                    elem.css('top', h_mrg);
+                }
+            });
+
+        });
+    </script>
+    <link href="~/Content/StyleSite2.css" rel="stylesheet" />
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <nav id="top_nav" class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div id="logo" class="pull-left">
+            <a href="#intro"><img src="~/Content/Photo/60.png" style="width: 200px; height:auto;" alt="" title="" /></a>
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+
+            <form class="form-inline my-2 my-lg-0">
+                <ul class="navbar-nav" style="width:100%">
+
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Index","Home")" style="white-space: nowrap;"><i class="fa fa-home" style="margin-right: 5px;font-size:20px"></i>Домашняя страница</a>
+                    </li>
+                    @try
+                    {
+                        if ((int)Session["admin"] != 0 || (int)Session["Buh"] != 0 || (int)Session["Kadri"] != 0 || (int)Session["Otdeli"] != 0)
+                        {
+                            <li class="nav-item dropdown ">
+                                <a style="white-space: nowrap;" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-friends" style="margin-right: 5px;font-size:20px"></i>Данные сотрудников</a>
+                                <div class="dropdown-menu dropdown-menu-right " style="width:100%">
+                                    @if ((int)Session["Otdeli"] != 0)
+                                    {
+                                        @Html.ActionLink("Отделы организации", "Index", "Departments", null, new { @class = "dropdown-item nav-item" })
+                                        <a class="dropdown-item" href="/Positions/Index/0">Должности</a>
+                                        <div class="dropdown-divider"></div>
+                                    }
+                                    @if ((int)Session["Otdeli"] != 0)
+                                    {
+                                        @Html.ActionLink("Документы для сдачи", "Index", "Documents", null, new { @class = "dropdown-item" })
+                                        @Html.ActionLink("Сбор документов", "Index", "Sbor_Docum", null, new { @class = "dropdown-item" })
+                                        <div class="dropdown-divider"></div>
+                                    }
+                                    @if ((int)Session["admin"] != 0 || (int)Session["Buh"] != 0 || (int)Session["Kadri"] != 0 || (int)Session["Otdeli"] != 0)
+                                    {
+                                        @Html.ActionLink("Графики работы", "Index", "Work_Schedule", null, new { @class = "dropdown-item" })
+                                        <div class="dropdown-divider"></div>
+                                    }
+                                    @if ((int)Session["Otdeli"] != 0)
+                                    {
+                                        <a class="dropdown-item" href="@Url.Action("Index", "Isp_Sroki")">Испытательные сроки <span class="badge badge-success badge-pill">@Program.colIsp</span></a>
+                                        <div class="dropdown-divider"></div>
+                                    }
+                                    @if ((int)Session["admin"] != 0 || (int)Session["Buh"] != 0 || (int)Session["Kadri"] != 0 || (int)Session["Otdeli"] != 0)
+                                    {
+                                        @Html.ActionLink("Данные сотрудников", "Index", "Sotrs", null, new { @class = "dropdown-item" })
+                                        @Html.ActionLink("Паспортные данные", "Index", "Pass_Dannie", null, new { @class = "dropdown-item" })
+                                    }
+
+                                </div>
+                            </li>
+                        }
+                        if ((int)Session["Buh"] != 0)
+                        {
+                            <li class="nav-item dropdown">
+                                <a style="white-space: nowrap;" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-dollar-sign" style="margin-right: 5px;font-size:20px"></i>Бухгалтерский отдел</a>
+                                <div class="dropdown-menu dropdown-menu-right " style="width:100%">
+                                    @Html.ActionLink("Имеющиеся ставки", "Index", "Rates", null, new { @class = "dropdown-item" })
+                                </div>
+                            </li>
+                        }
+                        if ((int)Session["admin"] != 0)
+                        {
+                            <li class="nav-item dropdown">
+                                <a style="white-space: nowrap;" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-shield-alt" style="margin-right: 5px;font-size:20px"></i>Наcтройка прав доступа</a>
+                                <div class="dropdown-menu dropdown-menu-right " style="width:100%">
+                                    @Html.ActionLink("Права доступа", "Index", "Roles", null, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Аккаунты", "Index", "Accounts", null, new { @class = "dropdown-item" })
+                                </div>
+                            </li>
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+                    <li class="nav-item">
+                        @if (@Session["style"] == null)
+                        {
+                            <a style="white-space: nowrap;" class="nav-link" href="@Url.Action("Them", "Account")">Сменить тему</a>
+                        }
+                        else
+                        {
+                            if (@Session["style"].ToString() == "bootstrap.min.css")
+                            {
+                                <a style="white-space: nowrap;" class="nav-link" href="@Url.Action("Them", "Account")"><i class="fas fa-bed" style="margin-right: 5px;font-size:20px"></i>Ночной режим</a>
+                            }
+                            else
+                            {
+                                <a style="white-space: nowrap;" class="nav-link" href="@Url.Action("Them", "Account")"><i class="fas fa-sun" style="margin-right: 5px;font-size:20px"></i>Обычный режим</a>
+                            }
+                        }
+                    </li>
+                    <li class="nav-item">
+                        <a style="white-space: nowrap;" class="nav-link" href="@Url.Action("LogOut", "Account")"><i class="fas fa-sign-in-alt" style="margin-right: 5px;font-size:20px"></i>Выйти</a>
+                    </li>
+                </ul>
+            </form>
+
+        </div>
+    </nav>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <div class="container body-content ">
+        <br />
+        @RenderBody()
+    </div>
+    <br />
+    <br />
+    <br />
+    <br />
+    <footer id="footer" class="bg-primary">
+        <div class="footer-top ">
+            <div class="container">
+                <div class="row">
+                    <div class="col-6 col-lg-4 footer-info">
+                        <h3 style="color:white">IT Liga</h3>
+                        <p style="color:white">Служба технической поддержки. Разработка и поддержка информационных систем.</p>
+                        <br><br>
+                    </div>
+                    <div class="col-12 col-lg-4 footer-contact">
+                        <h4 style="color:white">Наши контакты</h4>
+                        <p style="color:white">
+                            127254 г. Москва, <br>
+                            пр. Огородный, 9ас1<br>
+                            <strong style="color:white">Телефон:</strong><a href="tel:+74953692434"> +7 (495) 369-24-34</a><br>
+                            <strong style="color:white">Email:</strong><a href="mailto:info@itliga.ru"> info@itliga.ru</a><br>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="credits" style="color:white">
+                    @DateTime.Now.Year <strong>IT Liga</strong> Все права защищены<br>
+                    <a href="~/Content/Photo.zip" download>Скачать</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    @RenderSection("JavaScript", required: false)
+
+</body>
+</html>

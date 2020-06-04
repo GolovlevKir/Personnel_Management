@@ -13,7 +13,7 @@
     </div>
     <div class="modal-body">
         <div class="dl-horizontal">
-            <p class="text-muted">Вы действительно хотите удалить график работы: @Model.Naim_Sche? Все сотрудники с данным видом работы пропадут!</p>
+            <p class="text-muted">Вы действительно хотите удалить день @Model.DaysOfWeek.Naim_Day из графика работы сотрудника: @Model.Sotrs.Full?</p>
             @using (Html.BeginForm())
             {
                 @Html.AntiForgeryToken()
@@ -25,4 +25,3 @@
         </div>
     </div>
 </div>
-

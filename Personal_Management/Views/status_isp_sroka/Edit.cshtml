@@ -1,0 +1,52 @@
+﻿@model Personal_Management.Models.status_isp_sroka
+
+@{
+    Layout = null;
+}
+
+<div class="modal-content" style="width:100%">
+    <div class="modal-header">
+        <h3>Изменение записи</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="dl-horizontal">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"> @Html.ActionLink("Испытательные сроки", "Index", "Isp_Sroki")</li>
+            </ol>
+            <hr />
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    <h4>Наименование статуса испытательного срока</h4>
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.ID_St)
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name_St, htmlAttributes: new { @class = "control-label col-md-10" })
+                        <div class="col-md-12">
+                            @Html.EditorFor(model => model.Name_St, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Name_St, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Сохранить" class="btn btn-outline-success" />
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

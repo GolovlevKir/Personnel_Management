@@ -2,26 +2,27 @@
 
 @{
     ViewBag.Title = "Добавление прав доступа";
-    ViewBag.NameMeta = "AddRole";
-    ViewBag.ContentMeta = "На данном окне возможно добавление новых прав доступа";
 }
 
-<h2>Добавление новых прав доступа</h2>
-<ol class="breadcrumb">
-    <li class="breadcrumb-item">@Html.ActionLink("Перейти к списку ролей", "Index")</li>
-    <li class="breadcrumb-item"> @Html.ActionLink("Аккаунты", "Index", "Accounts")</li>
-</ol>
 
-@using (Html.BeginForm()) 
-{
-    @Html.AntiForgeryToken()
-    
+    <div class="container" style="display:block">
+        <h2>Добавление прав доступа</h2>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
     <div class="form-horizontal">
-        <h4>Роли</h4>
+        <h4>Данные прав доступа</h4>
+        <hr />
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"> @Html.ActionLink("Список прав доступа", "Index")</li>
+            <li class="breadcrumb-item"> @Html.ActionLink("Аккаунты", "Index", "Accounts")</li>
+            <li class="breadcrumb-item">@Html.ActionLink("Пользователи", "Index", "Sotrs")</li>
+        </ol>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.Role_Naim, htmlAttributes: new { @class = "control-label col-md-5" })
+            @Html.LabelFor(model => model.Role_Naim, htmlAttributes: new { @class = "control-label col-md-10" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Role_Naim, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Role_Naim, "", new { @class = "text-danger" })
@@ -29,46 +30,60 @@
         </div>
 
         <div class="form-group">
+            @Html.LabelFor(model => model.Manip_Roles, htmlAttributes: new { @class = "control-label col-md-10" })
             <div class="col-md-10">
-                @Html.CheckBoxFor(model => model.Manip_Roles, new { @class = "col-md-2 ", @type = "checkbox", @style = "width: 20px; height: 20px;" })
-                @Html.LabelFor(model => model.Manip_Roles, htmlAttributes: new { @class = "control-label col-md-5" })
-                @Html.ValidationMessageFor(model => model.Manip_Roles, "", new { @class = "text-danger" })
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.Manip_Roles)
+                    @Html.ValidationMessageFor(model => model.Manip_Roles, "", new { @class = "text-danger" })
+                </div>
             </div>
         </div>
 
-            <div class="form-group">
-                <div class="col-md-10">
-                    @Html.CheckBoxFor(model => model.Manip_Sotrs, new { @class = "col-md-2", @type = "checkbox", @style="width: 20px; height: 20px;" })
-                    @Html.LabelFor(model => model.Manip_Sotrs, htmlAttributes: new { @class = "control-label col-md-5" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Manip_Sotrs, htmlAttributes: new { @class = "control-label col-md-10" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.Manip_Sotrs)
                     @Html.ValidationMessageFor(model => model.Manip_Sotrs, "", new { @class = "text-danger" })
                 </div>
             </div>
+        </div>
 
-            <div class="form-group">
-                <div class="col-md-10">
-                    @Html.CheckBoxFor(model => model.Manip_Department, new { @class = "col-md-2", @type = "checkbox", @style = "width: 20px; height: 20px;" })
-                    @Html.LabelFor(model => model.Manip_Department, htmlAttributes: new { @class = "control-label col-md-5" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Manip_Department, htmlAttributes: new { @class = "control-label col-md-10" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.Manip_Department)
                     @Html.ValidationMessageFor(model => model.Manip_Department, "", new { @class = "text-danger" })
                 </div>
             </div>
+        </div>
 
-            <div class="form-group">
-                <div class="col-md-10">
-                    @Html.CheckBoxFor(model => model.Buh_Ych, new { @class = "col-md-2", @type = "checkbox", @style = "width: 20px; height: 20px;" })
-                    @Html.LabelFor(model => model.Buh_Ych, htmlAttributes: new { @class = "control-label col-md-5" })
-                    @Html.ValidationMessageFor(model => model.Buh_Ych, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Добавить" class="btn btn-outline-success" />
+        <div class="form-group">
+            @Html.LabelFor(model => model.Manip_Tests, htmlAttributes: new { @class = "control-label col-md-10" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.Manip_Tests)
+                    @Html.ValidationMessageFor(model => model.Manip_Tests, "", new { @class = "text-danger" })
                 </div>
             </div>
         </div>
-}
 
+        <div class="form-group">
+            @Html.LabelFor(model => model.Logical_Delete, htmlAttributes: new { @class = "control-label col-md-10" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.Logical_Delete)
+                    @Html.ValidationMessageFor(model => model.Logical_Delete, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Добавить права" class="btn btn-outline-success" />
+            </div>
+        </div>
+    </div>
+        }
+    </div>

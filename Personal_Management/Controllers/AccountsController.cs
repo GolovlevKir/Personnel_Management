@@ -1,188 +1,149 @@
 ﻿using Personal_Management.Models;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace Personal_Management.Controllers
 {
+    [Authorize]
     public class AccountsController : Controller
     {
         private PersonalContext db = new PersonalContext();
 
-        // GET: Accounts
-        [Authorize]
-        public ActionResult Index(string search)
+        public async Task<ActionResult> Index()
         {
-            //Проверка на испытательные сроки
-            Program.update();
-            //Связь с сотрудниками и ролями
-            var accounts = db.Accounts.Include(a => a.Roles).Include(a => a.Sotrs);
-            ViewBag.seo = search;
-            //Поиск
-            if (search != null && search != "")
+            if ((bool)Session["Manip_Roles"] == true && Session["Manip_Roles"] != null)
             {
-                accounts = accounts.Where(s => (s.Login.Contains(search)) || (s.Sotrs.Surname_Sot.Contains(search)) || (s.Sotrs.Name_Sot.Contains(search)) || (s.Sotrs.Petronumic_Sot.Contains(search)) || (s.Sotrs.Positions.Naim_Posit.Contains(search)));
-            }
-            return View(accounts.ToList());
-        }
-
-        // GET: Accounts/Create
-        [Authorize]
-        public ActionResult Create()
-        {
-            int selectedIndex = 0;
-            //Получаем наименования ролей
-            ViewBag.Role_ID = new SelectList(db.Roles, "ID_Role", "Role_Naim");
-            //Создаем лист должностей
-            List<Positions> pos = db.Positions.ToList();
-            //Добавляем все
-            pos.Insert(0, new Positions { ID_Positions = 0, Naim_Posit = "Все" });
-            //Создаем список должностей
-            ViewBag.Positions = new SelectList(pos, "ID_Positions", "Naim_Posit", selectedIndex);
-            if (selectedIndex > 0)
-            {
-                ViewBag.Sotr_ID = new SelectList(db.Sotrs.Where(p => p.Positions_ID == selectedIndex), "ID_Sotr", "Full");
+                //Получение аккаунтов (Незаблокированных)
+                var accounts = db.Accounts.Include(a => a.Roles).Where(a => a.Block == false);
+                return View(await accounts.ToListAsync());
             }
             else
             {
-                ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full");
+                return Redirect("/Error/NotRight");
             }
-            return View();
+
         }
 
-        public ActionResult GetItems(int id)
+        public ActionResult Index2()
         {
-            //Получаем список сотрудников
-            if (id > 0)
+            if ((bool)Session["Manip_Roles"] == true && Session["Manip_Roles"] != null)
             {
-                return PartialView(db.Sotrs.Where(c => c.Positions_ID == id).ToList());
+                //Получение аккаунтов (Заблокированных)
+                var accounts = db.Accounts.Include(a => a.Roles).Where(a => a.Block == true);
+                return View(accounts.ToList());
             }
             else
             {
-                return PartialView(db.Sotrs);
+                return Redirect("/Error/NotRight");
             }
-
         }
 
-        // POST: Accounts/Create
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
+        // Изменение данных аккаунта
+        public async Task<ActionResult> Edit(string id)
+        {
+            if ((bool)Session["Manip_Roles"] == true && Session["Manip_Roles"] != null)
+            {
+                //Если первичный ключ не указан
+                if (id == null)
+                {
+                    //Неверный запрос (Ошибка 400)
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                //Получение данных аккаунта по первичному ключу
+                Accounts accounts = await db.Accounts.FindAsync(id);
+                //Если пользователи не найдены
+                if (accounts == null)
+                {
+                    return HttpNotFound();
+                }
+                //Список прав доступа
+                ViewBag.Role_ID = new SelectList(db.Roles, "ID_Role", "Role_Naim", accounts.Role_ID);
+                return View(accounts);
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Login,Password,Role_ID,Sotr_ID,Password2")] Accounts accounts)
+        public async Task<ActionResult> Edit([Bind(Include = "Login,Password,Password_Shifr,Role_ID,Block,Logical_Delete")] Accounts accounts)
         {
-            SqlCommand command = new SqlCommand("", Program.SqlConnection);
-            command.CommandText = "Select count(*) from Accounts where Login = '" + accounts.Login + "'";
-            Program.SqlConnection.Open();
-            int co = (int)command.ExecuteScalar();
-            Program.SqlConnection.Close();
-            if (co == 0)
+            if ((bool)Session["Manip_Roles"] == true && Session["Manip_Roles"] != null)
             {
-                if (accounts.Password == accounts.Password2)
+                //Если валидация прошла
+                if (ModelState.IsValid)
                 {
-                    if (ModelState.IsValid)
-                    {
-                        //Создаем новый аккаунт
-                        accounts.Password = Program.Hash(accounts.Password2);
-                        db.Accounts.Add(accounts);
-                        db.SaveChanges();
-                        return RedirectToAction("Index");
-
-                    }
+                    //Зафиксировать изменения
+                    db.Entry(accounts).State = EntityState.Modified;
+                    //Сохранить данные
+                    await db.SaveChangesAsync();
+                    //Показать страницу со всеми данными
+                    return RedirectToAction("Index");
                 }
-                else
-                {
-                    ViewBag.p = "Введенные пароли не совпадают";
-                }
+                //Список прав доступа
+                ViewBag.Role_ID = new SelectList(db.Roles, "ID_Role", "Role_Naim", accounts.Role_ID);
+                //Вернуть данные для корректировки
+                return View(accounts);
             }
             else
             {
-                ViewBag.m = "Пользователь с таким логином уже существует!";
+                return Redirect("/Error/NotRight");
             }
-
-            ViewBag.Role_ID = new SelectList(db.Roles, "ID_Role", "Role_Naim", accounts.Role_ID);
-            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Surname_Sot", accounts.Sotr_ID);
-            List<Positions> pos = db.Positions.ToList();
-            //Добавляем все
-            pos.Insert(0, new Positions { ID_Positions = 0, Naim_Posit = "Все" });
-            ViewBag.Positions = new SelectList(pos, "ID_Positions", "Naim_Posit", 0);
-            return View(accounts);
         }
 
-        // GET: Accounts/Edit/5
-        [Authorize]
-        public ActionResult Edit(string id)
+        public async Task<ActionResult> Delete(string id )
         {
-            if (id == null)
+            if ((bool)Session["Manip_Roles"] == true && Session["Manip_Roles"] != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                //Ели первичный ключ пуст
+                if (id == null)
+                {
+                    //Вывод ошибки 400
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                //Поиск аккаунта по логину 
+                Accounts accounts = await db.Accounts.FindAsync(id);
+                if (accounts == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(accounts);
             }
-            Accounts accounts = db.Accounts.Find(id);
-            if (accounts == null)
+            else
             {
-                return HttpNotFound();
+                return Redirect("/Error/NotRight");
             }
-            //Получем список ролей и сотрудников
-            ViewBag.Role_ID = new SelectList(db.Roles, "ID_Role", "Role_Naim", accounts.Role_ID);
-            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full", accounts.Sotr_ID);
-            return View(accounts);
         }
 
-        // POST: Accounts/Edit/5
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(Accounts accounts)
-        {
-            if (ModelState.IsValid)
-            {
 
-                accounts.Password = Program.Hash(accounts.Password2);
-                db.Entry(accounts).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.Role_ID = new SelectList(db.Roles, "ID_Role", "Role_Naim", accounts.Role_ID);
-            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full", accounts.Sotr_ID);
-            return View(accounts);
-        }
-
-        // GET: Accounts/Delete/5
-        [Authorize]
-        public ActionResult Delete(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Accounts accounts = db.Accounts.Find(id);
-            if (accounts == null)
-            {
-                return HttpNotFound();
-            }
-            return View(accounts);
-        }
-
-        // POST: Accounts/Delete/5
-        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
+        public async Task<ActionResult> DeleteConfirmed(string id)
         {
-            //Удаление данных
-            Accounts accounts = db.Accounts.Find(id);
-            db.Accounts.Remove(accounts);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            if ((bool)Session["Manip_Roles"] == true && Session["Manip_Roles"] != null)
+            {
+                //Поиск аккаунта по логину
+                Accounts accounts = await db.Accounts.FindAsync(id);
+                //Удаление данных
+                db.Accounts.Remove(accounts);
+                //Сохранение данных
+                await db.SaveChangesAsync();
+                //Переадресация
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
         }
 
+        //Служит для очистки
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -191,5 +152,98 @@ namespace Personal_Management.Controllers
             }
             base.Dispose(disposing);
         }
+
+        public async Task<ActionResult> BlockAcc(string id)
+        {
+            if ((bool)Session["Manip_Roles"] == true && Session["Manip_Roles"] != null)
+            {
+                if (id == null)
+                {
+                    //Неверный запрос
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                //Поиск аккаунта по логину
+                Accounts dep = await db.Accounts.FindAsync(id);
+                if (dep == null)
+                {
+                    //Страница не найдена
+                    return HttpNotFound();
+                }
+                return View(dep);
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
+        }
+
+
+        [HttpPost, ActionName("BlockAcc")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> BlockAcco(string id)
+        {
+            if ((bool)Session["Manip_Roles"] == true && Session["Manip_Roles"] != null)
+            {
+                Accounts pos = await db.Accounts.FindAsync(id);
+                //Значение блокировки
+                pos.Block = true;
+                //Изменение данных аккаунта
+                db.Entry(pos).State = EntityState.Modified;
+                //Сохранение
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
+        }
+
+        public async Task<ActionResult> UnlockAcc(string id)
+        {
+            if ((bool)Session["Manip_Roles"] == true && Session["Manip_Roles"] != null)
+            {
+                if (id == null)
+                {
+                    //Неверный запрос
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                //Поиск по логину
+                Accounts dep = await db.Accounts.FindAsync(id);
+                if (dep == null)
+                {
+                    //404 ошибка
+                    return HttpNotFound();
+                }
+                return View(dep);
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
+        }
+
+
+        [HttpPost, ActionName("UnlockAcc")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UnlockAcco(string id)
+        {
+            if ((bool)Session["Manip_Roles"] == true && Session["Manip_Roles"] != null)
+            {
+                Accounts pos = await db.Accounts.FindAsync(id);
+                //Разблокировака аккаунта
+                pos.Block = false;
+                //Изменение
+                db.Entry(pos).State = EntityState.Modified;
+                //Сохранение
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
+        }
+
     }
 }

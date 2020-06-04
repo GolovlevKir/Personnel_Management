@@ -1,113 +1,187 @@
-﻿using System.Data.Entity;
-using System.Linq;
+﻿using Personal_Management.Models;
+using System.Data.Entity;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using Personal_Management.Models;
 
 namespace Personal_Management.Controllers
 {
+    [Authorize]
     public class RolesController : Controller
     {
         private PersonalContext db = new PersonalContext();
 
-        // GET: Roles
-        [Authorize]
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            //Проверка на испытательные сроки
-            Program.update();
-            return View(db.Roles.ToList());
+            if ((bool)Session["Manip_Roles"] == true && Session["Manip_Roles"] != null)
+            {
+                //полчение списка прав доступа
+                return View(await db.Roles.ToListAsync());
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
         }
 
-        // GET: Roles/Create
-        [Authorize]
+
+        public async Task<ActionResult> Details(int? id)
+        {
+            if ((bool)Session["Manip_Roles"] == true && Session["Manip_Roles"] != null)
+            {
+                if (id == null)
+                {
+                    //400 ошибка
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                //получение по ключу
+                Roles roles = await db.Roles.FindAsync(id);
+                if (roles == null)
+                {
+                    //404 ошибка
+                    return HttpNotFound();
+                }
+                return View(roles);
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
+        }
+
+
         public ActionResult Create()
         {
-            return View();
+            if ((bool)Session["Manip_Roles"] == true && Session["Manip_Roles"] != null)
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
         }
 
-        // POST: Roles/Create
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID_Role,Role_Naim,Manip_Roles,Manip_Sotrs,Manip_Department,Buh_Ych")] Roles roles)
+        public async Task<ActionResult> Create([Bind(Include = "ID_Role,Role_Naim,Manip_Roles,Manip_Sotrs,Manip_Department,Buh_Ych,Logical_Delete")] Roles roles)
         {
-            if (ModelState.IsValid)
+            if ((bool)Session["Manip_Roles"] == true && Session["Manip_Roles"] != null)
             {
-                //Добавление прав доступа
-                db.Roles.Add(roles);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+                //если валидация пройдена успешно
+                if (ModelState.IsValid)
+                {
+                    //Добавление данных
+                    db.Roles.Add(roles);
+                    //Сохранение
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
 
-            return View(roles);
+                return View(roles);
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
         }
 
-        // GET: Roles/Edit/5
-        [Authorize]
-        public ActionResult Edit(int? id)
+
+        public async Task<ActionResult> Edit(int? id)
         {
-            if (id == null)
+            if ((bool)Session["Manip_Roles"] == true && Session["Manip_Roles"] != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    //400 ошибка
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                //Поиск по ключу
+                Roles roles = await db.Roles.FindAsync(id);
+                if (roles == null)
+                {
+                    //404 ошибка
+                    return HttpNotFound();
+                }
+                return View(roles);
             }
-            Roles roles = db.Roles.Find(id);
-            if (roles == null)
+            else
             {
-                return HttpNotFound();
+                return Redirect("/Error/NotRight");
             }
-            return View(roles);
         }
 
-        // POST: Roles/Edit/5
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID_Role,Role_Naim,Manip_Roles,Manip_Sotrs,Manip_Department,Buh_Ych")] Roles roles)
+        public async Task<ActionResult> Edit([Bind(Include = "ID_Role,Role_Naim,Manip_Roles,Manip_Sotrs,Manip_Department,Manip_Tests,Logical_Delete")] Roles roles)
         {
-            if (ModelState.IsValid)
+            if ((bool)Session["Manip_Roles"] == true && Session["Manip_Roles"] != null)
             {
-                //Изменение данных
-                db.Entry(roles).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                //если валидация пройдена успешно
+                if (ModelState.IsValid)
+                {
+                    //Изменение данных
+                    db.Entry(roles).State = EntityState.Modified;
+                    //сохранение
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+                return View(roles);
             }
-            return View(roles);
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
         }
 
-        // GET: Roles/Delete/5
-        [Authorize]
-        public ActionResult Delete(int? id)
+
+        public async Task<ActionResult> Delete(int? id)
         {
-            if (id == null)
+            if ((bool)Session["Manip_Roles"] == true && Session["Manip_Roles"] != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    //400 ошибка
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                //поиск по ключу
+                Roles roles = await db.Roles.FindAsync(id);
+                if (roles == null)
+                {
+                    //404 ошибка
+                    return HttpNotFound();
+                }
+                return View(roles);
             }
-            Roles roles = db.Roles.Find(id);
-            if (roles == null)
+            else
             {
-                return HttpNotFound();
+                return Redirect("/Error/NotRight");
             }
-            return View(roles);
         }
 
-        // POST: Roles/Delete/5
-        [Authorize]
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            //Удаление данных
-            Roles roles = db.Roles.Find(id);
-            db.Roles.Remove(roles);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            if ((bool)Session["Manip_Roles"] == true && Session["Manip_Roles"] != null)
+            {
+                Roles roles = await db.Roles.FindAsync(id);
+                //Удаление строки
+                db.Roles.Remove(roles);
+                //Сохранение
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
         }
 
+        //Очистка мусора
         protected override void Dispose(bool disposing)
         {
             if (disposing)

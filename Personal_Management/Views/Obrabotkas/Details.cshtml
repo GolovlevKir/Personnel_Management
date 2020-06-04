@@ -1,0 +1,58 @@
+﻿@model Personal_Management.Models.Obrabotka
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Obrabotka</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Sotrs.Surname_Sot)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sotrs.Surname_Sot)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Data_Sob)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Data_Sob)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Vremya_Sob)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Vremya_Sob)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Kommnt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Kommnt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.reshenie)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.reshenie)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID_Obr }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

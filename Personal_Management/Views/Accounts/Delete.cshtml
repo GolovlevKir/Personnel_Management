@@ -3,7 +3,7 @@
 @{
     Layout = null;
 }
-
+<!-- Модальное окно для удаления -->
 <div class="modal-content" style="width:100%">
     <div class="modal-header">
         <h3>Удаление записи</h3>
@@ -13,7 +13,7 @@
     </div>
     <div class="modal-body">
         <div class="dl-horizontal">
-            <p class="text-muted">Вы действительно хотите удалить аккаунт: @Model.Login?</p>
+            <p class="text-muted">Вы действительно хотите удалить аккаунт с логином: @Model.Login?</p>
             @using (Html.BeginForm())
             {
                 @Html.AntiForgeryToken()
@@ -25,4 +25,3 @@
         </div>
     </div>
 </div>
-

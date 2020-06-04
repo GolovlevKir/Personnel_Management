@@ -1,122 +1,82 @@
 ﻿@model Personal_Management.Models.Isp_Sroki
 
 @{
-    Layout = null;
+    ViewBag.Title = "Изменение испытательного срока";
 }
 
-<div class="modal-content" style="width:100%">
-    <div class="modal-header">
-        <h3>Изменение записи</h3>
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    </div>
-    <div class="modal-body">
-        <div class="dl-horizontal">
-            <ol class="breadcrumb mb-3">
-                <li class="breadcrumb-item">@Html.ActionLink("Вернуться к списку испытательных сроков", "Index")</li>
-                <li class="breadcrumb-item">@Html.ActionLink("Сотрудники", "Index", "Sotrs")</li>
-                <li class="breadcrumb-item"><a href="/Positions/Index/0">Просмотреть должности</a></li>
-            </ol>
-            <hr />
+    <div class="container">
+        <h2>Изменение испытательного срока</h2>
 
-            @using (Html.BeginForm())
-            {
-                @Html.AntiForgeryToken()
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
 
-                <div class="form-horizontal">
-                    <h4>Испытательные сроки</h4>
-                    <hr />
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    @Html.HiddenFor(model => model.ID_Isp)
+            <div class="form-horizontal">
+                <h4>Данные испытательного срока</h4>
+                <hr />
+                <ol class="breadcrumb mb-3">
+                    <li class="breadcrumb-item">@Html.ActionLink("Список испытательных сроков", "Index")</li>
+                    <li class="breadcrumb-item">@Html.ActionLink("Отделы организации", "Index", "Departments")</li>
+                    <li class="breadcrumb-item"><a href="/Positions/Index/0">Должности</a></li>
+                    <li class="breadcrumb-item">@Html.ActionLink("Штатный состав", "Index", "Posit_Responsibilities")</li>
+                </ol>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.ID_Isp)
+                @Html.HiddenFor(model => model.Pos_Res_ID)
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Sotrs.Positions_ID, "Выберите должность", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-12">
-                            @Html.DropDownList("Positions", ViewBag.Positions as SelectList, new { id = "pos", @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.Sotr_ID, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Sotr_ID, "ФИО Сотрудника", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-12">
-                            @Html.DropDownList("Sotr_ID", null, new { @class = "form-control", id = "Sotr_ID" })
-                            @Html.ValidationMessageFor(model => model.Sotr_ID, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
+                <p class="control-label col-md-10"><b>Сотрудник:</b> @Model.Posit_Responsibilities.Sotrs.Full (@Model.Posit_Responsibilities.Positions.Naim_Posit)</p>
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Date_Start, htmlAttributes: new { @class = "control-label col-md-5" })
-                        <div class="col-md-12">
-                            @Html.EditorFor(model => model.Date_Start, new { htmlAttributes = new { @class = "form-control ", @id = "date" } })
-                            @Html.ValidationMessageFor(model => model.Date_Start, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Date_Finish, htmlAttributes: new { @class = "control-label col-md-5" })
-                        <div class="col-md-12">
-                            @Html.EditorFor(model => model.Date_Finish, new { htmlAttributes = new { @class = "form-control", @id = "date2" } })
-                            @Html.ValidationMessageFor(model => model.Date_Finish, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Status_ID, "Статус прохождения", htmlAttributes: new { @class = "control-label col-md-5" })
-                        <div class="col-md-12">
-                            @Html.DropDownList("Status_ID", null, htmlAttributes: new { @class = "form-control custom-select" })
-                            @Html.ValidationMessageFor(model => model.Status_ID, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-12">
-                            <input type="submit" value="Сохранить изменения" class="btn btn-outline-success" />
-                        </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Date_Start, htmlAttributes: new { @class = "control-label col-md-10" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.Date_Start, new { htmlAttributes = new { @class = "form-control", @id = "date" } })
+                        @Html.ValidationMessageFor(model => model.Date_Start, "", new { @class = "text-danger" })
                     </div>
                 </div>
-            }
-        </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Date_Finish, htmlAttributes: new { @class = "control-label col-md-10" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.Date_Finish, new { htmlAttributes = new { @class = "form-control", @id = "date2" } })
+                        @Html.ValidationMessageFor(model => model.Date_Finish, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Status_ID, "Статус", htmlAttributes: new { @class = "control-label col-md-10" })
+                    <div class="col-md-12">
+                        @Html.DropDownList("Status_ID", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Status_ID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.itog, htmlAttributes: new { @class = "control-label col-md-10" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.itog, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.itog, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Сохранить данные" class="btn btn-outline-success" />
+                    </div>
+                </div>
+            </div>
+        }
     </div>
-</div>
-
-@section scripts{
-    @Scripts.Render("~/bundles/jqueryval")
-    <script src="https://code.jquery.com/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="~/Scripts/jquery.maskedinput.min.js"></script>
-    <script>
-        jQuery(function ($) {
-            $.mask.definitions['~'] = '[+-]';
-            $('#date').mask('99.99.9999');
-            $('#date2').mask('99.99.9999');
-            $('#phone').mask('+7(999)999-99-99');
-            $('#phone1').mask('+7(999)999-99-99');
-        });
-
-    </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
-    @RenderSection("JavaScript", required: false)
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script type="text/javascript">
-    $(function () {
-
-        $('#pos').change(function()
-        {
-            // получаем выбранный id
-            var id = $(this).val();
-            $.ajax({
-                type: 'GET',
-                url: '@Url.Action("GetItems")/' + id,
-                success: function (data) {
-                    // заменяем содержимое присланным частичным представлением
-                    $('#Sotr_ID').replaceWith(data);
-                }
-            });
-        });
-    })
-    </script>
-}
+<script src="~/Scripts/jquery.maskedinput.min.js"></script>
+<script>
+    jQuery(function ($) {
+        $.mask.definitions['~'] = '[+-]';
+        $('#date').mask('99.99.9999');
+        $('#date2').mask('99.99.9999');
+        $('#phone').mask('+7(999)999-99-99');
+        $('#phone1').mask('+7(999)999-99-99');
+    });
+</script>

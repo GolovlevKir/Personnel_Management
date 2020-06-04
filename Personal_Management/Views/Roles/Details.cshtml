@@ -1,0 +1,66 @@
+﻿@model Personal_Management.Models.Roles
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Roles</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Role_Naim)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Role_Naim)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Manip_Roles)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Manip_Roles)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Manip_Sotrs)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Manip_Sotrs)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Manip_Department)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Manip_Department)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Manip_Tests)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Manip_Tests)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Logical_Delete)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Logical_Delete)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID_Role }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

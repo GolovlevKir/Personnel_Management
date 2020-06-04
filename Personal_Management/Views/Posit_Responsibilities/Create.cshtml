@@ -1,0 +1,59 @@
+﻿@model Personal_Management.Models.Posit_Responsibilities
+
+@{
+    ViewBag.Title = "Добавление штатного сотрудника";
+}
+
+    <div class="container">
+        <h2>Добавление штатного сотрудника</h2>
+        <ol class="breadcrumb mb-3">
+            <li class="breadcrumb-item">@Html.ActionLink("Вернуться к списку штатного состава", "Index")</li>
+        </ol>
+        <hr />
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Данные штатного сотрудника</h4>
+        <hr />
+        <ol class="breadcrumb mb-3">
+            <li class="breadcrumb-item">@Html.ActionLink("Штатный состав", "Index")</li>
+            <li class="breadcrumb-item">@Html.ActionLink("Отделы организации", "Index", "Departments")</li>
+            <li class="breadcrumb-item"><a href="/Positions/Index/0">Должности</a></li>
+        </ol>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Sotr_ID, "ФИО сотрудника", htmlAttributes: new { @class = "control-label col-md-9" })
+            <div class="col-md-12">
+                @Html.DropDownList("Sotr_ID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Sotr_ID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Positions_ID, "Должность", htmlAttributes: new { @class = "control-label col-md-9" })
+            <div class="col-md-12">
+                @Html.DropDownList("Positions_ID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Positions_ID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Rates_ID, "Трудовая ставка", htmlAttributes: new { @class = "control-label col-md-9" })
+            <div class="col-md-12">
+                @Html.DropDownList("Rates_ID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Rates_ID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Добавить сотрудника" class="btn btn-outline-success" />
+            </div>
+        </div>
+    </div>
+        }
+    </div>

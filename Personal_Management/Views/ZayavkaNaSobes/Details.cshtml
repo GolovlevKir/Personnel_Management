@@ -1,0 +1,42 @@
+﻿@model Personal_Management.Models.ZayavkaNaSobes
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Заявка №@Model.nomerzay</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            ФИО соискателя
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Questions.Quest_Naim)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Sotrs.Surname_Sot)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sotrs.Surname_Sot)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.otvet)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.otvet)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID_Zay }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

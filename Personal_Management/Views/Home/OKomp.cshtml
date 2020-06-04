@@ -1,0 +1,240 @@
+﻿@{
+    ViewBag.Title = "Данные о компании";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+    if (Session["style"] is null)
+    {
+        Session["style"] = "bootstrap_min.css";
+    }
+    if (Session["Guest"] != null && (bool)Session["Guest"] == false)
+    {
+        ViewBag.Vis = false;
+    }
+    else
+    {
+        ViewBag.Vis = true;
+    }
+}
+<link href="~/Content/progressStyle.css" rel="stylesheet" />
+<div class="container">
+
+    <h1 style="text-align:center">О компании</h1>
+    <hr />
+    <h2 style="margin-bottom:25px">CMS сегодня:</h2>
+    <ul>
+        <li>6 региональных представительств</li>
+        <li>производственные площадки в 6 городах РФ</li>
+        <li>более 135 городов присутствия</li>
+        <li>более 1 000 офисных сотрудников и технического персонала</li>
+        <li>более 110 единиц малотоннажного и среднетоннажного автотранспорта</li>
+    </ul>
+    <hr />
+    <h2 style="margin-bottom:25px">Наши заслуги</h2>
+    <div class="row">
+        <div class="card border-primary mb-3" style="max-width: 25rem;margin-right: 25px;">
+            <div class="card-header">Наружная реклама</div>
+            <div class="card-body">
+                <img src="~/Content/Zaslygi/sm3_1.jpg" style="width:100%" />
+                <p class="card-text">Производство наружной рекламы.</p>
+            </div>
+        </div>
+        <div class="card border-primary mb-3" style="max-width: 25rem;margin-right: 25px;">
+            <div class="card-header">Специальные мероприятия</div>
+            <div class="card-body">
+                <img src="~/Content/Zaslygi/sm4_1.jpg" style="width:100%" />
+                <p class="card-text">Техническое обеспечение специальных мероприятий.</p>
+            </div>
+        </div>
+        <div class="card border-primary mb-3" style="max-width: 25rem;margin-right: 25px;">
+            <div class="card-header">Дизайн и проектирование</div>
+            <div class="card-body">
+                <img src="~/Content/Zaslygi/sm7_1.jpg" style="width:100%" />
+                <p class="card-text">3D дизайн, проектирование, технический дизайн.</p>
+            </div>
+        </div>
+        <div class="card border-primary mb-3" style="max-width: 25rem;margin-right: 25px;">
+            <div class="card-header">Логистика</div>
+            <div class="card-body">
+                <img src="~/Content/Zaslygi/sm8_1.jpg" style="width:100%" />
+                <p class="card-text">Логистика.</p>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <h2>Статистика</h2>
+    <br />
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div id="chartContainer" style="height: 370px; width: 70%; margin: 0 auto; background-color: transparent"></div>
+            </div>
+            <div class="col">
+                <div id="chartContainer2" style="height: 370px; width: 100%;"></div>
+            </div>
+        </div>
+    </div>
+
+    @if (ViewBag.Vis == true)
+    {
+        <div style="width: 100%; margin-top:30px">
+            <div style="padding: 10px 10px 10px 10px">
+                <h3>Присоединяйся к нам</h3>
+                <a class="btn-info btn " href="~/ZayavkaNaSobes/Create" style="width:100%;">Подать заявку</a>
+            </div>
+
+        </div>
+    }
+
+    <hr />
+    <h2 style="margin-bottom:25px">Наши Клиенты / Партнеры</h2>
+    <div class="row">
+        <div class="card border-primary mb-3" style="max-width: 15rem;margin-right: 10px;">
+            <div class="card-body">
+                <img src="~/Content/Zaslygi/pyt.png" style="width:100%" />
+            </div>
+        </div>
+        <div class="card border-primary mb-3" style="max-width: 15rem;margin-right: 10px;">
+            <div class="card-body">
+                <img src="~/Content/Zaslygi/cym.png" style="width:100%" />
+            </div>
+        </div>
+        <div class="card border-primary mb-3" style="max-width: 15rem;margin-right: 10px;">
+            <div class="card-body">
+                <img src="~/Content/Zaslygi/acer.jpg" style="width:100%" />
+            </div>
+        </div>
+        <div class="card border-primary mb-3" style="max-width: 15rem;margin-right: 10px;">
+            <div class="card-body">
+                <img src="~/Content/Zaslygi/tom.jpg" style="width:100%" />
+            </div>
+        </div>
+        <div class="card border-primary mb-3" style="max-width: 15rem;margin-right: 10px;">
+            <div class="card-body">
+                <img src="~/Content/Zaslygi/st.png" style="width:100%" />
+            </div>
+        </div>
+        <div class="card border-primary mb-3" style="max-width: 15rem;margin-right: 10px;">
+            <div class="card-body">
+                <img src="~/Content/Zaslygi/rd.jpg" style="width:100%" />
+            </div>
+        </div>
+    </div>
+    <hr />
+    <h2 style="margin-bottom:25px">Приезжайте</h2>
+    <div class="row">
+        <div class="col-sm">
+            <h3>ЛИЧНЫМ ТРАНСПОРТОМ</h3>
+            <p>Со стороны Бережковской набережной подъезжайте к стр. 19. В этом здании находится бюро пропусков, где необходимо получить документы для въезда на территорию.</p>
+            <p>Для оформления пропуска потребуются СТС и водительское удостоверение.</p>
+        </div>
+        <div class="col-sm">
+            <h3>ОБЩЕСТВЕННЫМ ТРАНСПОРТОМ</h3>
+            <p>Езжайте от ст. метро Киевская на любом автобусе, следующем по направлению к Бережковской набережной (кроме 902), до остановки "ТЭЦ №12".</p>
+            <p>Далее идите по ходу движения до первого перекрестка, поверните направо и пройдите прямо до стр. 19. В этом здании находится бюро пропусков, где необходимо получить документы для входа на территорию.</p>
+            <p>Для оформления пропуска потребуется паспорт.</p>
+        </div>
+
+    </div>
+    <br />
+
+</div>
+<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2246.5095369027536!2d37.5483917!3d55.7322753!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54becb3df5aaf%3A0x596a0263c461aeae!2z0JHQtdGA0LXQttC60L7QstGB0LrQsNGPINC90LDQsS4sIDIwINGB0YLRgNC-0LXQvdC40LUgNiwg0JzQvtGB0LrQstCwLCAxMjEwNTk!5e0!3m2!1sru!2sru!4v1589355222080!5m2!1sru!2sru" frameborder="0" style="border:0; width:100%; height:500px" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+
+
+
+@if (Session["style"].ToString() != "bootstrapdark.min.css" || Session["style"] is null)
+{
+    <script>
+window.onload = function () {
+
+    var chart = new CanvasJS.Chart("chartContainer", {
+
+	animationEnabled: true,
+	title: {
+		text: "Процент текучести кадров"
+	},
+	data: [{
+		type: "doughnut",
+		startAngle: 60,
+		indexLabelFontSize: 14,
+		indexLabel: "{label} - {y}%",
+		toolTipContent: "<b>{label}:</b> {y}%",
+		dataPoints: @Html.Raw(ViewBag.DataPoints)
+	}]
+
+});
+    chart.render();
+    var chart2 = new CanvasJS.Chart("chartContainer2", {
+        theme: "light1",
+	animationEnabled: true,
+	title: {
+
+		text: "Вакантные места"
+	},
+
+	axisY: {
+		title: "Количество мест",
+		gridThickness: 0
+	},
+	data: [{
+        type: "bar",
+        indexLabelFontSize: 14,
+		indexLabel: "{y}",
+		dataPoints: @Html.Raw(ViewBag.DataPoints2)
+	}]
+});
+chart2.render();
+
+}
+    </script>
+
+
+}
+else
+{
+    <script>
+window.onload = function () {
+
+    var chart = new CanvasJS.Chart("chartContainer", {
+        theme: "dark1",
+        backgroundColor: "#222",
+	animationEnabled: true,
+	title: {
+		text: "Процент текучести кадров"
+	},
+	data: [{
+		type: "doughnut",
+		startAngle: 60,
+		indexLabelFontSize: 16,
+		indexLabel: "{label} - {y}%",
+		toolTipContent: "<b>{label}:</b> {y}%",
+		dataPoints: @Html.Raw(ViewBag.DataPoints)
+	}]
+
+});
+    chart.render();
+    var chart2 = new CanvasJS.Chart("chartContainer2", {
+        theme: "dark1",
+        backgroundColor: "#222",
+	animationEnabled: true,
+	title: {
+		text: "Вакантные места"
+	},
+
+	axisY: {
+		title: "Количество мест",
+		gridThickness: 0
+	},
+	data: [{
+		type: "bar",
+		indexLabel: "{y}",
+		dataPoints: @Html.Raw(ViewBag.DataPoints2)
+	}]
+});
+chart2.render();
+
+}
+    </script>
+}
+
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+

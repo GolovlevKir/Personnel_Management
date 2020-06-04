@@ -1,42 +1,55 @@
 ﻿@model Personal_Management.Models.LoginModel
 
 @{
-    Layout="~/Views/Shared/_LayoutAuth.cshtml";
     ViewBag.Title = "Авторизация";
-    ViewBag.NameMeta = "Auth";
-    ViewBag.ContentMeta = "Данное окно представляет собой авторизацию на сайте";
 }
 
-
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal" style="margin: 0 auto; width: 60%;">
         <h2>Авторизация</h2>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <!-- Поле для логина -->
         <div class="form-group">
-            @Html.LabelFor(model => model.Login, htmlAttributes: new { @class = "control-label col-md-4" })
+            @Html.LabelFor(model => model.Login, htmlAttributes: new { @class = "control-label col-md-10" })
             <div class="col-md-12">
-                @Html.EditorFor(model => model.Login, new { htmlAttributes = new { @class = "form-control", @placeholder="Логин" } })
+                @Html.EditorFor(model => model.Login, new { htmlAttributes = new { @class = "form-control", @placeholder = "Логин" } })
                 @Html.ValidationMessageFor(model => model.Login, "", new { @class = "text-danger" })
             </div>
         </div>
-
+        <!-- Поле для пароля -->
         <div class="form-group">
-            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-4" })
+            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-10" })
             <div class="col-md-12">
-                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @type="password", @placeholder="Пароль..." } })
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @type = "password", @placeholder = "Пароль...", @id = "password-input" } })
+                <a href="#" class="password-control"></a>
                 @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Войти в систему" class="btn btn-outline-success" />
+            <div class="col-md-offset-2 col-md-12">
+                <!-- Кнопка для входа -->
+                <input type="submit" value="Войти в систему" class="btn btn-outline-success" style="width:100%" />
+                <br />
+                <br />
+                @if (ViewBag.noacc == true)
+                {
+                    <!-- Блок если появляется ошибка -->
+                    <div style="width:100%">
+                        <div class="alert alert-dismissible alert-danger" style="background-color: #EB6864">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <p style="color:white; text-align:center">@ViewBag.noacct</p>
+                        </div>
+                    </div>
+                }
+
             </div>
         </div>
+        <hr />
     </div>
 }
 
@@ -44,3 +57,34 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+
+<!-- Стиль поля для пароля -->
+<style>
+    .password-control {
+        position: absolute;
+        top: 11px;
+        right: 30px;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background: url(https://snipp.ru/demo/495/view.svg) 0 0 no-repeat;
+    }
+
+        .password-control.view {
+            background: url(https://snipp.ru/demo/495/no-view.svg) 0 0 no-repeat;
+        }
+</style>
+
+<!-- Изменение типа поля пароля -->
+<script>
+    $('body').on('click', '.password-control', function () {
+        if ($('#password-input').attr('type') == 'password') {
+            $(this).addClass('view');
+            $('#password-input').attr('type', 'text');
+        } else {
+            $(this).removeClass('view');
+            $('#password-input').attr('type', 'password');
+        }
+        return false;
+    });
+</script>

@@ -1,42 +1,51 @@
 ﻿@model IEnumerable<Personal_Management.Models.Pass_Dannie>
 
+@using Shifr;
 
-<h2>Паспортные данные сотрудников</h2>
+    <div style="overflow-x:auto;">
+        <table class="table">
+            <tr>
+                <th>
+                    ФИО сотрудника (Должность)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.S_Pas)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.N_Pas)
+                </th>
+                <th></th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a href="~/Sotrs/LichKab/@item.Sotrs.ID_Sotr">@Html.DisplayFor(modelItem => item.Sotrs.FullName)</a>
+</td>
+                    <td>
+                        @Shifrovanie.Decryption(item.S_Pas)
+                    </td>
+                    <td>
+                        @Shifrovanie.Decryption(item.N_Pas)
+                    </td>
+                    <td>
+                        <a  href="~/Pass_Dannie/Edit/@item.ID_Pass">
+                            <svg class="bi bi-pencil-square" width="2em" height="2em" style="color:orange" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z" />
+                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-6a.5.5 0 00-1 0v6a.5.5 0 01-.5.5h-11a.5.5 0 01-.5-.5v-11a.5.5 0 01.5-.5H9a.5.5 0 000-1H2.5A1.5 1.5 0 001 2.5v11z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                        <a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Pass_Dannie/Delete/@item.ID_Pass">
+                            <svg class="bi bi-trash" width="2em" height="2em" viewBox="0 0 16 16" style="color:red" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z" />
+                                <path fill-rule="evenodd" d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
 
-<p>
-    @Html.ActionLink("Добавить данные", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            ФИО сотрудника (Должность)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.S_Pas)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.N_Pas)
-        </th>
-        <th></th>
-    </tr>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sotrs.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.S_Pas)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.N_Pas)
-            </td>
-            <td>
-                @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Pass }) |
-                @Html.ActionLink("Удалить данные", "Delete", new { id = item.ID_Pass })
-            </td>
-        </tr>
-    }
+                    </td>
+                </tr>
+            }
 
-</table>
+        </table>
+        </div>
 

@@ -1,157 +1,216 @@
-﻿using iTextSharp.text;
-using iTextSharp.text.pdf;
-using Personal_Management.Models;
-using System;
-using System.Data;
+﻿using Personal_Management.Models;
 using System.Data.Entity;
 using System.Data.SqlClient;
-using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 
 namespace Personal_Management.Controllers
 
 {
+    [Authorize]
     public class DepartmentsController : Controller
     {
         private PersonalContext db = new PersonalContext();
 
-
-        // GET: Departments
-        [Authorize]
         public ActionResult Index()
         {
-            if (Request.Browser.IsMobileDevice)
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                ViewBag.mob = 1;
+                //Если заход с мобильного устройства
+                if (Request.Browser.IsMobileDevice)
+                {
+                    ViewBag.mob = 1;
+                }
+                else
+                {
+                    ViewBag.mob = 0;
+                }
+                //Проверка испытательных сроков
+                Program.update();
+                //Список отделов
+                return View(db.Departments.ToList());
             }
             else
             {
-                ViewBag.mob = 0;
+                return Redirect("/Error/NotRight");
             }
-            //Проверка испытательных сроков
-            Program.update();
-            return View(db.Departments.ToList());
         }
 
-        // GET: Departments/Details/5
-        [Authorize]
+
         public ActionResult Details(int? id)
         {
-            //Получение подробной информации по отделу
-            if (id == null)
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                //Получение подробной информации по отделу
+                if (id == null)
+                {
+                    //Неверный запрос
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                //Поиск отдела по ключу
+                Departments departments = db.Departments.Find(id);
+                if (departments == null)
+                {
+                    //Страница не найдена
+                    return HttpNotFound();
+                }
+                return View(departments);
             }
-            Departments departments = db.Departments.Find(id);
-            if (departments == null)
+            else
             {
-                return HttpNotFound();
+                return Redirect("/Error/NotRight");
             }
-            return View(departments);
         }
 
-        // GET: Departments/Create
-        [Authorize]
         public ActionResult Create()
         {
-            return View();
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
+            {
+                //Представление
+                return View();
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
         }
 
-        // POST: Departments/Create
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID_Depart,Naim_Depart")] Departments departments)
         {
-            SqlCommand command = new SqlCommand("", Program.SqlConnection);
-            command.CommandText = "Select count(*) from Departments where Naim_Depart = '" + departments.Naim_Depart + "'";
-            Program.SqlConnection.Open();
-            int co = (int)command.ExecuteScalar();
-            Program.SqlConnection.Close();
-            if (co == 0)
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                if (ModelState.IsValid)
+                //Добавление команды
+                SqlCommand command = new SqlCommand("", Program.SqlConnection);
+                //Поиск отделов с таким же наименованием
+                command.CommandText = "Select count(*) from Departments where Naim_Depart = '" + departments.Naim_Depart + "'";
+                //Открытие подключения
+                Program.SqlConnection.Open();
+                //Выполнение команды
+                int co = (int)command.ExecuteScalar();
+                //Закрытие подключения
+                Program.SqlConnection.Close();
+                if (co == 0)
                 {
-                    //Добавление новой записи
-                    db.Departments.Add(departments);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
+                    //Если валидация успешно прошла
+                    if (ModelState.IsValid)
+                    {
+                        //Добавление новой записи
+                        db.Departments.Add(departments);
+                        //Сохранение
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
                 }
+                else
+                {
+                    //Вывод сообщения, что отдел такой уже существует
+                    ViewBag.m = "Такой отдел уже существует!";
+                }
+
+                return View(departments);
             }
             else
             {
-                ViewBag.m = "Такой отдел уже существует!";
+                return Redirect("/Error/NotRight");
             }
-
-            return View(departments);
         }
 
-        // GET: Departments/Edit/5
-        [Authorize]
+
         public ActionResult Edit(int? id)
         {
-            if (id == null)
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    //Неверный запрос
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                //Поиск по ключу
+                Departments departments = db.Departments.Find(id);
+                if (departments == null)
+                {
+                    //404 ошибка
+                    return HttpNotFound();
+                }
+                return View(departments);
             }
-            Departments departments = db.Departments.Find(id);
-            if (departments == null)
+            else
             {
-                return HttpNotFound();
+                return Redirect("/Error/NotRight");
             }
-            return View(departments);
         }
 
-        // POST: Departments/Edit/5
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID_Depart,Naim_Depart")] Departments departments)
         {
-            if (ModelState.IsValid)
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                //Изменение данных
-                db.Entry(departments).State = EntityState.Modified;
+                if (ModelState.IsValid)
+                {
+                    //Изменение данных
+                    db.Entry(departments).State = EntityState.Modified;
+                    //Сохранение 
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                return View(departments);
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
+        }
+
+
+        public ActionResult Delete(int? id)
+        {
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
+            {
+                if (id == null)
+                {
+                    //Неверный запрос
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                //Поиск по ключу
+                Departments departments = db.Departments.Find(id);
+                if (departments == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(departments);
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
+        }
+
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id )
+        {
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
+            {
+                //Удаление данных
+                Departments departments = db.Departments.Find(id);
+                db.Departments.Remove(departments);
+                //Сохранение 
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(departments);
-        }
-
-        // GET: Departments/Delete/5
-        [Authorize]
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
+            else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return Redirect("/Error/NotRight");
             }
-            Departments departments = db.Departments.Find(id);
-            if (departments == null)
-            {
-                return HttpNotFound();
-            }
-            return View(departments);
-        }
-
-        // POST: Departments/Delete/5
-        [Authorize]
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            //Удаление данных
-            Departments departments = db.Departments.Find(id);
-            db.Departments.Remove(departments);
-            db.SaveChanges();
-            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
@@ -163,153 +222,167 @@ namespace Personal_Management.Controllers
             base.Dispose(disposing);
         }
 
+        //ЕСЛИ ОТЧЕТ НЕОБХОДИМО СФОРМИРОВАТЬ С ПОМОЩЬЮ ITEXTSHARP
+        //public static string file_name;
+        //public static System.Data.DataTable table = new System.Data.DataTable();
+        //public static System.Data.DataTable table2 = new System.Data.DataTable();
+        //[HttpGet]
+        //public FileResult Generar()
+        //{
+        //    using (MemoryStream stream = new System.IO.MemoryStream())
+        //    {
+        //        //Initialize the PDF document object.
+        //        using (Document pdfDoc = new Document())
+        //        {
+        //            BaseFont baseFont = BaseFont.CreateFont(Server.MapPath("~/Content/Photo/") + "/times.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+        //            iTextSharp.text.Font font = new iTextSharp.text.Font(baseFont, 21, iTextSharp.text.Font.BOLD);
+        //            iTextSharp.text.Font font1 = new iTextSharp.text.Font(baseFont, 14, iTextSharp.text.Font.BOLD);
+        //            PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+        //            pdfDoc.Open();
 
-        public static string file_name;
-        public static System.Data.DataTable table = new System.Data.DataTable();
-        public static System.Data.DataTable table2 = new System.Data.DataTable();
-        [HttpGet]
-        public FileResult Generar()
+        //            //Add the Image file to the PDF document object.
+        //            iTextSharp.text.Image img = iTextSharp.text.Image.GetInstance(Server.MapPath("~/Content/Photo/") + "logo.png");
+        //            img.Alignment = Element.ALIGN_RIGHT;
+        //            img.ScaleToFit(300, 250);
+        //            pdfDoc.Add(img);
+
+        //            String phrase = "Данные по отделам";
+        //            Paragraph elements = new Paragraph(phrase, font);
+        //            elements.Alignment = Element.ALIGN_CENTER;
+        //            pdfDoc.Add(elements);
+        //            pdfDoc.Add(new Paragraph(" "));
+        //            DataBaseTables data1 = new DataBaseTables();
+        //            data1.dtDepFill();
+        //            table = data1.dtDepartments;
+        //            foreach (DataRow row in table.Rows)
+        //            {
+        //                DataBaseTables data = new DataBaseTables();
+        //                data.qrPositions = "Select Naim_Posit as 'Наименование должности', Salary as 'Оклад' from Positions join Departments on ID_Depart = Depart_ID where Naim_Depart = '" + row["Naim_Depart"].ToString() + "'";
+        //                data.dtPositFill();
+        //                table2 = data.dtPositions;
+        //                String phras = "Отдел: " + row["Naim_Depart"].ToString();
+        //                Paragraph el = new Paragraph(phras, font1);
+        //                el.Alignment = Element.ALIGN_LEFT;
+        //                pdfDoc.Add(el);
+
+        //                PdfPTable tab = new PdfPTable(table2.Columns.Count);
+        //                tab.SpacingAfter = 20;
+        //                PdfPCell cell = new PdfPCell();
+        //                cell.Colspan = table2.Columns.Count;
+        //                cell.HorizontalAlignment = 1;
+        //                tab.AddCell(cell);
+        //                for (int j = 0; j < table2.Columns.Count; j++)
+        //                {
+        //                    cell = new PdfPCell(new Phrase(new Phrase(table2.Columns[j].ColumnName, font1)));
+        //                    //Фоновый цвет (необязательно, просто сделаем по красивее)
+        //                    cell.BackgroundColor = iTextSharp.text.BaseColor.LIGHT_GRAY;
+        //                    tab.AddCell(cell);
+        //                }
+        //                for (int j = 0; j < table2.Rows.Count; j++)
+        //                {
+        //                    for (int k = 0; k < table2.Columns.Count; k++)
+        //                    {
+        //                        tab.AddCell(new Phrase(table2.Rows[j][k].ToString(), font1));
+        //                    }
+        //                }
+        //                //Добавляем таблицу в документ
+        //                pdfDoc.Add(new Paragraph(" "));
+        //                pdfDoc.Add(tab);
+
+        //            }
+        //            pdfDoc.Close();
+        //            //Download the PDF file.
+        //            return File(stream.ToArray(), "application/pdf", "ДО_Данные_По_Отделам" + DateTime.Now.ToString("_hh_mm_ss_dd_MM_yyyy") + ".pdf");
+        //        }
+        //    }
+        //}
+
+        public async Task<ActionResult> DeleteLogic(int? id)
         {
-            using (MemoryStream stream = new System.IO.MemoryStream())
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                //Initialize the PDF document object.
-                using (Document pdfDoc = new Document())
+                if (id == null)
                 {
-                    BaseFont baseFont = BaseFont.CreateFont(Server.MapPath("~/Content/Photo/") + "/times.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-                    iTextSharp.text.Font font = new iTextSharp.text.Font(baseFont, 21, iTextSharp.text.Font.BOLD);
-                    iTextSharp.text.Font font1 = new iTextSharp.text.Font(baseFont, 14, iTextSharp.text.Font.BOLD);
-                    PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
-                    pdfDoc.Open();
-
-                    //Add the Image file to the PDF document object.
-                    iTextSharp.text.Image img = iTextSharp.text.Image.GetInstance(Server.MapPath("~/Content/Photo/") + "logo.png");
-                    img.Alignment = Element.ALIGN_RIGHT;
-                    img.ScaleToFit(300, 250);
-                    pdfDoc.Add(img);
-
-                    String phrase = "Данные по отделам";
-                    Paragraph elements = new Paragraph(phrase, font);
-                    elements.Alignment = Element.ALIGN_CENTER;
-                    pdfDoc.Add(elements);
-                    pdfDoc.Add(new Paragraph(" "));
-                    DataBaseTables data1 = new DataBaseTables();
-                    data1.dtDepFill();
-                    table = data1.dtDepartments;
-                    foreach (DataRow row in table.Rows)
-                    {
-                        DataBaseTables data = new DataBaseTables();
-                        data.qrPositions = "Select Naim_Posit as 'Наименование должности', Salary as 'Оклад' from Positions join Departments on ID_Depart = Depart_ID where Naim_Depart = '" + row["Naim_Depart"].ToString() + "'";
-                        data.dtPositFill();
-                        table2 = data.dtPositions;
-                        String phras = "Отдел: " + row["Naim_Depart"].ToString();
-                        Paragraph el = new Paragraph(phras, font1);
-                        el.Alignment = Element.ALIGN_LEFT;
-                        pdfDoc.Add(el);
-
-                        PdfPTable tab = new PdfPTable(table2.Columns.Count);
-                        tab.SpacingAfter = 20;
-                        PdfPCell cell = new PdfPCell();
-                        cell.Colspan = table2.Columns.Count;
-                        cell.HorizontalAlignment = 1;
-                        tab.AddCell(cell);
-                        for (int j = 0; j < table2.Columns.Count; j++)
-                        {
-                            cell = new PdfPCell(new Phrase(new Phrase(table2.Columns[j].ColumnName, font1)));
-                            //Фоновый цвет (необязательно, просто сделаем по красивее)
-                            cell.BackgroundColor = iTextSharp.text.BaseColor.LIGHT_GRAY;
-                            tab.AddCell(cell);
-                        }
-                        for (int j = 0; j < table2.Rows.Count; j++)
-                        {
-                            for (int k = 0; k < table2.Columns.Count; k++)
-                            {
-                                tab.AddCell(new Phrase(table2.Rows[j][k].ToString(), font1));
-                            }
-                        }
-                        //Добавляем таблицу в документ
-                        pdfDoc.Add(new Paragraph(" "));
-                        pdfDoc.Add(tab);
-
-                    }
-                    pdfDoc.Close();
-                    //Download the PDF file.
-                    return File(stream.ToArray(), "application/pdf", "ДО_Данные_По_Отделам" + DateTime.Now.ToString("_hh_mm_ss_dd_MM_yyyy") + ".pdf");
+                    //400 ошибка
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
+                //Поиск по ключу
+                Departments dep = await db.Departments.FindAsync(id);
+                if (dep == null)
+                {
+                    //404 ошибка
+                    return HttpNotFound();
+                }
+                return View(dep);
             }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
+        }
 
-            //document.Sections.PageSetup.LeftMargin
-            //    = application.CentimetersToPoints(Convert.ToSingle(2.5));
-            //document.Sections.PageSetup.RightMargin
-            //    = application.CentimetersToPoints(Convert.ToSingle(1));
-            //document.Sections.PageSetup.TopMargin
-            //    = application.CentimetersToPoints(Convert.ToSingle(2));
-            //document.Sections.PageSetup.BottomMargin
-            //    = application.CentimetersToPoints(Convert.ToSingle(1.5));
-            //range.Text = "Служба технической поддержки IT Liga";
-            //range.ParagraphFormat.Alignment
-            //    = word.WdParagraphAlignment.wdAlignParagraphCenter;
-            //range.ParagraphFormat.SpaceAfter = 1;
-            //range.ParagraphFormat.SpaceBefore = 1;
-            //range.ParagraphFormat.LineSpacingRule = word.WdLineSpacing.wdLineSpaceSingle;
-            //range.Font.Name = "Times New Roman";
-            //range.Font.Size = 16;
-            //document.Paragraphs.Add();
-            //document.Paragraphs.Add();
-            //word.Paragraph Name_Doc = document.Paragraphs.Add();
-            //Name_Doc.Format.Alignment = word.WdParagraphAlignment.wdAlignParagraphLeft;
-            //Name_Doc.Range.Font.Name = "Times New Roman";
-            //Name_Doc.Range.Font.Size = 14;
-            //Name_Doc.Range.Text = "Список должностей";
-            //document.Paragraphs.Add();
-            //document.Paragraphs.Add();
-            //DataBaseTables data1 = new DataBaseTables();
-            //data1.dtDepFill();
-            //table = data1.dtDepartments;
-            //foreach (DataRow row in table.Rows)
-            //{
-            //    DataBaseTables data = new DataBaseTables();
-            //    data.qrPositions = "Select Naim_Posit, Salary from Positions join Departments on ID_Depart = Depart_ID where Naim_Depart = '" + row["Naim_Depart"].ToString() + "'";
-            //    data.dtPositFill();
-            //    table2 = data.dtPositions;
-            //    Name_Doc.Range.Font.Name = "Times New Roman";
-            //    Name_Doc.Range.Text = "Отдел: " + row["Naim_Depart"].ToString();
-            //    document.Paragraphs.Add();
-            //    word.Paragraph pTable = document.Paragraphs.Add();
-            //    word.Table tbDanTab = document.Tables.Add(pTable.Range, table2.Rows.Count + 1,
-            //        table2.Columns.Count);
-            //    tbDanTab.Borders.InsideLineStyle = word.WdLineStyle.wdLineStyleSingle;
-            //    tbDanTab.Borders.OutsideLineStyle = word.WdLineStyle.wdLineStyleSingle;
-            //    tbDanTab.Cell(1, 1).Range.Text = "Наименование должности";
-            //    tbDanTab.Cell(1, 2).Range.Text = "Оклад";
-            //    tbDanTab.Range.Font.Size = 12;
-            //    tbDanTab.Range.Font.Name = "Times New Roman";
-            //    tbDanTab.Rows.Alignment = WdRowAlignment.wdAlignRowCenter;
-            //    tbDanTab.Columns[1].Width = 250;
-            //    tbDanTab.Columns[2].Width = 150;
-            //    for (int i = 2; i <= tbDanTab.Rows.Count; i++)
-            //        for (int j = 1; j <= tbDanTab.Columns.Count; j++)
-            //        {
-            //            tbDanTab.Cell(i, j).Range.Text
-            //                = table2.Rows[i - 2][j - 1].ToString();
-            //        }
-            //    document.Paragraphs.Add();
-            //}
-            //document.Paragraphs.Add();
-            //Name_Doc.Range.Font.Name = "Times New Roman";
-            //Name_Doc.Range.Font.Size = 14;
-            //Name_Doc.Format.Alignment = word.WdParagraphAlignment.wdAlignParagraphRight;
-            //Name_Doc.Range.Text = "Руководитель отдела кадров ____________ (_________________)";
-            //document.Paragraphs.Add();
-            //Name_Doc.Range.Text = "Менеджер по персоналу ____________ (_________________)";
-            //document.Paragraphs.Add();
-            //Name_Doc.Range.Text = "Генеральный директор ____________ (_________________)";
-            //document.Paragraphs.Add();
-            //Name_Doc.Range.Text = DateTime.Now.ToLongDateString();
-            //document.SaveAs2(file_name, word.WdSaveFormat.wdFormatDocumentDefault);
-            //document.Close();
-            //application.Quit();
-            //Скачка файла
 
+        [HttpPost, ActionName("DeleteLogic")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmedLog(int id)
+        {
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
+            {
+                //Осуществление логического удаления
+                Departments pos = await db.Departments.FindAsync(id);
+                pos.Logical_Delete = true;
+                db.Entry(pos).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
+        }
+
+        public async Task<ActionResult> VozvLogic(int? id)
+        {
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
+            {
+                if (id == null)
+                {
+                    //400 ошибка
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                //Поиск по ключу
+                Departments dep = await db.Departments.FindAsync(id);
+                if (dep == null)
+                {
+                    //404 ошибка
+                    return HttpNotFound();
+                }
+                return View(dep);
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
+        }
+
+
+        [HttpPost, ActionName("VozvLogic")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> VozvLogic(int id)
+        {
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
+            {
+                //Осуществление возврата логического удаления
+                Departments pos = await db.Departments.FindAsync(id);
+                pos.Logical_Delete = false;
+                db.Entry(pos).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
         }
 
     }

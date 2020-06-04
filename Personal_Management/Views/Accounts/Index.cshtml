@@ -1,58 +1,129 @@
 ﻿@model IEnumerable<Personal_Management.Models.Accounts>
 
 @{
-    ViewBag.Title = "Список пользователей";
-    ViewBag.NameMeta = "Acc";
-    ViewBag.ContentMeta = "На данном окне предоставлен список пользователей";
+    ViewBag.Title = "Аккаунты";
 }
+<!-- Данные аккаунтов -->
+<div class="container">
+    <h2>Данные аккаунтов</h2>
+    <hr />
+    <ol class="breadcrumb mb-3">
+        <li class="breadcrumb-item">@Html.ActionLink("Права доступа", "Index", "Roles")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Пользователи", "Index", "Sotrs")</li>
+    </ol>
+    <hr />
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="home2-tab" data-toggle="tab" href="#home2" role="tab" aria-controls="home2" aria-selected="true">
+                <svg class="bi bi-person-lines-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 100-6 3 3 0 000 6zm7 1.5a.5.5 0 01.5-.5h2a.5.5 0 010 1h-2a.5.5 0 01-.5-.5zm-2-3a.5.5 0 01.5-.5h4a.5.5 0 010 1h-4a.5.5 0 01-.5-.5zm0-3a.5.5 0 01.5-.5h4a.5.5 0 010 1h-4a.5.5 0 01-.5-.5zm2 9a.5.5 0 01.5-.5h2a.5.5 0 010 1h-2a.5.5 0 01-.5-.5z" clip-rule="evenodd" />
+                </svg>
+                Аккаунты
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">
+                <svg class="bi bi-lock-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="11" height="9" x="2.5" y="7" rx="2" />
+                    <path fill-rule="evenodd" d="M4.5 4a3.5 3.5 0 117 0v3h-1V4a2.5 2.5 0 00-5 0v3h-1V4z" clip-rule="evenodd" />
+                </svg>
+                Заблокированные пользователи
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="home2" role="tabpanel" aria-labelledby="home2-tab">
+            <input class="form-control" type="text" placeholder="Поиск по аккаунтам" style="margin-top: 15px;
+        margin-bottom: 15px
+    " id="search-text" onkeyup="tableSearch()">
+            <div style="overflow-x:auto;">
+                <table class="table" id="info-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Login)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Roles.Role_Naim)
+                            </th>
 
-<h2>Аккаунты сотрудников</h2>
-<hr />
-<ol class="breadcrumb mb-3">
-    <li class="breadcrumb-item">@Html.ActionLink("Вернуться к списку аккаунтов", "Index")</li>
-    <li class="breadcrumb-item">@Html.ActionLink("Список прав доступа", "Index", "Roles")</li>
-    <li class="breadcrumb-item">@Html.ActionLink("Список сотрудников", "Index", "Sotrs")</li>
-</ol>
-<hr />
-<form method="get" class="form-inline mr-auto" style="margin: 0 auto; width:80%">
-    <input class="form-control" style="width:85%" type="text" value="@ViewBag.seo" placeholder="Поиск..." name="search" aria-label="Search">
-    <button class="btn bg-dark" type="submit"><i class="fas fa-search" aria-hidden="true"></i></button>
-</form>
-<hr />
-<p>
-    @Html.ActionLink("Добавить новый аккаунт", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            ФИО сотрудника (Должность)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Login)
-        </th>
-        <th></th>
-    </tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Password_Shifr)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Цикл для вывода данных -->
+                        @foreach (var item in Model)
+                        {
+                            if (item.Login == "AdminGlav")
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Login)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Roles.Role_Naim)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Password_Shifr)
+                                    </td>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sotrs.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Login)
-            </td>
-            <td>
-                @Html.ActionLink("Изменить", "Edit", new { id = item.Login }) |
-                @Html.ActionLink("Удалить", "Delete", new { id = item.Login }, new { @class = "compItem" })
-            </td>
-        </tr>
-    }
+                                </tr>
+                            }
+                            else
+                            {
 
-</table>
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Login)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Roles.Role_Naim)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Password_Shifr)
+                                    </td>
+                                    <td>
+                                        <a href="~/Accounts/Edit/@item.Login">
+                                            <svg class="bi bi-slash-circle-fill" style="color:green" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 01-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 01.872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 012.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 012.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 01.872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 01-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 01-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 100-5.86 2.929 2.929 0 000 5.858z" clip-rule="evenodd" />
+                                            </svg>
+                                        </a>
+                                        <a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Accounts/BlockAcc/@item.Login">
+                                            <svg class="bi bi-slash-circle-fill" style="color:orange" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <rect width="11" height="9" x="2.5" y="7" rx="2" />
+                                                <path fill-rule="evenodd" d="M4.5 4a3.5 3.5 0 117 0v3h-1V4a2.5 2.5 0 00-5 0v3h-1V4z" clip-rule="evenodd" />
+                                            </svg>
+                                        </a>
+                                        <a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Accounts/Delete/@item.Login">
+                                            <svg class="bi bi-trash" width="2em" height="2em" viewBox="0 0 16 16" style="color:red" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z" />
+                                                <path fill-rule="evenodd" d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" clip-rule="evenodd" />
+                                            </svg>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+            @Html.Action("Index2")
+        </div>
+    </div>
+
+</div>
+
 <div id="modDialog" class="modal fade">
     <div id="dialogContent" class="modal-dialog modal-lg"></div>
 </div>
+
+<!-- Вызов модального окна -->
 @section scripts
 {
     <script type="text/javascript">
@@ -70,3 +141,66 @@
         })
     </script>
 }
+<!-- Поиск -->
+<script>
+    function tableSearch() {
+        var phrase = document.getElementById('search-text');
+        var table = document.getElementById('info-table');
+        var regPhrase = new RegExp(phrase.value, 'i');
+        var flag = false;
+        for (var i = 1; i < table.rows.length; i++) {
+            flag = false;
+            for (var j = table.rows[i].cells.length - 1; j >= 0; j--) {
+                flag = regPhrase.test(table.rows[i].cells[j].innerHTML);
+                if (flag) break;
+            }
+            if (flag) {
+                table.rows[i].style.display = "";
+            } else {
+                table.rows[i].style.display = "none";
+            }
+
+        }
+    }
+</script>
+<!-- Сортировка -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.1.0/tablesort.min.js"></script>
+<script>
+    new Tablesort(document.getElementById('info-table2'));
+    new Tablesort(document.getElementById('info-table'));
+</script>
+<style>
+    th[role=columnheader]:not(.no-sort) {
+        cursor: pointer;
+    }
+
+        th[role=columnheader]:not(.no-sort):after {
+            content: '';
+            float: right;
+            margin-top: 7px;
+            border-width: 0 4px 4px;
+            border-style: solid;
+            border-color: #404040 transparent;
+            visibility: hidden;
+            opacity: 0;
+            -ms-user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+    th[aria-sort=ascending]:not(.no-sort):after {
+        border-bottom: none;
+        border-width: 4px 4px 0;
+    }
+
+    th[aria-sort]:not(.no-sort):after {
+        visibility: visible;
+        opacity: 0.4;
+    }
+
+    th[role=columnheader]:not(.no-sort):hover:after {
+        visibility: visible;
+        opacity: 1;
+    }
+</style>

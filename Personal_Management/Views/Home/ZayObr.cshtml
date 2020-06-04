@@ -1,0 +1,103 @@
+﻿@model Personal_Management.Models.ZayavkaNaSobes
+
+@{
+    ViewBag.Title = "Данные отправленной заявки";
+}
+    <div class="container">
+        <div id="source-html">
+            <h2>Данные отправленной зявки</h2>
+            <div>
+                <h4 style="margin-top:20px">Назначенное собеседование</h4>
+                <hr />
+                <h5>Данные отсутствуют</h5>
+                <hr />
+                <h4 style="margin-top:20px">Данные поданной заявки</h4>
+                <hr />
+                <div class="row">
+                    <div class="col">
+                        <h5>Данные пользователя:</h5>
+                        <p><b>ФИО:</b> @Model.Sotrs.Surname_Sot @Model.Sotrs.Name_Sot @Model.Sotrs.Petronumic_Sot </p>
+                        <p><b>Номер заявки:</b> @Model.nomerzay </p>
+                        <p><b>Дата заявки:</b> @Model.datazayavki</p>
+                    </div>
+                    <div class="col">
+                        <div id="qr" style="height:200px;background-color:#fff;
+text-align:center"></div>
+                        <br />
+                    </div>
+                </div>
+
+                <hr />
+                <h5>Ответы на вопросы:</h5>
+
+                <table class="table">
+                    <tr>
+                        <th>
+                            Вопрос
+                        </th>
+                        <th>
+                            Ответ
+                        </th>
+                        <th></th>
+                    </tr>
+                    @foreach (Personal_Management.Models.ZayavkaNaSobes i in ViewBag.zay)
+                    {
+                        <tr>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => i.Questions.Quest_Naim)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => i.otvet)
+                            </td>
+
+                        </tr>
+                    }
+
+                </table>
+
+                <hr />
+
+            </div>
+        </div>
+        <a href="#" class="btn btn-success" style="width:100%" id="btn-export" onclick="generatePDF('@Model.Sotrs.Surname_Sot @Model.Sotrs.Name_Sot @Model.Sotrs.Petronumic_Sot');">СКАЧАТЬ</a>
+
+    </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+<script>
+    $('#qr').qrcode({
+
+        // Ширина и высота QR кода
+        width: 200,
+        height: 200,
+
+        // Цвет QR кода
+        color: '#000',
+
+        // Фон, null значит прозрачный фон
+        bgColor: null,
+
+        // Кодируемый текст
+        text: '@Model.nomerzay'
+    });
+</script>
+<script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.1.min.js"></script>
+<script type="text/javascript" src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+<script type="text/javascript">
+    function generatePDF(sot) {
+        // Choose the element that our invoice is rendered in.
+        const element = document.getElementById("source-html");
+        element.style.display = 'block';
+        var dateName = new Date();
+        var opt = {
+            margin: [0.5, 1, 1, 1],
+            filename: 'Отчет по сотруднику ( ' + sot + ')' + '.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            pagebreak: { mode: 'avoid-all', before: '#page2el' },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        // Choose the element and save the PDF for our user.
+        html2pdf().from(element).set(opt).save();
+    }
+</script>

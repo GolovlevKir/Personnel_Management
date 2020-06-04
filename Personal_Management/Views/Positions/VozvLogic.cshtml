@@ -1,0 +1,27 @@
+﻿@model Personal_Management.Models.Positions
+
+@{
+    Layout = null;
+}
+
+<div class="modal-content" style="width:100%">
+    <div class="modal-header">
+        <h3>Восстановление записи</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="dl-horizontal">
+            <p class="text-muted">Вы действительно хотите восстановить должность: @Model.Naim_Posit?</p>
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-actions no-color">
+                    <input type="submit" value="Восстановить" class="btn btn-outline-danger" />
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,44 +1,46 @@
 ﻿@model Personal_Management.Models.Departments
 
 @{
-    ViewBag.Title = "Изменение данных отделов";
+    ViewBag.Title = "Изменение данных структурного подразделения";
     ViewBag.NameMeta = "UpdAcc";
     ViewBag.ContentMeta = "На данном окне возможно изменение данных отделов";
 }
-
-<h2>Изменение данных</h2>
-<hr />
-<ol class="breadcrumb mb-3">
-    <li class="breadcrumb-item">@Html.ActionLink("Вернуться ко всем отделам", "Index")</li>
-</ol>
-<hr />
-
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-
-    <div class="form-horizontal">
-        <h4>Отделы</h4>
+    <div class="container">
+        <h2>Изменение данных</h2>
         <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.ID_Depart)
+        <ol class="breadcrumb mb-3">
+            <li class="breadcrumb-item">@Html.ActionLink("Вернуться ко всем отделам", "Index")</li>
+            <li class="breadcrumb-item"><a href="/Positions/Index/0">Просмотреть все должности</a></li>
+            <li class="breadcrumb-item">@Html.ActionLink("Штатный состав", "Index", "Posit_Responsibilities")</li>
+        </ol>
+        <hr />
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Naim_Depart, htmlAttributes: new { @class = "control-label col-md-5" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Naim_Depart, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Naim_Depart, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Сохранить изменения" class="btn btn-outline-success" />
+            <div class="form-horizontal">
+                <h4>Отделы</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.ID_Depart)
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Naim_Depart, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Naim_Depart, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Naim_Depart, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Сохранить изменения" class="btn btn-outline-success" />
+                    </div>
+                </div>
             </div>
-        </div>
+        }
     </div>
-}
-
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

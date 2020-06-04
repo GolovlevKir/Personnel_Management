@@ -1,48 +1,195 @@
 ﻿@model IEnumerable<Personal_Management.Models.Work_Schedule>
 
 @{
-    ViewBag.Title = "Рабочие графики";
-    ViewBag.NameMeta = "Che";
-    ViewBag.ContentMeta = "На данном окне возможно просмотреть список рабочих графиков";
+    ViewBag.Title = "Графики работы";
+    Session["perehod"] = "/Work_Schedule/Index";
+    Session["pred"] = "/Work_Schedule/Index";
 }
-
-<h2>Графики работы</h2>
-<ol class="breadcrumb">
-    <li class="breadcrumb-item"> @Html.ActionLink("Данные сотрудников", "Index", "Sotrs")</li>
-    <li class="breadcrumb-item">@Html.ActionLink("Список ставок", "Index", "Rates")</li>
-</ol>
-<p>
-    @Html.ActionLink("Добавить график работы", "Create")
-</p>
-<table class="table" style="margin: 0 auto; width: auto;">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Naim_Sche)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
+@using Shifr;
+@{
+    Program.update();
+    ViewBag.isp = Program.colIsp;
+    if (Session["Manip_Sotrs"] is null)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Naim_Sche)
-            </td>
-            <td>
-                @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Schedule }) |
-                @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Schedule }, new { @class = "compItem" })
-            </td>
-        </tr>
+        Session["Manip_Sotrs"] = false;
     }
+    if (Session["Manip_Roles"] is null)
+    {
+        Session["Manip_Roles"] = false;
+    }
+    if (Session["Manip_Tests"] is null)
+    {
+        Session["Manip_Tests"] = false;
+    }
+    if (Session["Manip_Department"] is null)
+    {
+        Session["Manip_Department"] = false;
+    }
+    Personal_Management.Models.PersonalContext db = new Personal_Management.Models.PersonalContext();
+    if (User.Identity.IsAuthenticated)
+    {
+        var s = db.Sotrs.Where(sot => sot.Login_Acc == User.Identity.Name).FirstOrDefault();
+        Session["FIO"] = s.Surname_Sot + " " + s.Name_Sot + " " + s.Petronumic_Sot;
+        Session["Email"] = s.Email;
+        Session["Num_Phone"] = s.Num_Phone;
+        Session["Address"] = Shifrovanie.Decryption(s.Address);
+        Session["Day_Of_Birth"] = s.Day_Of_Birth;
+        Session["Photo"] = s.Photo;
+        Session["Dolj"] = "Статус: Гость";
+        Session["Guest"] = s.Guest;
+        Session["ID_S"] = 0;
+        if ((bool)Session["Guest"] == false && s.Accounts.Block == false && s.fired == false)
+        {
+            Session["Manip_Sotrs"] = s.Accounts.Roles.Manip_Sotrs;
+            Session["Manip_Roles"] = s.Accounts.Roles.Manip_Roles;
+            Session["Manip_Tests"] = s.Accounts.Roles.Manip_Tests;
+            Session["Manip_Department"] = s.Accounts.Roles.Manip_Department;
+            Session["Dolj"] = "Статус: Сотрудник";
+            Session["ID_S"] = s.ID_Sotr;
+        }
+        else
+        {
+            Session["Manip_Sotrs"] = false;
+            Session["Manip_Roles"] = false;
+            Session["Manip_Tests"] = false;
+            Session["Manip_Department"] = false;
+        }
+    }
+}
+<div class="container">
+    <h2>ГРАФИКИ РАБОТЫ СОТРУДНИКОВ | <a href="/Work_Schedule/Otch"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Отчет</a></h2>
+    <hr />
+    <ol class="breadcrumb mb-3">
+        <li class="breadcrumb-item">@Html.ActionLink("Отделы", "Index", "Departments")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Должности", "Index", "Positions")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Штатный состав", "Index", "Posit_Responsibilities")</li>
+    </ol>
+    <hr />
+    @if (ViewBag.i == true)
+    {
+        <p>
+            <a style="color:green" title="" href="~/Work_Schedule/Create">
+                <svg class="bi bi-plus-circle" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M8 3.5a.5.5 0 01.5.5v4a.5.5 0 01-.5.5H4a.5.5 0 010-1h3.5V4a.5.5 0 01.5-.5z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M7.5 8a.5.5 0 01.5-.5h4a.5.5 0 010 1H8.5V12a.5.5 0 01-1 0V8z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z" clip-rule="evenodd" />
+                </svg>
+                Добавить график работы
+            </a>
+        </p>
+    }
+    else
+    {
+        <p style="color:green">
+            <svg class="bi bi-check-all" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M12.354 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd" />
+                <path d="M6.25 8.043l-.896-.897a.5.5 0 10-.708.708l.897.896.707-.707zm1 2.414l.896.897a.5.5 0 00.708 0l7-7a.5.5 0 00-.708-.708L8.5 10.293l-.543-.543-.707.707z" />
+            </svg>
+            Сотрудники, которым не назначен график работы отсутствуют
+        </p>
+    }
+    <input class="form-control" type="text" placeholder="Поиск по графикам работы" style="        margin-top: 15px;
+        margin-bottom: 15px" id="search-text2" onkeyup="tableSearch2()">
+    <div style="overflow-x:auto;">
+        <table class="table" id="info-table2">
+            <thead>
+                <tr>
+                    <th>
+                        ФИО сотрудника
+                    </th>
+                    <th>
+                        День недели
+                    </th>
+                    <th>
+                        Время работы
+                    </th>
+                    <th>
+                        Перерыв
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    if (item.Vih == true)
+                    {
+                        <tr class="table-dark">
+                            <td>
+                                <a href="~/Sotrs/LichKab/@item.Sotrs.ID_Sotr">@Html.DisplayFor(modelItem => item.Sotrs.Full)</a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DaysOfWeek.Naim_Day)
+                            </td>
+                            <td colspan="2" style="text-align:center">
+                                ВЫХОДНОЙ ДЕНЬ
+                            </td>
+                            <td>
+                                <a href="~/Work_Schedule/Edit/@item.ID_Schedule">
+                                    <svg class="bi bi-pencil-square" width="2em" height="2em" style="color:orange" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z" />
+                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-6a.5.5 0 00-1 0v6a.5.5 0 01-.5.5h-11a.5.5 0 01-.5-.5v-11a.5.5 0 01.5-.5H9a.5.5 0 000-1H2.5A1.5 1.5 0 001 2.5v11z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+                                <a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Work_Schedule/Delete/@item.ID_Schedule">
+                                    <svg class="bi bi-trash" width="2em" height="2em" viewBox="0 0 16 16" style="color:red" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z" />
+                                        <path fill-rule="evenodd" d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>
+                                <a href="~/Sotrs/LichKab/@item.Sotrs.ID_Sotr">@Html.DisplayFor(modelItem => item.Sotrs.Full)</a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DaysOfWeek.Naim_Day)
+                            </td>
+                            <td>
+                                C @Html.DisplayFor(modelItem => item.Vremya_Start) до @Html.DisplayFor(modelItem => item.Vremya_End)
+                            </td>
+                            <td>
+                                С @Html.DisplayFor(modelItem => item.Break_Start) до @Html.DisplayFor(modelItem => item.Break_End)
+                            </td>
 
-</table>
+                            <td>
+                                <a href="~/Work_Schedule/Edit/@item.ID_Schedule">
 
-<div id="modDialog" class="modal fade">
-    <div id="dialogContent" class="modal-dialog modal-lg"></div>
+
+                                    <svg class="bi bi-pencil-square" width="2em" height="2em" style="color:orange" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z" />
+                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-6a.5.5 0 00-1 0v6a.5.5 0 01-.5.5h-11a.5.5 0 01-.5-.5v-11a.5.5 0 01.5-.5H9a.5.5 0 000-1H2.5A1.5 1.5 0 001 2.5v11z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+                                <a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Work_Schedule/Delete/@item.ID_Schedule">
+                                    <svg class="bi bi-trash" width="2em" height="2em" viewBox="0 0 16 16" style="color:red" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z" />
+                                        <path fill-rule="evenodd" d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+
+
+                }
+            </tbody>
+        </table>
+        <div id="modDialog" class="modal fade">
+            <div id="dialogContent" class="modal-dialog modal-lg"></div>
+        </div>
+    </div>
 </div>
+
+
 @section scripts
 {
     <script type="text/javascript">
+
 
         $(function () {
             $.ajaxSetup({ cache: false });
@@ -57,3 +204,26 @@
         })
     </script>
 }
+<script>
+    function tableSearch2() {
+        var phrase = document.getElementById('search-text2');
+        var table = document.getElementById('info-table2');
+        var regPhrase = new RegExp(phrase.value, 'i');
+        var flag = false;
+        for (var i = 1; i < table.rows.length; i++) {
+            flag = false;
+            for (var j = table.rows[i].cells.length - 1; j >= 0; j--) {
+                flag = regPhrase.test(table.rows[i].cells[j].innerHTML);
+                if (flag) break;
+            }
+            if (flag) {
+                table.rows[i].style.display = "";
+            } else {
+                table.rows[i].style.display = "none";
+            }
+
+        }
+    }
+</script>
+
+

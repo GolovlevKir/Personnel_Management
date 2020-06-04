@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewBag.Title = "Подача заявки";
+}
+<div class="container">
+    <h2>Заявка на собеседование</h2>
+    <hr />
+    <h3>Предисловие</h3>
+    <p>
+        На данной странице, Вы можете подать заявку на прохождение собеседования в нашей компании. Мы будем рады всем соискателям. Также на данной странице нашего сайты,
+        можно наблюдать за результатом заявки и решение появится именно здесь. Решение поданной заявки, мы также вышлем на почту, указанную при регистрации на сайте.
+    </p>
+    <p><b>Подать заявку</b></p>
+    <a class="btn-info btn " href="~/ZayavkaNaSobes/Create" style="width:60%;">Подать заявку</a>
+    <p style="padding-top: 15px"><b>Узнать решение поданной заявки</b></p>
+    <a data-placement="top" class="btn-success btn compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Home/PoiskZay" style="width:60%;">Узнать решение</a>
+    <p style="padding-top: 20px">
+        ВНИМАНИЕ! Не теряйте номер заявки, только по ней вы сможете проверить решение поданной заявки   .
+    </p>
+</div>
+
+<div id="modDialog" class="modal fade">
+    <div id="dialogContent" class="modal-dialog modal-lg"></div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(function () {
+            $.ajaxSetup({ cache: false });
+            $(".compItem").click(function (e) {
+
+                e.preventDefault();
+                $.get(this.href, function (data) {
+                    $('#dialogContent').html(data);
+                    $('#modDialog').modal('show');
+                });
+            });
+        })
+    </script>
+}

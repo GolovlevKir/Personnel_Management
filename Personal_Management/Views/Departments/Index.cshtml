@@ -1,63 +1,228 @@
 ﻿@model IEnumerable<Personal_Management.Models.Departments>
 
 @{
-    ViewBag.Title = "Отделы";
+    ViewBag.Title = "Структурные подразделения";
     ViewBag.NameMeta = "Dep";
     ViewBag.ContentMeta = "На данном окне возможно просмотреть список отделов";
+    Personal_Management.Models.PersonalContext db = new Personal_Management.Models.PersonalContext();
+    ViewBag.positi = null;
+
 }
 
-<h2>Отделы организации</h2>
-<hr />
-<ol class="breadcrumb mb-3">
-    <li class="breadcrumb-item"><a href="/Positions/Index/0">Просмотреть все должности</a></li>
-    @*@if (ViewBag.mob == 0)
-    {*@
+    <div class="container">
+        <h2>Отделы организации</h2>
+        <hr />
+        <ol class="breadcrumb mb-3">
+            <li class="breadcrumb-item"><a href="/Positions/Index/0">Просмотреть все должности</a></li>
+            <li class="breadcrumb-item">@Html.ActionLink("Штатный состав", "Index", "Posit_Responsibilities")</li>
+        </ol>
+        <hr />
 
-        <li class="breadcrumb-item"><a style="font-size:16px" href="@Url.Action("Generar", "Departments")"><i class="fas fa-download"></i>Скачать отчет по отделам</a></li>
-    @*}  *@
-</ol>
-<hr />
-@*@using (Html.BeginForm("GenerateDocument", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-{
+        <p>
+            <a style="color:green" title="" href="~/Departments/Create">
+                <svg class="bi bi-plus-circle" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M8 3.5a.5.5 0 01.5.5v4a.5.5 0 01-.5.5H4a.5.5 0 010-1h3.5V4a.5.5 0 01.5-.5z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M7.5 8a.5.5 0 01.5-.5h4a.5.5 0 010 1H8.5V12a.5.5 0 01-1 0V8z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z" clip-rule="evenodd" />
+                </svg>
+                Добавить отдел
+            </a> |
+            <button id="btn-export" class="btn btn-info" onclick="exportHTML();">
+                Экспорт в Word
+            </button> |
+            <button id="btn-export2" class="btn btn-primary" onclick="generatePDF();">
+                Экспорт в PDF
+            </button>
+        </p>
+        <br />
+        <div style="padding:5px 5px 5px 5px; background-color:white">
+            <table class="table" id="depTable" style="color:black">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Naim_Depart)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Цикл для вывода данных -->
+                    @foreach (var item in Model)
+                    {
+                        if (item.Logical_Delete == false)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Naim_Depart)
+                                </td>
+                                <td>
+                                    <a href="~/Departments/Edit/@item.ID_Depart">
+                                        <svg class="bi bi-pencil-square" width="2em" height="2em" style="color:orange" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z" />
+                                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-6a.5.5 0 00-1 0v6a.5.5 0 01-.5.5h-11a.5.5 0 01-.5-.5v-11a.5.5 0 01.5-.5H9a.5.5 0 000-1H2.5A1.5 1.5 0 001 2.5v11z" clip-rule="evenodd" />
+                                        </svg>
+                                    </a>
+                                    <a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Departments/DeleteLogic/@item.ID_Depart">
+                                        <svg class="bi bi-trash" width="2em" height="2em" viewBox="0 0 16 16" style="color:red" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z" />
+                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" clip-rule="evenodd" />
+                                        </svg>
+                                    </a>
+                                    <a href="~/Positions/Index/@item.ID_Depart">
+                                        <svg class="bi bi-eye" width="2em" height="2em" viewBox="0 0 16 16" style="color:Highlight" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 001.66 2.043C4.12 11.332 5.88 12.5 8 12.5c2.12 0 3.879-1.168 5.168-2.457A13.134 13.134 0 0014.828 8a13.133 13.133 0 00-1.66-2.043C11.879 4.668 10.119 3.5 8 3.5c-2.12 0-3.879 1.168-5.168 2.457A13.133 13.133 0 001.172 8z" clip-rule="evenodd" />
+                                            <path fill-rule="evenodd" d="M8 5.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM4.5 8a3.5 3.5 0 117 0 3.5 3.5 0 01-7 0z" clip-rule="evenodd" />
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
 
-    <button type="submit" class="btn btn-success btn-lg">
-        <i class="fa fa-list-alt"></i> Generate document
-    </button>
-}*@
-<p>
-    @Html.ActionLink("Создать отдел", "Create")
+        <!-- Отчет -->
+        <div hidden>
+            <div id="source-html2">
+                <div id="source-html">
+                    <h2 style="font-weight: 1; text-align:center">
+                        Общество с ограниченной ответственностью<br />
+                        «Си эМ эС»
+                    </h2>
+                    <p style="margin-bottom: 0rem; text-align:center">ОГРН 0000000000000 ИНН 0000000000 КПП 000000000</p>
+                    <p style="margin-bottom: 0rem; text-align:center">108840, город Москва, город Троицк, улица Промышленная, дом 19, офис 33</p>
+                    <hr />
+                    <h1>Структурные подразделения</h1>
+                    <table class="table" style="border-collapse: collapse; width:100%; margin-top:40px">
+                        <thead>
+                            <tr>
+                                <th style="border: 1px solid black;">
+                                    @Html.DisplayNameFor(model => model.Naim_Depart)
+                                </th>
+                                <th style="border: 1px solid black;">
+                                    Должности, входящие в отдел
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td style="border: 1px solid black;">
+                                        @Html.DisplayFor(modelItem => item.Naim_Depart)
+                                    </td>
+                                    <td style="border: 1px solid black;">
+                                        @{var p = db.Positions.Where(o => o.Depart_ID == item.ID_Depart).ToList(); ViewBag.positi = p; }
+                                        @foreach (Personal_Management.Models.Positions i in ViewBag.positi)
+                                        {
+                                            @Html.DisplayFor(modelItem => i.Naim_Posit)<br />
+                                        }
 
-</p>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Naim_Depart)
-        </th>
-        <th></th>
-    </tr>
+                </div>
+                <dl>
+                    <dd style=" margin-top:20px; text-align:left">
+                        Сотрудник отдела кадров компании ООО "Си эМ эС" ______________/______________/
+                        <br />
+                        <p><font style="margin-left:65%">Подпись</font> <font style="margin-left:5%">Расшифровка</font></p>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Naim_Depart)
-            </td>
-            <td>
-                @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Depart }) |
-                @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Depart }, new { @class = "compItem" })|
-                <a href="~/Positions/Index/@item.ID_Depart">Должности, входящие в отдел</a>
-            </td>
-        </tr>
-    }
+                        Генеральный директор компании ООО "Си эМ эС" _______________/_______________/
+                        <br />
+                        <p><font style="margin-left:65%">Подпись</font> <font style="margin-left:5%">Расшифровка</font></p>
+                        <br />
+                        <div>
+                            <p style="text-align: left; margin-left:20%">М.П.</p>
+                            <p style=" text-align: right">Дата: ____.________________ 20__ г.</p>
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        <br>
+        <!-- Вывод удаленных -->
+        @if (Session["Manip_Roles"] != null && (bool)Session["Manip_Roles"] == true)
+        {
+            <h3>Удаленные</h3>
+            <table class="table" id="depTable">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Naim_Depart)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        if (item.Logical_Delete == true)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Naim_Depart)
+                                </td>
+                                <td>
+                                    <a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Departments/VozvLogic/@item.ID_Depart">
+                                        <svg class="bi bi-folder-symlink-fill" style="color:dodgerblue" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M13.81 3H9.828a2 2 0 01-1.414-.586l-.828-.828A2 2 0 006.172 1H2.5a2 2 0 00-2 2l.04.87a1.99 1.99 0 00-.342 1.311l.637 7A2 2 0 002.826 14h10.348a2 2 0 001.991-1.819l.637-7A2 2 0 0013.81 3zM2.19 3c-.24 0-.47.042-.684.12L1.5 2.98a1 1 0 011-.98h3.672a1 1 0 01.707.293L7.586 3H2.19zm9.608 5.271l-3.182 1.97c-.27.166-.616-.036-.616-.372V9.1s-2.571-.3-4 2.4c.571-4.8 3.143-4.8 4-4.8v-.769c0-.336.346-.538.616-.371l3.182 1.969c.27.166.27.576 0 .742z" clip-rule="evenodd" />
+                                        </svg>
+                                    </a>
+                                    <a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Departments/Delete/@item.ID_Depart">
+                                        <svg class="bi bi-trash" width="2em" height="2em" viewBox="0 0 16 16" style="color:red" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z" />
+                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" clip-rule="evenodd" />
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
 
-</table>
+        }
+        <div id="modDialog" class="modal fade">
+            <div id="dialogContent" class="modal-dialog modal-lg"></div>
+        </div>
+    </div>
+<link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
 
-<div id="modDialog" class="modal fade">
-    <div id="dialogContent" class="modal-dialog modal-lg"></div>
-</div>
 @section scripts
 {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script>
+        function activatejQueryTable() {
+            $("#depTable").DataTable({
+
+
+                "language": {
+                    "lengthMenu": "Показать _MENU_ полей на странице",
+                    "zeroRecords": "Отсутствуют данные",
+                    "info": "Страница _PAGE_ из _PAGES_",
+                    "search": "Поиск:",
+                    "paginate": {
+                        "first": "Первая",
+                        "last": "Последняя",
+                        "next": "Следующая",
+                        "previous": "Предыдущая"
+                    },
+                    "infoEmpty": "",
+                    "infoFiltered": ""
+                }
+
+            });
+        }
+        $(function () {
+            activatejQueryTable()
+        });
+    </script>
     <script type="text/javascript">
 
         $(function () {
@@ -72,4 +237,43 @@
             });
         })
     </script>
+
+    <script>
+        function exportHTML() {
+            var header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
+                "xmlns:w='urn:schemas-microsoft-com:office:word' " +
+                "xmlns='http://www.w3.org/TR/REC-html40'>" +
+                "<head><meta charset='utf-8'><title>Export HTML to Word Document with JavaScript</title></head><body>";
+            var footer = "</body></html>";
+            var sourceHTML = header + document.getElementById("source-html").innerHTML + footer;
+
+            var source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+            var fileDownload = document.createElement("a");
+            document.body.appendChild(fileDownload);
+            fileDownload.href = source;
+            fileDownload.download = 'document.doc';
+            fileDownload.click();
+            document.body.removeChild(fileDownload);
+        }
+    </script>
+
 }
+<script type="text/javascript" src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+<script type="text/javascript">
+    function generatePDF(sot) {
+        // Choose the element that our invoice is rendered in.
+        const element = document.getElementById("source-html2");
+        element.style.display = 'block';
+        var dateName = new Date();
+        var opt = {
+            margin: [0.5, 1, 1, 1],
+            filename: 'Отчет по сотруднику ( ' + sot + ')' + '.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            pagebreak: { mode: 'avoid-all', before: '#page2el' },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        // Choose the element and save the PDF for our user.
+        html2pdf().from(element).set(opt).save();
+    }
+</script>

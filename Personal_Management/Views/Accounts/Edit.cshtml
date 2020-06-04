@@ -1,60 +1,42 @@
 ﻿@model Personal_Management.Models.Accounts
 
 @{
-    ViewBag.Title = "Изменение данных аккаунтов";
-    ViewBag.NameMeta = "UpdAcc";
-    ViewBag.ContentMeta = "На данном окне возможно изменение данных пользователей";
+    ViewBag.Title = "Изменение прав доступа";
 }
+<!-- Окно для корректировки данных -->
+<div class="container">
+    <h2>Корректировка аккаунта</h2>
 
-<h2>Изменение данных</h2>
-<hr />
-<ol class="breadcrumb mb-3">
-    <li class="breadcrumb-item">@Html.ActionLink("Вернуться к списку аккаунтов", "Index")</li>
-    <li class="breadcrumb-item">@Html.ActionLink("Список прав доступа", "Index", "Roles")</li>
-    <li class="breadcrumb-item">@Html.ActionLink("Список сотрудников", "Index", "Sotrs")</li>
-</ol>
-<hr />
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    <h4>Аккаунт: @Html.DisplayFor(model => model.Login)</h4>
-    <hr />
-    <div class="form-horizontal">
+        <div class="form-horizontal">
+            <h4>Данные аккаунта: @Model.Login</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.Login)
+            @Html.HiddenFor(model => model.Password)
+            @Html.HiddenFor(model => model.Password_Shifr)
+            @Html.HiddenFor(model => model.Block)
+            @Html.HiddenFor(model => model.Logical_Delete)
 
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Login)
-        @Html.HiddenFor(model => model.Password)
-        
-        <div class="form-group">
-            @Html.LabelFor(model => model.Role_ID, "Права доступа", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("Role_ID", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Role_ID, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Role_ID, "Права оступа", htmlAttributes: new { @class = "control-label col-md-10" })
+                <div class="col-md-12">
+                    @Html.DropDownList("Role_ID", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Role_ID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Сохранить изменения" class="btn btn-outline-success" />
+                </div>
             </div>
         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Sotr_ID, "Сотрудник", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("Sotr_ID", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Sotr_ID, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Password2, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Password2, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Password2, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Сохранить изменения" class="btn btn-outline-success" />
-            </div>
-        </div>
-    </div>
-}
-
+    }
+</div>

@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Personal_Management.Models;
+using System;
 using System.Data;
 using System.Data.Entity;
 using System.Data.SqlClient;
@@ -8,101 +8,97 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using Personal_Management.Models;
 
 namespace Personal_Management.Controllers
 {
+    [Authorize]
     public class Sbor_DocumController : Controller
     {
         private PersonalContext db = new PersonalContext();
 
-        // GET: Sbor_Docum
         [Authorize]
-        public ActionResult Index()
+        public ActionResult Index(string search, int? id)
         {
-            Program.update();
-            var sbor_Docum = db.Sbor_Docum.Include(s => s.Documents).Include(s => s.Sotrs);
-            return View(sbor_Docum.ToList());
-        }
-
-
-        // GET: Sbor_Docum/Details/5
-        [Authorize]
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                //Получение данных реестра документов сотрудников
+                var sbor_Docum = db.Sbor_Docum.Include(s => s.Documents).Include(s => s.Sotrs).Where(s => s.Sotrs.fired == false && s.Sotrs.Accounts.Block == false);
+                //Обновление испытательных сроков
+                Program.update();
+                if (id != null && id != 0)
+                {
+                    //Вывод по ключу сотрудника
+                    sbor_Docum = sbor_Docum.Where(s => s.Sotr_ID == id);
+                }
+                if (search != null && search != "")
+                {
+                    //Поиск по данным
+                    sbor_Docum = sbor_Docum.Where(s => s.Sotrs.Surname_Sot.Contains(search) || s.Sotrs.Name_Sot.Contains(search) || s.Sotrs.Petronumic_Sot.Contains(search) || s.Sotrs.Surname_Sot.Contains(search) && s.Sotrs.Name_Sot.Contains(search) || s.Sotrs.Name_Sot.Contains(search) && s.Sotrs.Petronumic_Sot.Contains(search) || s.Sotrs.Surname_Sot.Contains(search) && s.Sotrs.Name_Sot.Contains(search) && s.Sotrs.Petronumic_Sot.Contains(search) || s.Sotrs.Login_Acc.Contains(search));
+                }
+                return View(sbor_Docum.ToList());
             }
-            Sbor_Docum sbor_Docum = db.Sbor_Docum.Find(id);
-            if (sbor_Docum == null)
+            else
             {
-                return HttpNotFound();
+                return Redirect("/Error/NotRight");
             }
-            return View(sbor_Docum);
         }
 
-        // GET: Sbor_Docum/Create
-        [Authorize]
-        public ActionResult Create()
-        {
-            ViewBag.Doc_ID = new SelectList(db.Documents, "ID_Doc", "Doc_Naim");
-            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full");
-            return View();
-        }
-
-        // POST: Sbor_Docum/Create
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID_Sbora,Doc_ID,Sotr_ID,Itog,Photo_Doc")] Sbor_Docum sbor_Docum)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Sbor_Docum.Add(sbor_Docum);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.Doc_ID = new SelectList(db.Documents, "ID_Doc", "Doc_Naim", sbor_Docum.Doc_ID);
-            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full", sbor_Docum.Sotr_ID);
-            return View(sbor_Docum);
-        }
-
-        // GET: Sbor_Docum/Edit/5
         [Authorize]
         public ActionResult Edit(int? id)
         {
-            if (id == null)
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    //400 ошибка
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                //Поиск по ключу
+                Sbor_Docum sbor_Docum = db.Sbor_Docum.Find(id);
+                if (sbor_Docum == null)
+                {
+                    //404 ошибка
+                    return HttpNotFound();
+                }
+                //Получение должностей
+                SqlCommand command = new SqlCommand("", Program.SqlConnection);
+                command.CommandText = "SELECT dbo.Positions.Naim_Posit FROM dbo.Sotrs JOIN dbo.Posit_Responsibilities ON dbo.Sotrs.ID_Sotr = dbo.Posit_Responsibilities.Sotr_ID INNER JOIN dbo.Positions ON dbo.Posit_Responsibilities.Positions_ID = dbo.Positions.ID_Positions where id_Sotr = " + sbor_Docum.Sotr_ID;
+                Program.SqlConnection.Open();
+                string i = command.ExecuteScalar().ToString();
+                Program.SqlConnection.Close();
+                if (i != null && i != "")
+                    ViewBag.Dolj = "Должноть: " + i;
+                else
+                    ViewBag.Dolj = "";
+                //Список документов
+                ViewBag.Doc_ID = new SelectList(db.Documents, "ID_Doc", "Doc_Naim", sbor_Docum.Doc_ID);
+                //Список сотрудников
+                ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full", sbor_Docum.Sotr_ID);
+                return View(sbor_Docum);
             }
-            Sbor_Docum sbor_Docum = db.Sbor_Docum.Find(id);
-            if (sbor_Docum == null)
+            else
             {
-                return HttpNotFound();
+                return Redirect("/Error/NotRight");
             }
-            ViewBag.Doc_ID = new SelectList(db.Documents, "ID_Doc", "Doc_Naim", sbor_Docum.Doc_ID);
-            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full", sbor_Docum.Sotr_ID);
-            return View(sbor_Docum);
         }
 
-        // POST: Sbor_Docum/Edit/5
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Sbor_Docum sbor_Docum, HttpPostedFileBase imgfile)
         {
-            ViewBag.Doc_ID = new SelectList(db.Documents, "ID_Doc", "Doc_Naim", sbor_Docum.Doc_ID);
-            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full", sbor_Docum.Sotr_ID);
-            SqlCommand command;
-            string path = upload(imgfile);
-            if (!path.Equals("-1"))
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
+                //Список документов
+                ViewBag.Doc_ID = new SelectList(db.Documents, "ID_Doc", "Doc_Naim", sbor_Docum.Doc_ID);
+                //Список сотрудников
+                ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full", sbor_Docum.Sotr_ID);
+                SqlCommand command;
+                //Если загружен файл
+                string path = upload(imgfile);
+                if (!path.Equals("-1"))
+                {
+                    //Обновление данных
                     command = new SqlCommand(
                         "update Sbor_Docum " +
                         "set " +
@@ -115,10 +111,11 @@ namespace Personal_Management.Controllers
                     Program.SqlConnection.Open();
                     command.ExecuteScalar();
                     Program.SqlConnection.Close();
-                    return RedirectToAction("Index");
+                    return Redirect(Session["perehod"].ToString());
                 }
                 else
                 {
+                    //Обновление данных
                     command = new SqlCommand(
                         "update Sbor_Docum " +
                         "set " +
@@ -131,78 +128,97 @@ namespace Personal_Management.Controllers
                     Program.SqlConnection.Open();
                     command.ExecuteScalar();
                     Program.SqlConnection.Close();
-                    return RedirectToAction("Index");
+                    return Redirect(Session["perehod"].ToString());
                 }
-            
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
+
         }
 
         public string upload(HttpPostedFileBase file)
         {
             Random r = new Random();
+            //Изначальное значение пути
             string path = "-1";
             int random = r.Next();
             if (file != null && file.ContentLength > 0)
             {
                 string extension = Path.GetExtension(file.FileName);
-                if (extension.ToLower().Equals(".jpg") || extension.ToLower().Equals(".jpeg") || extension.ToLower().Equals(".png"))
+                try
                 {
-                    try
-                    {
-                        path = Path.Combine(Server.MapPath("~/Content/Photo/dok/"), DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName));
-                        file.SaveAs(path);
-                        path = DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName);
-                        //    ViewBag.Message = "File uploaded successfully";
-                    }
-                    catch 
-                    {
-                        path = "-1";
-                    }
+                    //Путь к файлу
+                    path = Path.Combine(Server.MapPath("~/Content/Photo/dok/"), DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName));
+                    //Сохранение файла
+                    file.SaveAs(path);
+                    //Имя файла
+                    path = DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetFileName(file.FileName);
+                    //    ViewBag.Message = "File uploaded successfully";
                 }
-                else
+                catch
                 {
-                    Response.Write("<script>alert('Only jpg ,jpeg or png formats are acceptable....'); </script>");
+                    path = "-1";
                 }
             }
             return path;
         }
 
-        // GET: Sbor_Docum/Delete/5
         [Authorize]
         public ActionResult Delete(int? id)
         {
-            if (id == null)
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    //400 ошибка
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                //Поиск по коду
+                Sbor_Docum sbor_Docum = db.Sbor_Docum.Find(id);
+                if (sbor_Docum == null)
+                {
+                    //404 ошибка
+                    return HttpNotFound();
+                }
+                return View(sbor_Docum);
             }
-            Sbor_Docum sbor_Docum = db.Sbor_Docum.Find(id);
-            if (sbor_Docum == null)
+            else
             {
-                return HttpNotFound();
+                return Redirect("/Error/NotRight");
             }
-            return View(sbor_Docum);
         }
 
-        // POST: Sbor_Docum/Delete/5
         [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Sbor_Docum sbor_Docum = db.Sbor_Docum.Find(id);
-            SqlCommand command;
-            command = new SqlCommand(
-                            "update Sbor_Docum " +
-                            "set " +
-                            "Itog = 0, " +
-                            "Photo_Doc = '' " +
-                            "where ID_Sbora = " + sbor_Docum.ID_Sbora.ToString(),
-                            Program.SqlConnection);
-            Program.SqlConnection.Open();
-            command.ExecuteScalar();
-            Program.SqlConnection.Close();
-            return RedirectToAction("Index");
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
+            {
+                //Очистка данных
+                Sbor_Docum sbor_Docum = db.Sbor_Docum.Find(id);
+                SqlCommand command;
+                command = new SqlCommand(
+                                "update Sbor_Docum " +
+                                "set " +
+                                "Itog = 0, " +
+                                "Photo_Doc = '' " +
+                                "where ID_Sbora = " + sbor_Docum.ID_Sbora.ToString(),
+                                Program.SqlConnection);
+                Program.SqlConnection.Open();
+                command.ExecuteScalar();
+                Program.SqlConnection.Close();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
         }
 
+        //Очистка мусора
         protected override void Dispose(bool disposing)
         {
             if (disposing)

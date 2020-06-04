@@ -1,0 +1,375 @@
+﻿@model Personal_Management.Models.Sotrs
+
+@using Shifr;
+@{
+    ViewBag.Title = "Личный кабинет сотрудника";
+    Session["perehod"] = "/Sotrs/LichKab/" + ViewBag.id.ToString();
+
+}
+<style>
+    [data-tooltip] {
+        position: relative; /* Относительное позиционирование */
+    }
+
+        [data-tooltip]::after {
+            z-index: 1001;
+            content: attr(data-tooltip); /* Выводим текст */
+            position: absolute; /* Абсолютное позиционирование */
+            width: 300px; /* Ширина подсказки */
+            left: 0;
+            top: 0; /* Положение подсказки */
+            background: #3989c9; /* Синий цвет фона */
+            color: #fff; /* Цвет текста */
+            padding: 0.5em; /* Поля вокруг текста */
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Параметры тени */
+            pointer-events: none; /* Подсказка */
+            opacity: 0; /* Подсказка невидима */
+            transition: 1s; /* Время появления подсказки */
+        }
+
+        [data-tooltip]:hover::after {
+            opacity: 1; /* Показываем подсказку */
+            top: 2.5em; /* Положение подсказки */
+            left: 0px
+        }
+</style>
+<div class="container">
+    <h2>Кабинет сотрудника</h2>
+    <div>
+        <h4>Данные о сотруднике | <a href="@Session["pred"]">Вернуться назад</a></h4>
+        <hr />
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#home"><ya-tr-span data-index="171-0" data-value="Home" data-translation="Главная" data-type="trSpan">Данные о сотруднике</ya-tr-span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#profile"><ya-tr-span data-index="172-0" data-value="Profile" data-translation="Профиль" data-type="trSpan">Должностные обязанности</ya-tr-span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#Isp"><ya-tr-span data-index="172-0" data-value="Isp" data-translation="Профиль" data-type="trSpan">Испытательный срок</ya-tr-span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#doc"><ya-tr-span data-index="172-0" data-value="doc" data-translation="Профиль" data-type="trSpan">Сбор документов</ya-tr-span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#ste"><ya-tr-span data-index="172-0" data-value="ste" data-translation="Профиль" data-type="trSpan">Этапы принятия</ya-tr-span></a>
+            </li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade show active" id="home">
+                <br />
+                <h3 style="text-align:center">Личные данные сотрудника</h3>
+                <br />
+                <div class="row">
+                    @foreach (Personal_Management.Models.Sotrs sot in ViewBag.dannie)
+                    {
+                        <div class="col">
+                            <div style="text-align:center">
+                                @if (sot.Photo == "" || sot.Photo.ToString() == "-")
+                                {
+                                    <img src="~/Content/Photo/st/default.png" class="avatar img-circle img-thumbnail" style="width:50%" alt="avatar">
+                                }
+                                else
+                                {
+                                    <img src="@sot.Photo" class="avatar img-circle img-thumbnail" alt="avatar" style="text-align:center;width:50%">
+                                }
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <h4>ФИО: @sot.Full</h4>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <h4>Дата рождения: @sot.Day_Of_Birth</h4>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <h4>Номер телефона: @sot.Num_Phone</h4>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <h4>Эл. почта: <a href="mailto: @sot.Email">@sot.Email</a></h4>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <h4>Адрес: @Shifrovanie.Decryption(sot.Address)</h4>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <h4>Дата приема на работу: @sot.Date_of_adoption</h4>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <a href="~/Sotrs/AddOrEdit/@ViewBag.id.ToString()" class="btn btn-secondary">Редактировать данные</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+                </div>
+
+            </div>
+            <div class="tab-pane fade" id="profile">
+                <br />
+                <h3 style="text-align:center">Должностные обязанности</h3>
+                <br />
+                <div class="form-group">
+                    <div class="col-xs-6">
+                        <h4>Отдел организации: @ViewBag.dep</h4>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-6">
+                        <h4>Наименование должности: @ViewBag.posit</h4>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-6">
+                        <h4>Трудовая ставка: @ViewBag.rate</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="Isp">
+                <br />
+                <h3 style="text-align:center">Прохождение испытательного срока</h3>
+                <br />
+                @if (ViewBag.isp != null)
+                {
+                    <table class="table" id="info-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    ФИО сотрудника
+                                </th>
+                                <th>
+                                    Период
+                                </th>
+                                <th>
+                                    Статус
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (Personal_Management.Models.Isp_Sroki item in ViewBag.isp)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Posit_Responsibilities.Sotrs.Full) (@Html.DisplayFor(modelItem => item.Posit_Responsibilities.Positions.Naim_Posit))
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Date_Start) - @Html.DisplayFor(modelItem => item.Date_Finish)
+
+                                    </td>
+                                    @switch (item.Status_ID)
+                                    {
+                                        case (1):
+                                            <td style="color:#3CB371">
+                                                <b>@Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St)</b>
+                                            </td>
+                                            break;
+                                        case 2:
+                                            <td style="color:#48D1CC">
+                                                <b>@Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St)</b>
+                                            </td>
+                                            break;
+                                        case 3:
+                                            <td style="color:#FF8C00">
+                                                <b>@Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St) </b>
+                                            </td>
+                                            break;
+                                        case 4:
+                                            <td style="color:#FF4500">
+                                                <b>@Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St) </b>
+                                            </td>
+                                            break;
+                                    }
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <h4>Испытательный срок еще не назначен</h4>
+                }
+
+            </div>
+            <div class="tab-pane fade" id="doc">
+                <br />
+                <h3 style="text-align:center">Сбор документов с сотрудника</h3>
+                <br />
+                <table class="table" id="info-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Наименование документа
+                            </th>
+                            <th>
+                                Результат
+                            </th>
+                            <th>
+                                Загрузить
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Personal_Management.Models.Sbor_Docum item in ViewBag.doc)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Documents.Doc_Naim)
+                                </td>
+                                <td>
+                                    @if (item.Itog == true)
+                                    {<p>Сдано</p> }
+                                    else
+                                    { <p>Не сдан</p>}
+                                </td>
+                                <td>
+                                    <a href="~/Sbor_Docum/Edit/@item.ID_Sbora">
+                                        <span class="badge  badge-pill">
+                                            <svg class="bi bi-pencil-square" width="2em" height="2em" style="color:orange" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z" />
+                                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-6a.5.5 0 00-1 0v6a.5.5 0 01-.5.5h-11a.5.5 0 01-.5-.5v-11a.5.5 0 01.5-.5H9a.5.5 0 000-1H2.5A1.5 1.5 0 001 2.5v11z" clip-rule="evenodd" />
+                                            </svg>
+                                        </span>
+                                    </a>
+                                    @if (item.Itog == true)
+                                    {
+                                        <a href="~/Content/Photo/dok/@item.Photo_Doc" download="">
+                                            <svg class="bi bi-download" style="color:green" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M.5 8a.5.5 0 01.5.5V12a1 1 0 001 1h12a1 1 0 001-1V8.5a.5.5 0 011 0V12a2 2 0 01-2 2H2a2 2 0 01-2-2V8.5A.5.5 0 01.5 8z" clip-rule="evenodd" />
+                                                <path fill-rule="evenodd" d="M5 7.5a.5.5 0 01.707 0L8 9.793 10.293 7.5a.5.5 0 11.707.707l-2.646 2.647a.5.5 0 01-.708 0L5 8.207A.5.5 0 015 7.5z" clip-rule="evenodd" />
+                                                <path fill-rule="evenodd" d="M8 1a.5.5 0 01.5.5v8a.5.5 0 01-1 0v-8A.5.5 0 018 1z" clip-rule="evenodd" />
+                                            </svg>
+                                        </a>
+                                    }
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="ste">
+                <br />
+                <h3 style="text-align:center">Прохождение этапов принятия на работу</h3>
+                <br />
+                <div class="containerb">
+                    <div class="wrapper" style="padding: 0px 0px;">
+                        <div class="arrow-steps clearfix">
+                            @foreach (Personal_Management.Models.Steps item in ViewBag.step)
+                            {
+
+
+                                switch (item.Sobesedovanie)
+                                {
+                                    case false:
+                                        <div class="step current"><span><a href="~/ZayavkaNaSobes/CreateSob/@item.Sotr_ID" style="color:white" data-tooltip="Отсутствует решение по собеседованию">Этап 1</a> @Html.ActionLink("Назначить собеседование", "CreateSob", "ZayavkaNaSobes", new { num = @item.Sotrs.Login_Acc }, new { @class = " " })</span> </div>
+                                        <div class="step"><span>Этап 2</span></div>
+                                        <div class="step"><span>Этап 3</span></div>
+                                        <div class="step"><span>Этап 4</span></div>
+                                        <div class="step"><span>Этап 5</span></div>
+                                        break;
+                                    case true:
+                                        switch (item.Dolznost)
+                                        {
+                                            case false:
+                                                <div class="step current done"><span data-tooltip="Собеседование пройдено">Этап 1</span></div>
+                                                <div class="step current"><a href="~/Posit_Responsibilities/Create/@item.Sotr_ID" style="color:white" data-tooltip="Необходимо назначить на сотрудника должность"><span>Этап 2</span></a> </div>
+                                                <div class="step"><span>Этап 3</span></div>
+                                                <div class="step"><span>Этап 4</span></div>
+                                                <div class="step"><span>Этап 5</span></div>
+                                                break;
+                                            case true:
+                                                switch (item.Grafik_Raboti)
+                                                {
+                                                    case false:
+                                                        <div class="step current done"><span data-tooltip="Собеседование пройдено">Этап 1</span></div>
+                                                        <div class="step current done"><span data-tooltip="Должность назначена">Этап 2</span></div>
+                                                        <div class="step current "><a href="~/Work_Schedule/Create/@item.Sotr_ID" style="color:white" data-tooltip="Необходимо назначить график работы на неделю"><span>Этап 3</span></a></div>
+                                                        <div class="step"><span>Этап 4</span></div>
+                                                        <div class="step"><span>Этап 5</span></div>
+                                                        break;
+                                                    case true:
+                                                        switch (item.Sbor_Documentov)
+                                                        {
+                                                            case false:
+                                                                <div class="step current done"><span data-tooltip="Собеседование пройдено">Этап 1</span></div>
+                                                                <div class="step current done"><span data-tooltip="Должность назначена">Этап 2</span></div>
+                                                                <div class="step current done"><span data-tooltip="График работы создан">Этап 3</span></div>
+                                                                <div class="step current "><a href="~/Sbor_Docum/Index/@item.Sotr_ID" style="color:white" data-tooltip="Сотрудник сдал еще не все документы"><span>Этап 4</span></a></div>
+                                                                <div class="step"><span>Этап 5</span></div>
+                                                                break;
+                                                            case true:
+                                                                switch (item.Isp_Srok)
+                                                                {
+                                                                    case false:
+                                                                        <div class="step current done"><span data-tooltip="Собеседование пройдено">Этап 1</span></div>
+                                                                        <div class="step current done"><span data-tooltip="Должность назначена">Этап 2</span></div>
+                                                                        <div class="step current done"><span data-tooltip="График работы создан">Этап 3</span></div>
+                                                                        <div class="step current done"><span data-tooltip="Все документы сданы">Этап 4</span></div>
+                                                                        <div class="step current "><a href="~/Isp_Sroki/Index/@item.Sotr_ID" style="color:white" data-tooltip="Сотрудник проходит испытательный срок"><span>Этап 5</span></a></div>
+                                                                        break;
+                                                                    case true:
+                                                                        <div class="step current done"><span data-tooltip="Собеседование пройдено">Этап 1</span></div>
+                                                                        <div class="step current done"><span data-tooltip="Должность назначена">Этап 2</span></div>
+                                                                        <div class="step current done"><span data-tooltip="График работы создан">Этап 3</span></div>
+                                                                        <div class="step current done"><span data-tooltip="Все документы сданы">Этап 4</span></div>
+                                                                        <div class="step current done"><span data-tooltip="Сотрудник прошел испытательный срок и принят в организацию на постоянную основу">Этап 5</span></div>
+                                                                        break;
+                                                                }
+                                                                break;
+                                                        }
+                                                        break;
+                                                }
+                                                break;
+                                        }
+                                        break;
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <h3 style="text-align:center">Отчетная документация</h3>
+    <br />
+    <div class="list-group" style="margin-top:15px; background-color:lightgray" id="list-tab" role="tablist">
+        <a class="list-group-item list-group-item-action" href="~/Sotrs/Details/@ViewBag.id.ToString()"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Шаблон личного дела</a>
+        <a class="list-group-item list-group-item-action" href="~/Sotrs/Details2/@ViewBag.id.ToString()"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Полный отчет по сотруднику</a>
+        <a class="list-group-item list-group-item-action" href="~/Sotrs/Details3/@ViewBag.id.ToString()"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> График работы</a>
+    </div>
+
+</div>
+<div id="modDialog" class="modal fade">
+    <div id="dialogContent" class="modal-dialog modal-lg"></div>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(function () {
+            $.ajaxSetup({ cache: false });
+            $(".compItem").click(function (e) {
+
+                e.preventDefault();
+                $.get(this.href, function (data) {
+                    $('#dialogContent').html(data);
+                    $('#modDialog').modal('show');
+                });
+            });
+        })
+    </script>
+}

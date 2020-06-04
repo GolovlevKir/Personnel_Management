@@ -1,0 +1,81 @@
+﻿@model IEnumerable<Personal_Management.Models.status_isp_sroka>
+
+@{
+    ViewBag.Title = "Список испытательных сроков";
+}
+    <div class="container">
+        <h2>Статусы испытательных сроков</h2>
+        <hr />
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"> @Html.ActionLink("Испытательные сроки", "Index", "Isp_Sroki")</li>
+        </ol>
+        <br />
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name_St)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    @switch (item.ID_St)
+                    {
+                        case (1):
+                            <td style="color:#3CB371">
+                                <b>@Html.DisplayFor(modelItem => item.Name_St)</b>
+                            </td>
+                            break;
+                        case 2:
+                            <td style="color:#48D1CC">
+                                <b>@Html.DisplayFor(modelItem => item.Name_St)</b>
+                            </td>
+                            break;
+                        case 3:
+                            <td style="color:#FF8C00">
+                                <b>@Html.DisplayFor(modelItem => item.Name_St) </b>
+                            </td>
+                            break;
+                        case 4:
+                            <td style="color:#FF4500">
+                                <b>@Html.DisplayFor(modelItem => item.Name_St) </b>
+                            </td>
+                            break;
+                    }
+                    <td>
+                        <a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/status_isp_sroka/edit/@item.ID_St">
+                            <svg class="bi bi-pencil-square" width="2em" height="2em" style="color:orange" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z" />
+                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-6a.5.5 0 00-1 0v6a.5.5 0 01-.5.5h-11a.5.5 0 01-.5-.5v-11a.5.5 0 01.5-.5H9a.5.5 0 000-1H2.5A1.5 1.5 0 001 2.5v11z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+
+
+<div id="modDialog" class="modal fade">
+    <div id="dialogContent" class="modal-dialog modal-lg"></div>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(function () {
+            $.ajaxSetup({ cache: false });
+            $(".compItem").click(function (e) {
+
+                e.preventDefault();
+                $.get(this.href, function (data) {
+                    $('#dialogContent').html(data);
+                    $('#modDialog').modal('show');
+                });
+            });
+        })
+    </script>
+}

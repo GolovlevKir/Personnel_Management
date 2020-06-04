@@ -1,0 +1,172 @@
+﻿
+@{
+    ViewBag.Title = "Настройки аккаунта";
+}
+
+    <div class="container">
+
+        @if (ViewBag.Suc == true)
+        {
+            <div class="alert alert-dismissible alert-success">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <h4 class="alert-heading">Сохранено!</h4>
+                <p class="mb-0">@ViewBag.SucMes</p>
+            </div>
+        }
+
+
+        <h2 style="margin-bottom:15px">Настройки аккаунта</h2>
+
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#home">Личные данные</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#Tema">Тема</a>
+            </li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active show" id="home">
+                @using (Html.BeginForm("Settings", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @model Personal_Management.Models.Sotrs
+                    @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    <h3 style="margin-top:15px">Данные аккаунта</h3>
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.ID_Sotr)
+                    @Html.HiddenFor(model => model.Login_Acc)
+                    @Html.HiddenFor(model => model.Date_of_adoption)
+                    @Html.HiddenFor(model => model.Logical_Delete)
+                    @Html.HiddenFor(model => model.Guest)
+                    @Html.HiddenFor(model => model.fired)
+                    @Html.HiddenFor(model => model.Photo)
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <img src="@Model.Photo" style="margin:10px; object-fit: cover;" height="200" width="200" id="imagePr" />
+                            <input type="file" name="ImageUpload" accept="image/jpeg, image/png, image/jpg" onchange="ShowImagePreview(this, document.getElementById('imagePr'))" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Surname_Sot, "Фамилия пользователя", htmlAttributes: new { @class = "control-label col-md-9" })
+                        <div class="col-md-12">
+                            @Html.EditorFor(model => model.Surname_Sot, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Surname_Sot, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name_Sot, "Имя пользователя", htmlAttributes: new { @class = "control-label col-md-9" })
+                        <div class="col-md-12">
+                            @Html.EditorFor(model => model.Name_Sot, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Name_Sot, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Petronumic_Sot, "Отчество пользователя", htmlAttributes: new { @class = "control-label col-md-9" })
+                        <div class="col-md-12">
+                            @Html.EditorFor(model => model.Petronumic_Sot, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Petronumic_Sot, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Day_Of_Birth, "Дата рождения", htmlAttributes: new { @class = "control-label col-md-9" })
+                        <div class="col-md-12">
+                            @Html.EditorFor(model => model.Day_Of_Birth, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Day_Of_Birth, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Address, "Адрес проживания пользователя", htmlAttributes: new { @class = "control-label col-md-9" })
+                        <div class="col-md-12">
+                            @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Num_Phone, "Телефон", htmlAttributes: new { @class = "control-label col-md-9" })
+                        <div class="col-md-12">
+                            @Html.EditorFor(model => model.Num_Phone, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Num_Phone, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Email, "Электронный адрес почты", htmlAttributes: new { @class = "control-label col-md-9" })
+                        <div class="col-md-12">
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                            <div class="btn-group mr-2" role="group" aria-label="First group">
+                                <input type="submit" value="Сохранить данные" style="height:38px" class="btn btn-outline-success" />
+                            </div>
+                            <div class="btn-group mr-2" role="group" aria-label="Second group">
+                                <p><a class="addLink btn btn-outline-secondary" href="/Home/SettPersDannie">Сменить пароль</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+            <div class="tab-pane fade " id="Tema">
+                <br />
+                @using (Html.BeginForm(Html.BeginForm("Them", "Account")))
+                {
+                    <div class="form-group">
+                        <div class="custom-control custom-switch">
+                            @if (Session["style"] == null || Session["style"].ToString() == "bootstrap_min.css")
+                            {
+                                <input type="checkbox" class="custom-control-input" id="tema" name="tema" onchange="fun1()">
+                                <label class="custom-control-label" for="tema">Сменить тему на обычную версию  </label>
+                            }
+                            else
+                            {
+                                <input type="checkbox" class="custom-control-input" checked="" id="tema" name="tema" onchange="fun1()">
+                                <label class="custom-control-label" for="tema">Сменить тему сайта на темную версию  </label>
+                            }
+
+                        </div>
+                        <input style="margin-top:15px" type="submit" class="btn btn-outline-success" value="Сохранить " />
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+
+
+@section scripts{
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+
+}
+
+<script>
+    var st;
+    function fun1() {
+        var chbox;
+        chbox = document.getElementById('tema');
+        if (chbox.checked) {
+            document.getElementById('style').href = "/Content/bootstrapdark.min.css";
+            st = "/Content/bootstrapdark.min.css";
+        }
+        else {
+            document.getElementById('style').href = "/Content/bootstrap_min.css";
+            st = "/Content/bootstrap_min.css";
+        }
+    }
+    function fun() {
+        return document.getElementById('style').href = st;
+    }
+</script>

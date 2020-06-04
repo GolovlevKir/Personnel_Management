@@ -6,37 +6,40 @@
     ViewBag.ContentMeta = "На данном окне возможно добавление новых ставок";
 }
 
-<h2>Добавление записи</h2>
-<ol class="breadcrumb">
-    <li class="breadcrumb-item"> @Html.ActionLink("Перейти к списку ставок", "Index")</li>
-    <li class="breadcrumb-item"> @Html.ActionLink("Данные сотрудников", "Index", "Sotrs")</li>
-    <li class="breadcrumb-item">@Html.ActionLink("Список рабочих графиков", "Index", "Work_Schedule")</li>
-</ol>
+    <div class="container">
+        <h2>Добавление записи</h2>
 
-@using (Html.BeginForm()) 
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Ставки</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.Rate, htmlAttributes: new { @class = "control-label col-md-5" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Rate, new { htmlAttributes = new { @class = "form-control", @type="number", @pattern=@"\d+(,\d{2})?" , @step="0.01", @min="0" } })
-                @Html.ValidationMessageFor(model => model.Rate, "", new { @class = "text-danger" })
-            </div>
-        </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Добавить ставку" class="btn btn-outline-success" />
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <h4>Ставки</h4>
+                <hr />
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"> @Html.ActionLink("Перейти к списку ставок", "Index")</li>
+                    <li class="breadcrumb-item"> @Html.ActionLink("Данные штатного состава", "Index", "Posit_Responsibilities")</li>
+                    <li class="breadcrumb-item">@Html.ActionLink("Список рабочих графиков", "Index", "Work_Schedule")</li>
+                </ol>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Rate, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.Rate, new { htmlAttributes = new { @class = "form-control", @type = "number", @pattern = @"\d+(,\d{2})?", @step = "0.01", @min = "0" } })
+                        @Html.ValidationMessageFor(model => model.Rate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Добавить ставку" class="btn btn-outline-success" />
+                    </div>
+                </div>
             </div>
-        </div>
+        }
     </div>
-}
-
 
 
 @section Scripts {

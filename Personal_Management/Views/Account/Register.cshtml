@@ -1,54 +1,139 @@
 ﻿@model Personal_Management.Models.RegisterModel
-
 @{
-    ViewBag.Title = "Register";
+    ViewBag.Title = "Регистрация";
 }
 
 
-
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))//data-reset
 {
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal" style="margin: 0 auto; width: 800px;">
-        <h2>Регистрация новых пользователей</h2>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.Login, htmlAttributes: new { @class = "control-label col-md-5" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Login, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Login, "", new { @class = "text-danger" })
+    <div class="container">
+        <h2 style="text-align:center">Регистрация</h2>
+        @if ((bool)Session["War"] == true)
+        {
+            <div class="alert alert-dismissible alert-warning">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <h4 class="alert-heading">Ошибка!</h4>
+                <p class="mb-0">@Html.ValidationSummary(true, "", new { @class = "text-danger" })</p>
             </div>
+        }
+
+        @Html.HiddenFor(model => model.Photo)
+
+        <!--Загрузка фото-->
+        <div class="text-center">
+            <img src="~/Content/Photo/st/default.png" style="margin:10px; border: 2px solid; object-fit: cover;" height="300" width="300" id="imagePreview" />
+            <br />
+            <input type="file" class="btn" name="ImageUpload" accept="image/jpeg, image/png, image/jpg" onchange="ShowImagePreview(this, document.getElementById('imagePreview'))" />
+            <br />
+
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-5" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @type="password", @placeholder="Пароль..." } })
-                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+        <div class="tab-pane active" id="home">
+            <!-- Логин -->
+            <div class="form-group">
+                <div class="col-xs-6">
+                    @Html.LabelFor(model => model.Login, "Логин пользователя", htmlAttributes: new { @class = "control-label col-md-9" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.Login, new { htmlAttributes = new { @class = "form-control", @placeholder = "Придумайте логин пользователя" } })
+                        <p id="tx">@Session["LogGeve"].ToString()</p>
+                        @Html.ValidationMessageFor(model => model.Login, "", new { @class = "text-danger" })
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Role_ID, htmlAttributes: new { @class = "control-label col-md-5" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.Role_ID, ViewBag.Roles as SelectList, new { @class = "form-control", @id = "exampleSelect1"})
-                @Html.ValidationMessageFor(model => model.Role_ID, "", new { @class = "text-danger" })
+            <!-- Пароль -->
+            <div class="form-group">
+                <div class="col-xs-6">
+                    @Html.LabelFor(model => model.Password, "Пароль пользователя", htmlAttributes: new { @class = "control-label col-md-9" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @id = "password-input", @type = "password", @placeholder = "Придумайте пароль пользователя" } })
+                        <a href="#" class="password-control"></a>
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Sotr_ID, htmlAttributes: new { @class = "control-label col-md-5" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.Sotr_ID, ViewBag.Sotrs as SelectList, new { @class = "form-control", @id = "exampleSelect1" })
-                @Html.ValidationMessageFor(model => model.Sotr_ID, "", new { @class = "text-danger" })
+            <!-- Личные данные -->
+            <div class="form-group">
+                <div class="col-xs-6">
+                    @Html.LabelFor(model => model.Surname_Sot, "Фамилия пользователя", htmlAttributes: new { @class = "control-label col-md-9" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.Surname_Sot, new { htmlAttributes = new { @class = "form-control", @placeholder = "Фамилия" } })
+                        @Html.ValidationMessageFor(model => model.Surname_Sot, "", new { @class = "text-danger" })
+                    </div>
+                </div>
             </div>
-        </div>
+            <div class="form-group">
+                <div class="col-xs-6">
+                    @Html.LabelFor(model => model.Name_Sot, "Имя пользователя", htmlAttributes: new { @class = "control-label col-md-9" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.Name_Sot, new { htmlAttributes = new { @class = "form-control", @placeholder = "Имя" } })
+                        @Html.ValidationMessageFor(model => model.Name_Sot, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-6">
+                    @Html.LabelFor(model => model.Petronumic_Sot, "Отчество пользователя", htmlAttributes: new { @class = "control-label col-md-9" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.Petronumic_Sot, new { htmlAttributes = new { @class = "form-control", @placeholder = "Отчество" } })
+                        @Html.ValidationMessageFor(model => model.Petronumic_Sot, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-6">
+                    @Html.LabelFor(model => model.Day_Of_Birth, "Дата рождения", htmlAttributes: new { @class = "control-label col-md-9" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.Day_Of_Birth, new { htmlAttributes = new { @class = "form-control", @id = "date" } })
+                        @Html.ValidationMessageFor(model => model.Day_Of_Birth, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-6">
+                    @Html.LabelFor(model => model.Address, "Адрес проживания", htmlAttributes: new { @class = "control-label col-md-9" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control", @placeholder = "Адрес проживания" } })
+                        @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-6">
+                    @Html.LabelFor(model => model.Num_Phone, "Номер телефона", htmlAttributes: new { @class = "control-label col-md-9" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.Num_Phone, new { htmlAttributes = new { @class = "form-control", @id = "phone", @placeholder = "Номер мобильного телефона" } })
+                        @Html.ValidationMessageFor(model => model.Num_Phone, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-6">
+                    @Html.LabelFor(model => model.Email, "Электронный почтовый адрес", htmlAttributes: new { @class = "control-label col-md-9" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @placeholder = "Адрес электронной почты" } })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-6">
+                    <div class="col-md-12">
+                        <div class="custom-control custom-switch">
+                            <!-- Чекбокс для подтверждения лицензионного соглашения -->
+                            <input type="checkbox" class="custom-control-input" id="customSwitch1" onclick="fun();">
+                            <label class="custom-control-label" for="customSwitch1"><ya-tr-span data-index="164-0" data-value="Toggle this switch element" data-translation="Переключите этот элемент переключателя" data-type="trSpan">Согласен с <a href="~/Account/Lic" target="_blank">пользовательским соглашением</a></ya-tr-span></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-10">
+                    <div class="col-md-12">
+                        <!-- Кнопка для регистрации -->
+                        <input type="submit" style="display:none; width:100%" id="bt" value="Зарегистрироваться" class="btn btn-outline-success" />
+                    </div>
+                </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Зарегистрироваться" class="btn btn-default" />
             </div>
         </div>
     </div>
@@ -57,3 +142,59 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+<!-- Маски ввода -->
+<script src="~/Scripts/jquery.maskedinput.min.js"></script>
+<script>
+    jQuery(function ($) {
+        $.mask.definitions['~'] = '[+-]';
+        $('#date').mask('99.99.9999');
+        $('#date2').mask('99.99.9999');
+        $('#phone').mask('+7(999)999-99-99');
+        $('#phone1').mask('+7(999)999-99-99');
+    });
+</script>
+
+<!-- Видимость от чекбокса -->
+<script>
+    var chbox;
+    chbox = document.getElementById('customSwitch1');
+    var bt = document.getElementById('bt');
+    function fun() {
+        if (chbox.checked) {
+            bt.style.display = 'block';
+        }
+        else {
+            bt.style.display = 'none';
+        }
+    }
+
+</script>
+<!-- Стиль для поля пароля -->
+<style>
+    .password-control {
+        position: absolute;
+        top: 11px;
+        right: 30px;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background: url(https://snipp.ru/demo/495/view.svg) 0 0 no-repeat;
+    }
+
+        .password-control.view {
+            background: url(https://snipp.ru/demo/495/no-view.svg) 0 0 no-repeat;
+        }
+</style>
+
+<script>
+    $('body').on('click', '.password-control', function () {
+        if ($('#password-input').attr('type') == 'password') {
+            $(this).addClass('view');
+            $('#password-input').attr('type', 'text');
+        } else {
+            $(this).removeClass('view');
+            $('#password-input').attr('type', 'password');
+        }
+        return false;
+    });
+</script>

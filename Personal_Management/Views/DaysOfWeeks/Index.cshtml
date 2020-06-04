@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Personal_Management.Models.DaysOfWeek>
+
+@{
+    ViewBag.Title = "Дни недели";
+}
+    <div class="container">
+        <h2>Список дней недели</h2>
+
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Naim_Day)
+                </th>
+                <th></th>
+            </tr>
+            <!-- Цикл для вывода данных -->
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Naim_Day)
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>

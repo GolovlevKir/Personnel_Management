@@ -1,0 +1,306 @@
+﻿@model Personal_Management.Models.Sotrs
+@using System.Data.SqlClient;
+@using Shifr;
+@{
+    ViewBag.Title = "Отчет по сотруднику";
+    ViewBag.dne = null;
+    if (Model.Date_of_adoption != null && Model.Date_of_adoption != "")
+    {
+        SqlCommand command = new SqlCommand("", Program.SqlConnection);
+        command.CommandText = "select DATEDIFF(DAY,CONVERT(datetime, '" + Model.Date_of_adoption + "', 104),GETDATE())";
+        Program.SqlConnection.Open();
+        ViewBag.dne = (int)command.ExecuteScalar();
+        Program.SqlConnection.Close();
+    }
+}
+<div class="container">
+
+    <h2>Данные по сотруднику | <a href="#" id="btn-export" onclick="generatePDF('@Model.Surname_Sot @Model.Name_Sot @Model.Petronumic_Sot');">СКАЧАТЬ</a> | <a href="@Session["perehod"].ToString()">Вернуться назад</a></h2>
+    <hr />
+    <div style="text-align:center; margin: 0 auto; background-color:lightgray; width:90%; margin-bottom:50px; font-family:'Times New Roman'">
+        <div style="text-align:center; padding: 10px 10px 10px 10px; font-family:'Times New Roman'" id="source-html">
+            <h3 style="font-weight: 1;font-family:'Times New Roman'">
+                Общество с ограниченной ответственностью<br />
+                «Си эМ эС»
+            </h3>
+            <p style="        margin-bottom: 0rem;">ОГРН 0000000000000 ИНН 0000000000 КПП 000000000</p>
+            <br />
+            <p style="margin-bottom: 0rem;">108840, город Москва, город Троицк, улица Промышленная, дом 19, офис 33</p>
+            <hr />
+
+            <h3 style="margin-top:20px; font-family:'Times New Roman'">ОТЧЕТ ПО СОТРУДНИКУ</h3>
+            <dl class="dl-horizontal">
+                <dd>
+                    <img src="@Url.Content(Model.Photo)" style="margin:10px; object-fit: cover;" height="200" width="200" id="imagePreview" />
+                </dd>
+                <dd>
+
+                    <h3 style="font-weight: 1; margin-top:20px; font-family:'Times New Roman'">Личные данные</h3>
+                </dd>
+                <dd>
+                    <h5 style="font-weight: 1; margin-top:20px;text-align:left; font-family:'Times New Roman'">Фамилия: @Model.Surname_Sot</h5>
+                </dd>
+
+                <dd>
+                    <h5 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Имя: @Model.Name_Sot</h5>
+                </dd>
+
+                <dd>
+                    <h5 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Отчество: @Model.Petronumic_Sot</h5>
+                </dd>
+                <dd>
+                    <h5 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Дата рождения: @Model.Day_Of_Birth</h5>
+                </dd>
+                <dd>
+                    <h5 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Адрес проживания: @Shifrovanie.Decryption(Model.Address)</h5>
+                </dd>
+                <dd>
+                    <h3 style="font-weight: 1; margin-top:20px; font-family:'Times New Roman'">Контактная информация</h3>
+                </dd>
+                <dd>
+                    <h5 style="font-weight: 1; margin-top:20px;text-align:left; font-family:'Times New Roman'">Номер телефона: @Model.Num_Phone</h5>
+                </dd>
+                <dd>
+                    <h5 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Адрес электронной почты: @Model.Email</h5>
+                </dd>
+                <dd>
+                    <h3 style="font-weight: 1; margin-top:20px; font-family:'Times New Roman'">Данные по работе в компании ООО "Си эМ эС"</h3>
+                </dd>
+                <dd>
+                    <h5 style="font-weight: 1; margin-top:20px;text-align:left; font-family:'Times New Roman'">Дата принятия на работу: @Model.Date_of_adoption</h5>
+                </dd>
+                <dd>
+                    <h5 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Подразделение компании: @ViewBag.dep</h5>
+                </dd>
+                <dd>
+                    <h5 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Должность: @ViewBag.posit</h5>
+                </dd>
+                <dd>
+                    <h5 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Размер трудовой ставки: @ViewBag.rate</h5>
+                </dd>
+                @if (ViewBag.dne != null)
+                {
+                    <dd>
+                        <h5 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Отработано дней в компании: @ViewBag.dne</h5>
+                    </dd>
+                }
+
+
+                <dd>
+                    <h3 style="font-weight: 1; margin-top:20px; font-family:'Times New Roman'">Статистика по принятию на работу</h3>
+                </dd>
+                <dd>
+                    <h4 style="font-weight: 1; margin-top:20px;text-align:left; font-family:'Times New Roman'">Испытательный срок</h4>
+                </dd>
+                <dd>
+                    @if (ViewBag.isp != null)
+                    {
+                        <table class="table" style="font-weight: 1; text-align:left; font-family:'Times New Roman'">
+                            <thead>
+                                <tr>
+
+                                    <th>
+                                        <b>Период</b>
+                                    </th>
+                                    <th>
+                                        <b>Статус</b>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (Personal_Management.Models.Isp_Sroki item in ViewBag.isp)
+                                {
+                                    <tr>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Date_Start) - @Html.DisplayFor(modelItem => item.Date_Finish)
+
+                                        </td>
+                                        <td>
+                                            <b>@Html.DisplayFor(modelItem => item.status_isp_sroka.Name_St)</b>
+                                        </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <h5 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Не назначался</h5>
+                    }
+                </dd>
+                <dd>
+                    <h4 style="font-weight: 1; margin-top:20px;text-align:left; font-family:'Times New Roman'">Этапы принятия на работу</h4>
+                </dd>
+                <dd>
+                    @if (ViewBag.step != null)
+                    {
+                        foreach (Personal_Management.Models.Steps item in ViewBag.step)
+                        {
+                            switch (item.Sobesedovanie)
+                            {
+                                case false:
+                                    <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 1 "Прохождение собеседования": <font style="color:orange">Ожидается</font></h6>
+                                    <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 2 "Назначение должности": <font style="color:red">Не выполнено</font></h6>
+                                    <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 3 "Назначение графика работы": <font style="color:red">Не выполнено</font></h6>
+                                    <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 4 "Сдача всех требуемых документов": <font style="color:red">Не выполнено</font></h6>
+                                    <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 5 "Прохождение испытательного срока": <font style="color:red">Не выполнено</font></h6>
+                                    break;
+                                case true:
+                                    switch (item.Dolznost)
+                                    {
+                                        case false:
+                                            <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 1 "Прохождение собеседования": <font style="color:green">Выполнено</font></h6>
+                                            <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 2 "Назначение должности": <font style="color:orange">Ожидается</font></h6>
+                                            <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 3 "Назначение графика работы": <font style="color:red">Не выполнено</font></h6>
+                                            <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 4 "Сдача всех требуемых документов": <font style="color:red">Не выполнено</font></h6>
+                                            <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 5 "Прохождение испытательного срока": <font style="color:red">Не выполнено</font></h6>
+                                            break;
+                                        case true:
+                                            switch (item.Grafik_Raboti)
+                                            {
+                                                case false:
+                                                    <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 1 "Прохождение собеседования": <font style="color:green">Выполнено</font></h6>
+                                                    <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 2 "Назначение должности": <font style="color:green">Выполнено</font></h6>
+                                                    <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 3 "Назначение графика работы": <font style="color:orange">Ожидается</font></h6>
+                                                    <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 4 "Сдача всех требуемых документов": <font style="color:red">Не выполнено</font></h6>
+                                                    <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 5 "Прохождение испытательного срока": <font style="color:red">Не выполнено</font></h6>
+                                                    break;
+                                                case true:
+                                                    switch (item.Sbor_Documentov)
+                                                    {
+                                                        case false:
+                                                            <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 1 "Прохождение собеседования": <font style="color:green">Выполнено</font></h6>
+                                                            <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 2 "Назначение должности": <font style="color:green">Выполнено</font></h6>
+                                                            <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 3 "Назначение графика работы": <font style="color:green">Выполнено</font></h6>
+                                                            <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 4 "Сдача всех требуемых документов": <font style="color:orange">Ожидается</font></h6>
+                                                            <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 5 "Прохождение испытательного срока": <font style="color:red">Не выполнено</font></h6>
+                                                            break;
+                                                        case true:
+                                                            switch (item.Isp_Srok)
+                                                            {
+                                                                case false:
+                                                                    <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 1 "Прохождение собеседования": <font style="color:green">Выполнено</font></h6>
+                                                                    <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 2 "Назначение должности": <font style="color:green">Выполнено</font></h6>
+                                                                    <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 3 "Назначение графика работы": <font style="color:green">Выполнено</font></h6>
+                                                                    <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 4 "Сдача всех требуемых документов": <font style="color:green">Выполнено</font></h6>
+                                                                    <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 5 "Прохождение испытательного срока": <font style="color:orange">Ожидается</font></h6>
+                                                                    break;
+                                                                case true:
+                                                                    <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 1 "Прохождение собеседования": <font style="color:green">Выполнено</font></h6>
+                                                                    <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 2 "Назначение должности": <font style="color:green">Выполнено</font></h6>
+                                                                    <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 3 "Назначение графика работы": <font style="color:green">Выполнено</font></h6>
+                                                                    <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 4 "Сдача всех требуемых документов": <font style="color:green">Выполнено</font></h6>
+                                                                    <h6 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Этап 5 "Прохождение испытательного срока": <font style="color:green">Выполнено</font></h6>
+                                                                    break;
+                                                            }
+                                                            break;
+                                                    }
+                                                    break;
+                                            }
+                                            break;
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <h5 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Не велись</h5>
+                    }
+                </dd>
+                <dd>
+                    <h4 style="font-weight: 1; margin-top:20px;text-align:left; font-family:'Times New Roman'">Реестр документов сотрудника</h4>
+                </dd>
+                <dd>
+                    @if (ViewBag.doc != null && ViewBag.doc.Count != 0)
+                    {
+                        <table class="table" id="info-table" style="text-align:left">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Наименование документа
+                                    </th>
+                                    <th>
+                                        Результат
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (Personal_Management.Models.Sbor_Docum item in ViewBag.doc)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Documents.Doc_Naim)
+                                        </td>
+                                        <td>
+                                            @if (item.Itog == true)
+                                            {
+                                                <p>СДАН</p>
+                                            }
+                                            else
+                                            {
+                                                <p>НЕ СДАН</p>
+                                            }
+                                        </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <h5 style="font-weight: 1; margin-top:10px;text-align:left; font-family:'Times New Roman'">Не сдавались</h5>
+                    }
+                </dd>
+
+
+
+
+                <dd style=" margin-top:20px; text-align:left">
+                    Сотрудник отдела кадров компании ООО "Си эМ эС" ______________/______________/
+                    <br />
+                    <p><font style="margin-left:65%">Подпись</font> <font style="margin-left:5%">Расшифровка</font></p>
+
+                    Генеральный директор компании ООО "Си эМ эС" _______________/_______________/
+                    <br />
+                    <p><font style="margin-left:65%">Подпись</font> <font style="margin-left:5%">Расшифровка</font></p>
+                    <br />
+                    <div>
+                        <p style="text-align: left; margin-left:20%">М.П.</p>
+                        <p style=" text-align: right">Дата: ____.________________ 20__ г.</p>
+                    </div>
+                </dd>
+
+
+
+
+            </dl>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.1.min.js"></script>
+<script type="text/javascript" src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+<script type="text/javascript">
+    function generatePDF(sot) {
+        // Choose the element that our invoice is rendered in.
+        const element = document.getElementById("source-html");
+        element.style.display = 'block';
+        var dateName = new Date();
+        var opt = {
+            margin: [0.5, 1, 1, 1],
+            filename: 'Отчет по сотруднику ( ' + sot + ')' + '.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            pagebreak: { mode: 'avoid-all', before: '#page2el' },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        // Choose the element and save the PDF for our user.
+        html2pdf().from(element).set(opt).save();
+    }
+</script>

@@ -1,159 +1,72 @@
 ﻿@model Personal_Management.Models.Sotrs
 
 @{
-    Layout = null;
+    ViewBag.Title = "Шаблон личного дела сотрудника";
 }
-
-<div class="modal-content" style="width:100%">
-    <div class="modal-header">
-        <h5 class="modal-title">Изменение данных должностей</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="modal-body">
-        <div class="dl-horizontal">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"> @Html.ActionLink("Вернуться к списку сотрудников", "Index")</li>
-                @if (Program.Kadri != 0)
-                {
-                    <li class="breadcrumb-item">@Html.ActionLink("Посмотреть этапы принятия", "Index", "Steps")</li>
-                }
-                <li class="breadcrumb-item"> @Html.ActionLink("Данные ставок", "Index", "Rates")</li>
-                <li class="breadcrumb-item">@Html.ActionLink("Список рабочих графиков", "Index", "Work_Schedule")</li>
-            </ol>
+<div class="container">
+    
+    <h2>ШАБЛОН ЛИЧНОГО ДЕЛА | <a href="#" id="btn-export" onclick="generatePDF('');">СКАЧАТЬ</a> | <a href="@Session["perehod"].ToString()">Вернуться назад</a></h2>
+    <hr />
+    <div style="text-align:center; margin: 0 auto; background-color:lightgray; width:80%; margin-bottom:50px;">
+        <div style="text-align:center; padding:25px 15px 10px 25px" id="source-html">
+            <h2 style="font-weight: 1;">
+                Общество с ограниченной ответственностью<br />
+                «Си эМ эС»
+            </h2>
+            <p style="margin-bottom: 0rem;">ОГРН 0000000000000 ИНН 0000000000 КПП 000000000</p>
+            <br />
+            <p style="margin-bottom: 0rem;">108840, город Москва, город Троицк, улица Промышленная, дом 19, офис 33</p>
             <hr />
-            <div>
-                <h4>Сотрудник</h4>
-                <hr />
-                <dl class="dl-horizontal">
-                    <dt>
-                        <img style="margin: 0 auto; height: 340px; width: 260px; display: block;" src="~/Content/Photo/st/@Model.Photo" alt="Card image">
-                    </dt>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Positions.Naim_Posit)
-                    </dt>
 
-                    <dd>
-                        @Html.DisplayFor(model => model.Positions.Naim_Posit)
-                    </dd>
+            <h2 style="margin-top:100px">ЛИЧНОЕ ДЕЛО №@Html.DisplayFor(model => model.ID_Sotr)</h2>
+            <dl class="dl-horizontal">
 
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Rates.Rate)
-                    </dt>
+                <dd>
+                    <h4 style="font-weight: 1; margin-top:60px">@Model.Surname_Sot</h4>
+                </dd>
 
-                    <dd>
-                        @Html.DisplayFor(model => model.Rates.Rate)
-                    </dd>
+                <dd>
+                    <h4 style="font-weight: 1; margin-top:20px">@Model.Name_Sot</h4>
+                </dd>
 
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Work_Schedule.Naim_Sche)
-                    </dt>
+                <dd>
+                    <h4 style="font-weight: 1; margin-top:20px">@Model.Petronumic_Sot</h4>
+                </dd>
 
-                    <dd>
-                        @Html.DisplayFor(model => model.Work_Schedule.Naim_Sche)
-                    </dd>
+                <dd style=" margin-top:100px; text-align:left">
+                    Начато: __.____________ 20__ г.
+                </dd>
 
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Surname_Sot)
-                    </dt>
+                <dd style=" margin-top:40px; text-align:left">
+                    Окончено: __.____________ 20__ г.
+                </dd>
 
-                    <dd>
-                        @Html.DisplayFor(model => model.Surname_Sot)
-                    </dd>
+                <dd style=" margin-top:100px; text-align:right">
+                    На ___ листах
+                </dd>
 
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Name_Sot)
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.Name_Sot)
-                    </dd>
-
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Petronumic_Sot)
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.Petronumic_Sot)
-                    </dd>
-
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Day_Of_Birth)
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.Day_Of_Birth)
-                    </dd>
-
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Address)
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.Address)
-                    </dd>
-
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Num_Phone)
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.Num_Phone)
-                    </dd>
-
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Email)
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.Email)
-                    </dd>
-
-                    <dt>
-                        Резюме
-                    </dt>
+                <dd style=" margin-top:40px; text-align:right">
+                    Срок хранения ___ лет
+                </dd>
 
 
-                    @if (Model.rezume != "-")
-                    {
-                        <dd>
-                            <a href="~/Content/Files/@Model.rezume" download>Скачать резюме</a>
-                        </dd>
-                    }
-                    else
-                    {
-                        <dd>
-                            Отсутствует
-                        </dd>
-                    }
 
-
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Date_of_adoption)
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.Date_of_adoption)
-                    </dd>
-
-                    <dt>
-                        Описание
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.Opisanie)
-                    </dd>
-
-                </dl>
-            </div>
-            <p>
-                @Html.ActionLink("Изменить данные", "Edit", new { id = Model.ID_Sotr })
-            </p>
+            </dl>
         </div>
     </div>
-</div>
+    </div>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+
+
+<script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.1.min.js"></script>
+<script type="text/javascript" src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+<script type="text/javascript">
+    function generatePDF() {
+        // Choose the element that our invoice is rendered in.
+        const element = document.getElementById("source-html");
+        // Choose the element and save the PDF for our user.
+        html2pdf()
+            .from(element)
+            .save();
+    }
+</script>

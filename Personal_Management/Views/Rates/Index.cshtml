@@ -1,44 +1,65 @@
 ﻿@model IEnumerable<Personal_Management.Models.Rates>
 
 @{
-    ViewBag.Title = "Ставки";
+    ViewBag.Title = "Трудовые ставки";
     ViewBag.NameMeta = "Rates";
     ViewBag.ContentMeta = "На данном окне возможно просмотреть список ставок";
 }
 
-<h2>Ставки</h2>
-<ol class="breadcrumb">
-    <li class="breadcrumb-item"> @Html.ActionLink("Данные сотрудников", "Index", "Sotrs")</li>
-    <li class="breadcrumb-item">@Html.ActionLink("Список рабочих графиков", "Index", "Work_Schedule")</li>
-</ol>
-<p>
-    @Html.ActionLink("Добавить", "Create")
-</p>
-<table class="table" style="margin: 0 auto; width: auto;">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Rate)
-        </th>
-        <th></th>
-    </tr>
+    <div class="container">
+        <h2>Ставки</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"> @Html.ActionLink("Штатный состав", "Index", "Posit_Responsibilities")</li>
+            <li class="breadcrumb-item">@Html.ActionLink("Список рабочих графиков", "Index", "Work_Schedule")</li>
+        </ol>
+        <hr />
+        <p>
+            <a style="color:green" title="" href="~/Rates/Create">
+                <svg class="bi bi-plus-circle" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M8 3.5a.5.5 0 01.5.5v4a.5.5 0 01-.5.5H4a.5.5 0 010-1h3.5V4a.5.5 0 01.5-.5z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M7.5 8a.5.5 0 01.5-.5h4a.5.5 0 010 1H8.5V12a.5.5 0 01-1 0V8z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z" clip-rule="evenodd" />
+                </svg>
+                Добавить трудовую ставку
+            </a>
+        </p>
+        <ul class="list-group" id="myUL">
+            @foreach (var item in Model)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center" id="l">
+                    <a>@item.Rate</a>
+                    <div class="form-group">
+                        <a href="~/Rates/Edit/@item.ID_Rate">
+                            <span class="badge  badge-pill">
+                                <svg class="bi bi-pencil-square" width="2em" height="2em" style="color:orange" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z" />
+                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-6a.5.5 0 00-1 0v6a.5.5 0 01-.5.5h-11a.5.5 0 01-.5-.5v-11a.5.5 0 01.5-.5H9a.5.5 0 000-1H2.5A1.5 1.5 0 001 2.5v11z" clip-rule="evenodd" />
+                                </svg>
+                            </span>
+                        </a>
+                        <a data-placement="top" class="compItem" data-toggle="tooltip" title="" data-original-title="Tooltip on top" href="~/Rates/Delete/@item.ID_Rate">
+                            <span class="badge badge-pill">
+                                <svg class="bi bi-trash" width="2em" height="2em" viewBox="0 0 16 16" style="color:red" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z" />
+                                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" clip-rule="evenodd" />
+                                </svg>
+                            </span>
+                        </a>
+                    </div>
+                </li>
+            }
+        </ul>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rate)
-            </td>
-            <td>
-                @Html.ActionLink("Изменить", "Edit", new { id = item.ID_Rate }) |
-                @Html.ActionLink("Удалить", "Delete", new { id = item.ID_Rate }, new { @class = "compItem" })
-            </td>
-        </tr>
-    }
+        <div id="modDialog" class="modal fade">
+            <div id="dialogContent" class="modal-dialog modal-lg"></div>
+        </div>
+    </div>
+<br>
 
-</table>
-<div id="modDialog" class="modal fade">
-    <div id="dialogContent" class="modal-dialog modal-lg"></div>
-</div>
+
+
+
+
 @section scripts
 {
     <script type="text/javascript">

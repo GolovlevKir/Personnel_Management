@@ -1,12 +1,19 @@
-﻿using System.Data.Entity;
+﻿using Personal_Management.Hubs;
+using Personal_Management.Models;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using Personal_Management.Models;
-using Personal_Management.Hubs;
+using Shifr;
+using System.Data.SqlClient;
+using System.Configuration;
+using System.Data;
+using System.Collections.Generic;
 
 namespace Personal_Management.Controllers
 {
+    [Authorize]
     public class Pass_DannieController : Controller
     {
         private PersonalContext db = new PersonalContext();
@@ -15,125 +22,239 @@ namespace Personal_Management.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            var pass_Dannie = db.Pass_Dannie.Include(p => p.Sotrs);
-            return View(pass_Dannie.ToList());
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
+            {
+                //получение списка паспортных данных сотрудников, которые не уволены и не заблокированы
+                var pass_Dannie = db.Pass_Dannie.Include(p => p.Sotrs).Where(i => i.Sotrs.fired == false && i.Sotrs.Accounts.Block == false);
+                SqlCommand command = new SqlCommand("", Program.SqlConnection);
+                //Поиск сотрудников, которым не назначены должностные обязанности
+                command.CommandText = "SELECT count(*) FROM Sotrs LEFT JOIN Pass_Dannie ON Sotrs.ID_Sotr=Pass_Dannie.Sotr_ID WHERE Guest = 'false' and [fired] = 'false' and Pass_Dannie.Sotr_ID IS NULL";
+                Program.SqlConnection.Open();
+                //Выполенение запроса
+                int? es = (int)command.ExecuteScalar();
+                Program.SqlConnection.Close();
+                if (es == null || es == 0)
+                {
+                    ViewBag.i = false;
+                }
+                else
+                {
+                    ViewBag.i = true;
+                }
+                return View(pass_Dannie.ToList());
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
         }
 
+        //Частичное представление
         public ActionResult GetEmployeeData()
         {
-            var pass_Dannie = db.Pass_Dannie.Include(p => p.Sotrs);
-            return PartialView("_EmployeeData", pass_Dannie.ToList());
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
+            {
+                //получение списка паспортных данных сотрудников, которые не уволены и не заблокированы
+                var pass_Dannie = db.Pass_Dannie.Include(p => p.Sotrs).Where(i => i.Sotrs.fired == false && i.Sotrs.Accounts.Block == false);
+                return PartialView("_EmployeeData", pass_Dannie.ToList());
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
         }
 
-        // GET: Pass_Dannie/Details/5
-        [Authorize]
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Pass_Dannie pass_Dannie = db.Pass_Dannie.Find(id);
-            if (pass_Dannie == null)
-            {
-                return HttpNotFound();
-            }
-            return View(pass_Dannie);
-        }
 
-        // GET: Pass_Dannie/Create
-        [Authorize]
         public ActionResult Create()
         {
-            Program.update();
-            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full");
-            return View();
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
+            {
+                //Список сотрудников
+                string constr = ConfigurationManager.ConnectionStrings["PersonalContext"].ToString();
+                SqlConnection _con = new SqlConnection(constr);
+                //Поиск сотрудников, которым не назначены должностные инструкции
+                SqlDataAdapter _da = new SqlDataAdapter("SELECT ID_Sotr, Surname_Sot + ' ' + Name_Sot + ' ' + Petronumic_Sot + ' (' + Login_Acc + ')' as FIO FROM Sotrs LEFT JOIN Pass_Dannie ON Sotrs.ID_Sotr=Pass_Dannie.Sotr_ID WHERE Guest = 'false' and [fired] = 'false' and Pass_Dannie.Sotr_ID IS NULL", constr);
+                DataTable _dt = new DataTable();
+                _da.Fill(_dt);
+                //Список сотрудников
+                ViewBag.Sotr_ID = ToSelectList(_dt, "ID_Sotr", "FIO"); return View();
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
         }
 
-        // POST: Pass_Dannie/Create
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID_Pass,S_Pas,N_Pas,Sotr_ID")] Pass_Dannie pass_Dannie)
+        public async Task<ActionResult> Create([Bind(Include = "ID_Pass,S_Pas,N_Pas,Sotr_ID")] Pass_Dannie pass_Dannie)
         {
-            if (ModelState.IsValid)
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                db.Pass_Dannie.Add(pass_Dannie);
-                db.SaveChanges();
-                EmployeesHub.BroadcastData();
-                return RedirectToAction("Index");
+                //Если валидация прошла успешно
+                if (ModelState.IsValid)
+                {
+                    //Добавление данных
+                    db.Pass_Dannie.Add(new Pass_Dannie {
+                    Sotr_ID = pass_Dannie.Sotr_ID,
+                    N_Pas = Shifrovanie.Encryption(pass_Dannie.N_Pas),
+                    S_Pas = Shifrovanie.Encryption(pass_Dannie.S_Pas)
+                    });
+                    //Сохранение 
+                    await db.SaveChangesAsync();
+                    //Обновление списка пасортных данных у всех пользователей
+                    EmployeesHub.BroadcastData();
+                    return RedirectToAction("Index");
+                }
+                //Список сотрудников
+                string constr = ConfigurationManager.ConnectionStrings["PersonalContext"].ToString();
+                SqlConnection _con = new SqlConnection(constr);
+                //Поиск сотрудников, которым не назначены должностные инструкции
+                SqlDataAdapter _da = new SqlDataAdapter("SELECT ID_Sotr, Surname_Sot + ' ' + Name_Sot + ' ' + Petronumic_Sot + ' (' + Login_Acc + ')' as FIO FROM Sotrs LEFT JOIN Pass_Dannie ON Sotrs.ID_Sotr=Pass_Dannie.Sotr_ID WHERE Guest = 'false' and [fired] = 'false' and Pass_Dannie.Sotr_ID IS NULL", constr);
+                DataTable _dt = new DataTable();
+                _da.Fill(_dt);
+                //Список сотрудников
+                ViewBag.Sotr_ID = ToSelectList(_dt, "ID_Sotr", "FIO", pass_Dannie.Sotr_ID);
+                return View(pass_Dannie);
             }
-
-            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Surname_Sot", pass_Dannie.Sotr_ID);
-            return View(pass_Dannie);
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
         }
 
-        [Authorize]
-        public ActionResult Edit(int? id)
+        [NonAction]
+        public SelectList ToSelectList(DataTable table, string valueField, string textField, int id = 1)
         {
-            if (id == null)
+            //Виртуальный список
+            List<SelectListItem> list = new List<SelectListItem>();
+            //Перебор строк виртуальной таблицы
+            foreach (DataRow row in table.Rows)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                //Добавление в виртуальный список
+                list.Add(new SelectListItem()
+                {
+                    //Отображаемый текст
+                    Text = row[textField].ToString(),
+                    //Значение
+                    Value = row[valueField].ToString(),
+                });
             }
-            Pass_Dannie pass_Dannie = db.Pass_Dannie.Find(id);
-            if (pass_Dannie == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Surname_Sot", pass_Dannie.Sotr_ID);
-            return View(pass_Dannie);
+            //Возврат виртуального списка
+            return new SelectList(list, "Value", "Text", id);
         }
 
-        // POST: Pass_Dannie/Edit/5
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
+        // GET: Pass_Dannie1/Edit/5
+        public async Task<ActionResult> Edit(int? id)
+        {
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
+            {
+                if (id == null)
+                {
+                    //400 ошибка
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                //Поиск по ключу
+                Pass_Dannie pass_Dannie = await db.Pass_Dannie.FindAsync(id);
+                pass_Dannie.S_Pas = Shifrovanie.Decryption(pass_Dannie.S_Pas);
+                pass_Dannie.N_Pas = Shifrovanie.Decryption(pass_Dannie.N_Pas);
+                var fio = db.Sotrs.Where(f => f.ID_Sotr == pass_Dannie.Sotr_ID).FirstOrDefault();
+                ViewBag.fio = fio.Full;
+                if (pass_Dannie == null)
+                {
+                    //404 ошибка
+                    return HttpNotFound();
+                }
+                //Список сотрудников
+                ViewBag.Sotr_ID = new SelectList(db.Sotrs.Where(i => i.fired == false && i.Accounts.Block == false), "ID_Sotr", "Full", pass_Dannie.Sotr_ID);
+                return View(pass_Dannie);
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID_Pass,S_Pas,N_Pas,Sotr_ID")] Pass_Dannie pass_Dannie)
+        public async Task<ActionResult> Edit([Bind(Include = "ID_Pass,S_Pas,N_Pas,Sotr_ID")] Pass_Dannie pass_Dannie)
         {
-            if (ModelState.IsValid)
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                db.Entry(pass_Dannie).State = EntityState.Modified;
-                db.SaveChanges();
-                EmployeesHub.BroadcastData();
-                return RedirectToAction("Index");
+                //Если валидация прошла успешно
+                if (ModelState.IsValid)
+                {
+                    pass_Dannie.N_Pas = Shifrovanie.Encryption(pass_Dannie.N_Pas);
+                    pass_Dannie.S_Pas = Shifrovanie.Encryption(pass_Dannie.S_Pas);
+                    //Сохранение измений
+                    db.Entry(pass_Dannie).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
+                    //Обновление у всех пользователей данных
+                    EmployeesHub.BroadcastData();
+                    return RedirectToAction("Index");
+                }
+                //Список сотрудников
+                ViewBag.Sotr_ID = new SelectList(db.Sotrs.Where(i => i.fired == false && i.Accounts.Block == false), "ID_Sotr", "Full", pass_Dannie.Sotr_ID);
+                var fio = db.Sotrs.Where(f => f.ID_Sotr == pass_Dannie.Sotr_ID).FirstOrDefault();
+                ViewBag.fio = fio.Full;
+                return View(pass_Dannie);
             }
-            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Surname_Sot", pass_Dannie.Sotr_ID);
-            return View(pass_Dannie);
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
         }
 
-        // GET: Pass_Dannie/Delete/5
-        [Authorize]
-        public ActionResult Delete(int? id)
+
+        public async Task<ActionResult> Delete(int? id)
         {
-            if (id == null)
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    //400 ошибка
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                //Поиск по ключу
+                Pass_Dannie pass_Dannie = await db.Pass_Dannie.FindAsync(id);
+                if (pass_Dannie == null)
+                {
+                    //404 ошибка
+                    return HttpNotFound();
+                }
+                return View(pass_Dannie);
             }
-            Pass_Dannie pass_Dannie = db.Pass_Dannie.Find(id);
-            if (pass_Dannie == null)
+            else
             {
-                return HttpNotFound();
+                return Redirect("/Error/NotRight");
             }
-            return View(pass_Dannie);
         }
 
-        // POST: Pass_Dannie/Delete/5
-        [Authorize]
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Pass_Dannie pass_Dannie = db.Pass_Dannie.Find(id);
-            db.Pass_Dannie.Remove(pass_Dannie);
-            db.SaveChanges();
-            EmployeesHub.BroadcastData();
-            return RedirectToAction("Index");
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
+            {
+                Pass_Dannie pass_Dannie = await db.Pass_Dannie.FindAsync(id);
+                //Удаление записи
+                db.Pass_Dannie.Remove(pass_Dannie);
+                //Сохранение 
+                await db.SaveChangesAsync();
+                //Обновление у всех пользователей данных
+                EmployeesHub.BroadcastData();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
         }
 
+        //Очистка мусора
         protected override void Dispose(bool disposing)
         {
             if (disposing)

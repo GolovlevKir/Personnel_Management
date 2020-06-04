@@ -1,114 +1,164 @@
-﻿using System.Data.Entity;
+﻿using Personal_Management.Models;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using Personal_Management.Models;
 
 namespace Personal_Management.Controllers
 {
+    [Authorize]
     public class RatesController : Controller
     {
         private PersonalContext db = new PersonalContext();
-        
 
-        // GET: Rates
         [Authorize]
         public ActionResult Index()
         {
-            //Проверка на испытательные сроки
-            Program.update();
-            return View(db.Rates.ToList());
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
+            {
+                //Проверка на испытательные сроки
+                Program.update();
+                return View(db.Rates.ToList());
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
         }
 
-        // GET: Rates/Create
         [Authorize]
         public ActionResult Create()
         {
-            return View();
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
         }
 
-        // POST: Rates/Create
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID_Rate,Rate")] Rates rates)
         {
-            if (ModelState.IsValid)
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                //Добавление данных
-                db.Rates.Add(rates);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+                //если валидайия пройдена успешно
+                if (ModelState.IsValid)
+                {
+                    //Добавление данных
+                    db.Rates.Add(rates);
+                    //Сохранение
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
 
-            return View(rates);
+                return View(rates);
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
         }
 
-        // GET: Rates/Edit/5
         [Authorize]
         public ActionResult Edit(int? id)
         {
-            if (id == null)
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    //400 ошибка
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                //поиск по ключу
+                Rates rates = db.Rates.Find(id);
+                if (rates == null)
+                {
+                    //404 ошибка
+                    return HttpNotFound();
+                }
+                return View(rates);
             }
-            Rates rates = db.Rates.Find(id);
-            if (rates == null)
+            else
             {
-                return HttpNotFound();
+                return Redirect("/Error/NotRight");
             }
-            return View(rates);
         }
 
-        // POST: Rates/Edit/5
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID_Rate,Rate")] Rates rates)
         {
-            if (ModelState.IsValid)
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                //Изменение данных
-                db.Entry(rates).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                //если валидация пройдена успешно
+                if (ModelState.IsValid)
+                {
+                    //Изменение данных
+                    db.Entry(rates).State = EntityState.Modified;
+                    //Сохранение
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                return View(rates);
             }
-            return View(rates);
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
         }
 
-        // GET: Rates/Delete/5
         [Authorize]
         public ActionResult Delete(int? id)
         {
-            if (id == null)
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    //400 ошибка
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                //Поиск по ключу
+                Rates rates = db.Rates.Find(id);
+                if (rates == null)
+                {
+                    //404 ошибка
+                    return HttpNotFound();
+                }
+                return View(rates);
             }
-            Rates rates = db.Rates.Find(id);
-            if (rates == null)
+            else
             {
-                return HttpNotFound();
+                return Redirect("/Error/NotRight");
             }
-            return View(rates);
         }
 
-        // POST: Rates/Delete/5
         [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            //Удаление данных
-            Rates rates = db.Rates.Find(id);
-            db.Rates.Remove(rates);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
+            {
+                //Удаление данных
+                Rates rates = db.Rates.Find(id);
+                db.Rates.Remove(rates);
+                //Сохранение
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
         }
 
+        //Очистка мусора
         protected override void Dispose(bool disposing)
         {
             if (disposing)

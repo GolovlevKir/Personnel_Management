@@ -1,56 +1,15 @@
 ﻿
 @{
-    Layout = null;
+    ViewBag.Title = "Страница не найдена";
 }
-
-<!doctype html>
-<html lang="ru">
-<head>
-    <title>404. Страница не найдена</title>
-    <meta charset="windows-1251">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="~/Content/Photo/fav.ico" rel="icon">
-    <link type="text/css" rel="stylesheet" href="https://s.pikabu.ru/apps/app-404/1.0.0/main/app.css">
-    <style>
-        body {
-            background-color: #222;
-        }
-    </style>
-</head>
-<body>
-
-    <script type="application/javascript" charset="utf-8" src="https://s.pikabu.ru/apps/app-404/1.0.1/main/app.55b08cfce9b2e2523968.le.js"></script>
-    <div class="app-404">
-        <div class="app-404__svg-player"></div>
-        <div class="app-404__information">
-            <p style="color: white ">Страница не найдена</p>
-            <p><a href="/Home/Index">Вернуться на главную</a></p>
+    <div class="container">
+        <h1 style="margin: 0 auto; text-align:center">Ошибка 404</h1>
+        <br />
+        <div class="row">
+            <div style=" text-align:center;" class="col-sm">
+                <img style="width:30%; text-align:center" src="~/Content/Photo/грусть4.png" />
+                <h2>СТРАНИЦА НЕ НАЙДЕНА!!!</h2>
+                <h3><a href="~/Home/Index">Попробуй вернуться на главную</a></h3>
+            </div>
         </div>
-        <noscript></noscript>
     </div>
-    <!-- Yandex.Metrika counter -->
-    <script type="text/javascript">
-		(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-			m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-		(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-		ym(31048081, "init", {
-			clickmap:true,
-			trackLinks:true,
-			accurateTrackBounce:true
-		});
-    </script>
-    <noscript><div><img src="https://mc.yandex.ru/watch/31048081" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-    <!-- /Yandex.Metrika counter -->
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-28292940-1"></script>
-    <script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag("js", new Date());
-
-		gtag("config", "UA-28292940-1");
-    </script>
-    <!-- /Global site tag (gtag.js) - Google Analytics -->
-</body>
-</html>

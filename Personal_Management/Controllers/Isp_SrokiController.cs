@@ -1,196 +1,345 @@
-﻿using System;
+﻿using Personal_Management.Models;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Personal_Management.Hubs;
-using Personal_Management.Models;
+using Email;
 
 namespace Personal_Management.Controllers
 {
+    [Authorize]
     public class Isp_SrokiController : Controller
     {
         private PersonalContext db = new PersonalContext();
 
         // GET: Isp_Sroki
-        [Authorize]
-        public async Task<ActionResult> Index(string search)
+        public async Task<ActionResult> Index(int? id)
         {
-            Program.update();
-            var isp_Sroki = db.Isp_Sroki.Include(i => i.Sotrs).Include(i => i.status_isp_sroka);
-            ViewBag.seo = search;
-            //Осуществление поиска
-            if (search != null && search != "")
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                isp_Sroki = isp_Sroki.Where(s => (s.Sotrs.Surname_Sot.Contains(search)) || (s.Sotrs.Name_Sot.Contains(search)) || (s.Sotrs.Petronumic_Sot.Contains(search)) || (s.Sotrs.Positions.Naim_Posit.Contains(search)));
+                //получение испытательных сроков
+                var isp_Sroki = db.Isp_Sroki.Include(i => i.Posit_Responsibilities).Include(i => i.status_isp_sroka);
+                //исключение уволенных и заблокированных сотрудников
+                isp_Sroki = isp_Sroki.Where(i => i.Posit_Responsibilities.Sotrs.fired == false && i.Posit_Responsibilities.Sotrs.Accounts.Block == false);
+                if (id != null && id != 0)
+                {
+                    //Если присутсвует ключ, то вывести по запрошенному ключу сотрудника и его испытательный срок 
+                    isp_Sroki = isp_Sroki.Where(i => i.Posit_Responsibilities.Sotr_ID == id);
+                }
+                return View(await isp_Sroki.ToListAsync());
             }
-            return View(await isp_Sroki.ToListAsync());
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
         }
 
-        public async Task<ActionResult> GetEmployeeData()
-        {
-            var pass_Dannie = db.Isp_Sroki.Include(i => i.Sotrs).Include(i => i.status_isp_sroka);
-            return PartialView("_EmployeeData", await pass_Dannie.ToListAsync());
-        }
-
-        // GET: Isp_Sroki/Create
-        [Authorize]
         public ActionResult Create()
         {
-            int selectedIndex = 0;
-            ViewBag.Status_ID = new SelectList(db.status_isp_sroka.Where(s => (s.ID_St == 1) || (s.ID_St == 2) || (s.ID_St == 4)), "ID_St", "Name_St");
-            //Создаем лист должностей
-            List<Positions> pos = db.Positions.ToList();
-            //Добавляем все
-            pos.Insert(0, new Positions { ID_Positions = 0, Naim_Posit = "Все" });
-            //Создаем список должностей
-            ViewBag.Positions = new SelectList(pos, "ID_Positions", "Naim_Posit", selectedIndex);
-            if (selectedIndex > 0)
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                ViewBag.Sotr_ID = new SelectList(db.Sotrs.Where(p => p.Positions_ID == selectedIndex), "ID_Sotr", "Full");
+                //Получение строки подключения
+                string constr = ConfigurationManager.ConnectionStrings["PersonalContext"].ToString();
+                SqlConnection _con = new SqlConnection(constr);
+                //Запрос на получение ФИО и должности
+                SqlDataAdapter _da = new SqlDataAdapter("SELECT ID_Pos_Res, dbo.Sotrs.Surname_Sot + ' ' + dbo.Sotrs.Name_Sot + ' ' + dbo.Sotrs.Petronumic_Sot + ' (' + Naim_Posit + ')' as 'FIO' FROM dbo.Posit_Responsibilities JOIN dbo.Sotrs ON dbo.Posit_Responsibilities.Sotr_ID = dbo.Sotrs.ID_Sotr JOIN dbo.Positions ON dbo.Posit_Responsibilities.Positions_ID = dbo.Positions.ID_Positions where fired = 'false'", constr);
+                DataTable _dt = new DataTable();
+                _da.Fill(_dt);
+                //Список штатного состава
+                ViewBag.Pos_Res_ID = ToSelectList(_dt, "ID_Pos_Res", "FIO");
+                //Спсиок статусов
+                ViewBag.Status_ID = new SelectList(db.status_isp_sroka, "ID_St", "Name_St");
+                return View();
             }
             else
             {
-                ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full");
+                return Redirect("/Error/NotRight");
             }
-            var m = new Isp_Sroki();
-            m.Date_Start = DateTime.Now.ToString("ddMMyyyy");
-            return View(m);
         }
 
-        public ActionResult GetItems(int id)
+        [NonAction]
+        public SelectList ToSelectList(DataTable table, string valueField, string textField, int id = 1)
         {
-            //Получаем список сотрудников
-            if (id > 0)
+            //Виртуальный список
+            List<SelectListItem> list = new List<SelectListItem>();
+            //Перебор строк таблицы из запроса
+            foreach (DataRow row in table.Rows)
             {
-                return PartialView(db.Sotrs.Where(c => c.Positions_ID == id).ToList());
+                //Составление запроса
+                list.Add(new SelectListItem()
+                {
+                    //Текст выводимый
+                    Text = row[textField].ToString(),
+                    //Значение
+                    Value = row[valueField].ToString(),
+                });
             }
-            else
-            {
-                return PartialView(db.Sotrs);
-            }
-
+            //Вывод списка
+            return new SelectList(list, "Value", "Text", id);
         }
 
-        // POST: Isp_Sroki/Create
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID_Isp,Sotr_ID,Date_Start,Date_Finish,Status_ID")] Isp_Sroki isp_Sroki)
+        public async Task<ActionResult> Create([Bind(Include = "ID_Isp,Pos_Res_ID,Date_Start,Date_Finish,Status_ID,itog")] Isp_Sroki isp_Sroki)
         {
-            if (ModelState.IsValid)
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                //Добавление испытательного срока
-                db.Isp_Sroki.Add(isp_Sroki);
-                db.SaveChanges();
-                EmployeesHub.BroadcastData();
-                return RedirectToAction("Index");
-            }
-            ViewBag.Sotrs = new SelectList(db.Sotrs, "ID_Sotr", "Full",isp_Sroki.Sotr_ID);
-            ViewBag.Status_ID = new SelectList(db.status_isp_sroka.Where(s => (s.ID_St == 1) || (s.ID_St == 2) || (s.ID_St == 4)), "ID_St", "Name_St");
-            
-            List<Positions> pos = db.Positions.ToList();
-            //Добавляем все
-            pos.Insert(0, new Positions { ID_Positions = 0, Naim_Posit = "Все" });
-            //Создаем список должностей
-            ViewBag.Positions = new SelectList(pos, "ID_Positions", "Naim_Posit", 0);
-            return View(isp_Sroki);
-        }
+                //Если валидация прошла успешно
+                if (ModelState.IsValid)
+                {
+                    //Добавление испытательного срока
+                    db.Isp_Sroki.Add(isp_Sroki);
+                    //Сохранение
+                    await db.SaveChangesAsync();
+                    SqlCommand command = new SqlCommand("", Program.SqlConnection);
+                    //Ведутся ли этапы принятия 
+                    command.CommandText = "select count(*) from Steps join Sotrs on Steps.Sotr_ID = ID_Sotr join Posit_Responsibilities on Posit_Responsibilities.Sotr_ID = ID_Sotr where ID_Pos_Res = " + isp_Sroki.Pos_Res_ID;
+                    Program.SqlConnection.Open();
+                    //выполнение запроса
+                    int? step_count = (int)command.ExecuteScalar();
+                    //Получение ключа сотрудника
+                    command.CommandText = "select ID_Sotr from  Sotrs join Posit_Responsibilities on Posit_Responsibilities.Sotr_ID = ID_Sotr where ID_Pos_Res =  " + isp_Sroki.Pos_Res_ID;
+                    //выполнение команды
+                    int? idst = (int)command.ExecuteScalar();
+                    Program.SqlConnection.Close();
+                    if (isp_Sroki.Status_ID != 1)
+                    {
+                        if (step_count != null && step_count != 0)
+                        {
+                            //Изменение этапов принятия
+                            command.CommandText = "update [dbo].[Steps] set [Isp_Srok] = 'false' where Sotr_ID = " + idst;
+                            Program.SqlConnection.Open();
+                            //Выполнение запроса
+                            command.ExecuteNonQuery();
+                            Program.SqlConnection.Close();
+                        }
+                        else
+                        {
+                            //Добавление этапов принятия
+                            command.CommandText = "Insert into dbo.Steps ([Sotr_ID],[Sobesedovanie],[Dolznost],[Grafik_Raboti],[Sbor_Documentov],[Isp_Srok],[Logical_Delete]) " +
+                                "values (" + idst + ", 0,0,0,0,0,0)";
+                            Program.SqlConnection.Open();
+                            //выполнения запроса
+                            command.ExecuteNonQuery();
+                            Program.SqlConnection.Close();
+                        }
+                    }
+                    else
+                    {
+                        if (step_count != null && step_count != 0)
+                        {
+                            //Изменение этапа принятия как пройденный испытательный срок
+                            command.CommandText = "update [dbo].[Steps] set [Isp_Srok] = 'true' where Sotr_ID = " + idst;
+                            Program.SqlConnection.Open();
+                            //выполенение запроса
+                            command.ExecuteNonQuery();
+                            Program.SqlConnection.Close();
+                        }
+                        else
+                        {
+                            //Добавление испытательных сроков
+                            command.CommandText = "Insert into dbo.Steps ([Sotr_ID],[Sobesedovanie],[Dolznost],[Grafik_Raboti],[Sbor_Documentov],[Isp_Srok],[Logical_Delete]) " +
+                                "values (" + idst + ", 0,0,0,0,1,0)";
+                            Program.SqlConnection.Open();
+                            //выполнение запроса
+                            command.ExecuteNonQuery();
+                            Program.SqlConnection.Close();
+                        }
+                    }
+                    return Redirect(Session["perehod"].ToString());
+                }
+                else
+                {
+                    //Строка подключения
+                    string constr = ConfigurationManager.ConnectionStrings["PersonalContext"].ToString();
+                    SqlConnection _con = new SqlConnection(constr);
+                    //Добавление запроса
+                    SqlDataAdapter _da = new SqlDataAdapter("SELECT ID_Pos_Res, dbo.Sotrs.Surname_Sot + ' ' + dbo.Sotrs.Name_Sot + ' ' + dbo.Sotrs.Petronumic_Sot + ' (' + Naim_Posit + ')' as 'FIO' FROM dbo.Posit_Responsibilities JOIN dbo.Sotrs ON dbo.Posit_Responsibilities.Sotr_ID = dbo.Sotrs.ID_Sotr JOIN dbo.Positions ON dbo.Posit_Responsibilities.Positions_ID = dbo.Positions.ID_Positions  where fired = 'false'", constr);
+                    DataTable _dt = new DataTable();
+                    _da.Fill(_dt);
+                    //Список штатного состава
+                    ViewBag.Pos_Res_ID = ToSelectList(_dt, "ID_Pos_Res", "FIO", isp_Sroki.Pos_Res_ID);
+                    //Список статусов
+                    ViewBag.Status_ID = new SelectList(db.status_isp_sroka, "ID_St", "Name_St", isp_Sroki.Status_ID);
 
-        // GET: Isp_Sroki/Edit/5
-        [Authorize]
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Isp_Sroki isp_Sroki = db.Isp_Sroki.Find(id);
-            if (isp_Sroki == null)
-            {
-                return HttpNotFound();
-            }
-            int selectedIndex = 0;
-            //Создаем лист должностей
-            List<Positions> pos = db.Positions.ToList();
-            //Добавляем все
-            pos.Insert(0, new Positions { ID_Positions = 0, Naim_Posit = "Все" });
-            //Создаем список должностей
-            ViewBag.Positions = new SelectList(pos, "ID_Positions", "Naim_Posit", selectedIndex);
-            if (selectedIndex > 0)
-            {
-                ViewBag.Sotr_ID = new SelectList(db.Sotrs.Where(p => p.Positions_ID == selectedIndex), "ID_Sotr", "Full");
+                    return View(isp_Sroki);
+                }
             }
             else
             {
-                ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Full", isp_Sroki.Sotr_ID);
+                return Redirect("/Error/NotRight");
             }
-            ViewBag.Status_ID = new SelectList(db.status_isp_sroka.Where(s => (s.ID_St == 1) || (s.ID_St == 2) || (s.ID_St == 4)), "ID_St", "Name_St", isp_Sroki.Status_ID);
-            return View(isp_Sroki);
+
         }
 
-        // POST: Isp_Sroki/Edit/5
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
+
+        public async Task<ActionResult> Edit(int? id)
+        {
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
+            {
+                if (id == null)
+                {
+                    //400 ошибка
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                //поиск по ключу
+                Isp_Sroki isp_Sroki = await db.Isp_Sroki.FindAsync(id);
+                if (isp_Sroki == null)
+                {
+                    //404 ошибка
+                    return HttpNotFound();
+                }
+                //Список штатного состава
+                ViewBag.Pos_Res_ID = new SelectList(db.Posit_Responsibilities, "ID_Pos_Res", "ID_Pos_Res", isp_Sroki.Pos_Res_ID);
+                //список статусов
+                ViewBag.Status_ID = new SelectList(db.status_isp_sroka, "ID_St", "Name_St", isp_Sroki.Status_ID);
+                return View(isp_Sroki);
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Isp_Sroki isp_Sroki)
+        public async Task<ActionResult> Edit([Bind(Include = "ID_Isp,Pos_Res_ID,Date_Start,Date_Finish,Status_ID,itog")] Isp_Sroki isp_Sroki)
         {
-            if (ModelState.IsValid)
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                SqlCommand command = new SqlCommand("", Program.SqlConnection);
-                //Изменение данных
-                Program.SqlConnection.Open();
-                command.CommandText = "update Isp_Sroki set Sotr_ID = " + isp_Sroki.Sotr_ID.ToString() + " , Date_Start = '" + isp_Sroki.Date_Start + "', Date_Finish = '" + isp_Sroki.Date_Finish + "', Status_ID = " + isp_Sroki.Status_ID.ToString() + " where ID_Isp = " + isp_Sroki.ID_Isp.ToString();
-                command.ExecuteScalar();
-                Program.SqlConnection.Close();
-                EmployeesHub.BroadcastData();
-                return RedirectToAction("Index");
+                //если валидация прошла успешно
+                if (ModelState.IsValid)
+                {
+                    //Изменение данных и их фиксирование
+                    db.Entry(isp_Sroki).State = EntityState.Modified;
+                    SqlCommand command = new SqlCommand("", Program.SqlConnection);
+                    //Манипулирование этапами принятия
+                    command.CommandText = "select count(*) from Steps join Sotrs on Steps.Sotr_ID = ID_Sotr join Posit_Responsibilities on Posit_Responsibilities.Sotr_ID = ID_Sotr where ID_Pos_Res = " + isp_Sroki.Pos_Res_ID;
+                    Program.SqlConnection.Open();
+                    //Изменение тех что в процессе на ожидании
+                    int? step_count = (int)command.ExecuteScalar();
+                    command.CommandText = "select ID_Sotr from  Sotrs join Posit_Responsibilities on Posit_Responsibilities.Sotr_ID = ID_Sotr where ID_Pos_Res =  " + isp_Sroki.Pos_Res_ID;
+                    int? idst = (int)command.ExecuteScalar();
+                    Program.SqlConnection.Close();
+                    if (isp_Sroki.Status_ID != 1)
+                    {
+                        if (step_count != null && step_count != 0)
+                        {
+                            command.CommandText = "update [dbo].[Steps] set [Isp_Srok] = 'false' where Sotr_ID = " + idst;
+                            Program.SqlConnection.Open();
+                            //Изменение тех что в процессе на ожидании
+                            command.ExecuteNonQuery();
+                            Program.SqlConnection.Close();
+                        }
+                        else
+                        {
+                            command.CommandText = "Insert into dbo.Steps ([Sotr_ID],[Sobesedovanie],[Dolznost],[Grafik_Raboti],[Sbor_Documentov],[Isp_Srok],[Logical_Delete]) " +
+                                "values (" + idst + ", 0,0,0,0,0,0)";
+                            Program.SqlConnection.Open();
+                            //Изменение тех что в процессе на ожидании
+                            command.ExecuteNonQuery();
+                            Program.SqlConnection.Close();
+                        }
+                        var sta = db.status_isp_sroka.Where(s => s.ID_St == isp_Sroki.Status_ID).FirstOrDefault();
+                        var pos = db.Posit_Responsibilities.Where(s => s.ID_Pos_Res== isp_Sroki.Pos_Res_ID).FirstOrDefault();
+                        EmailTo.MySendMail("" +
+                        "Приветствуем, " + pos.Sotrs.Full + "! <br>Вы, " +
+                        "проходите испытательный срок в нашей компании ООО \"Си эМ эС\", на должность " + pos.Positions.Naim_Posit + "." +
+                        "<br />Ваш статус прохождения изменен на " + sta.Name_St,
+                         pos.Sotrs.Email, "Компания CMS", "Прохождение испытательного срока");
+                    }
+                    else
+                    {
+                        if (step_count != null && step_count != 0)
+                        {
+                            command.CommandText = "update [dbo].[Steps] set [Isp_Srok] = 'true' where Sotr_ID = " + idst;
+                            Program.SqlConnection.Open();
+                            //Изменение тех что в процессе на ожидании
+                            command.ExecuteNonQuery();
+                            Program.SqlConnection.Close();
+                        }
+                        else
+                        {
+                            command.CommandText = "Insert into dbo.Steps ([Sotr_ID],[Sobesedovanie],[Dolznost],[Grafik_Raboti],[Sbor_Documentov],[Isp_Srok],[Logical_Delete]) " +
+                                "values (" + idst + ", 0,0,0,0,1,0)";
+                            Program.SqlConnection.Open();
+                            //Изменение тех что в процессе на ожидании
+                            command.ExecuteNonQuery();
+                            Program.SqlConnection.Close();
+                        }
+                        var pos = db.Posit_Responsibilities.Where(s => s.ID_Pos_Res == isp_Sroki.Pos_Res_ID).FirstOrDefault();
+                        EmailTo.MySendMail("" +
+                        "Приветствуем, " + pos.Sotrs.Full + "! <br>Поздравляем, " +
+                        "Вы прошли испытательный срок в нашей компании ООО \"Си эМ эС\", на должность " + pos.Positions.Naim_Posit + ".",
+                         pos.Sotrs.Email, "Компания CMS", "Прохождение испытательного срока");
+                    }
+                    //сохранение изменений
+                    await db.SaveChangesAsync();
+
+                    return Redirect(Session["perehod"].ToString());
+                }
+                //Список штатного состава
+                ViewBag.Pos_Res_ID = new SelectList(db.Posit_Responsibilities, "ID_Pos_Res", "ID_Pos_Res", isp_Sroki.Pos_Res_ID);
+                //Список статусов
+                ViewBag.Status_ID = new SelectList(db.status_isp_sroka, "ID_St", "Name_St", isp_Sroki.Status_ID);
+                return View(isp_Sroki);
             }
-            ViewBag.Sotr_ID = new SelectList(db.Sotrs, "ID_Sotr", "Surname_Sot");
-            ViewBag.Status_ID = new SelectList(db.status_isp_sroka.Where(s => (s.ID_St == 1) || (s.ID_St == 2) || (s.ID_St == 4)), "ID_St", "Name_St", isp_Sroki.Status_ID);
-            List<Positions> pos = db.Positions.ToList();
-            //Добавляем все
-            pos.Insert(0, new Positions { ID_Positions = 0, Naim_Posit = "Все" });
-            //Создаем список должностей
-            ViewBag.Positions = new SelectList(pos, "ID_Positions", "Naim_Posit", 0);
-            return View(isp_Sroki);
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
         }
 
-        // GET: Isp_Sroki/Delete/5
-        [Authorize]
-        public ActionResult Delete(int? id)
+
+        public async Task<ActionResult> Delete(int? id)
         {
-            if (id == null)
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    //400 ошибка
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                //поиск по ключу
+                Isp_Sroki isp_Sroki = await db.Isp_Sroki.FindAsync(id);
+                if (isp_Sroki == null)
+                {
+                    //404 ошибка
+                    return HttpNotFound();
+                }
+                return View(isp_Sroki);
             }
-            Isp_Sroki isp_Sroki = db.Isp_Sroki.Find(id);
-            if (isp_Sroki == null)
+            else
             {
-                return HttpNotFound();
+                return Redirect("/Error/NotRight");
             }
-            return View(isp_Sroki);
         }
 
-        // POST: Isp_Sroki/Delete/5
-        [Authorize]
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Isp_Sroki isp_Sroki = db.Isp_Sroki.Find(id);
-            //Удаление данных
-            db.Isp_Sroki.Remove(isp_Sroki);
-            db.SaveChanges();
-            EmployeesHub.BroadcastData();
-            return RedirectToAction("Index");
+            if ((bool)Session["Manip_Sotrs"] == true && Session["Manip_Sotrs"] != null)
+            {
+                Isp_Sroki isp_Sroki = await db.Isp_Sroki.FindAsync(id);
+                //удаление данных
+                db.Isp_Sroki.Remove(isp_Sroki);
+                //Сохранение
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return Redirect("/Error/NotRight");
+            }
         }
 
         protected override void Dispose(bool disposing)

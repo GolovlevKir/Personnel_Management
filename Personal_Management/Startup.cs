@@ -1,6 +1,4 @@
-﻿using System;
-using System.Configuration;
-using System.Threading.Tasks;
+﻿using System.Configuration;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
 using Owin;
@@ -11,6 +9,7 @@ namespace Personal_Management
 {
     public class Startup
     {
+        //чтобы задействовать фукциональность SignalR
         public void Configuration(IAppBuilder app)
         {
             GlobalHost.DependencyResolver.UseSqlServer(ConfigurationManager.ConnectionStrings["PersonalContext"].ToString());
