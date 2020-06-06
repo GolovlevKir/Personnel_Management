@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using Shifr;
 using Email;
+using Personal_Management.Hubs;
 
 namespace Personal_Management.Controllers
 {
@@ -209,6 +210,7 @@ namespace Personal_Management.Controllers
                         Session["Photo"] = model.Photo;
                         Session["Dolj"] = "Статус: Гость";
                         //Открытие личного кабинета
+                        EmployeesHub.BroadcastData();
                         return RedirectToAction("Index", "Home");
                     }
                     //Иначе выводим надпись, данные введены некоррекно

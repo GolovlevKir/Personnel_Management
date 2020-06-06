@@ -65,8 +65,15 @@
         // Choose the element that our invoice is rendered in.
         const element = document.getElementById("source-html");
         // Choose the element and save the PDF for our user.
-        html2pdf()
-            .from(element)
-            .save();
+        var opt = {
+            margin: [0.5, 1, 1, 1],
+            filename: 'Шаблон личного дела.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            pagebreak: { mode: 'avoid-all', before: '#page2el' },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        // Choose the element and save the PDF for our user.
+        html2pdf().from(element).set(opt).save();
     }
 </script>

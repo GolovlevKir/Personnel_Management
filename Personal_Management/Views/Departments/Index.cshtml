@@ -251,7 +251,7 @@
             var fileDownload = document.createElement("a");
             document.body.appendChild(fileDownload);
             fileDownload.href = source;
-            fileDownload.download = 'document.doc';
+            fileDownload.download = 'ОтчетПоОтделамCMS.doc';
             fileDownload.click();
             document.body.removeChild(fileDownload);
         }
@@ -267,7 +267,7 @@
         var dateName = new Date();
         var opt = {
             margin: [0.5, 1, 1, 1],
-            filename: 'Отчет по сотруднику ( ' + sot + ')' + '.pdf',
+            filename: 'Отчет по отделам.pdf',
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
             pagebreak: { mode: 'avoid-all', before: '#page2el' },

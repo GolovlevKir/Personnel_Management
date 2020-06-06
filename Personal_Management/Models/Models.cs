@@ -45,8 +45,6 @@ namespace Personal_Management.Models
         [Display(Name = "Наименование должности")]
         //Ограничения ввода
         [StringLength(50, MinimumLength = 0, ErrorMessage = "Длина наименования должности от 0 до 50 символов")]
-        //Регулярное выражение
-        [RegularExpression(@"^([а-яА-Я .&'-]+)$", ErrorMessage = "Поле наименования должно содержать только русские буквы")]
         //Вывод ошибки
         [Required(ErrorMessage = "Наименование не может быть пустым")]
         public string Naim_Posit { get; set; }

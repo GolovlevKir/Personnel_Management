@@ -24,7 +24,7 @@
                     <h3 style="font-weight: 1; margin-top:50px; font-family:'Times New Roman'">ФИО сотрудника: @Model.Surname_Sot @Model.Name_Sot @Model.Petronumic_Sot</h3>
                 </dd>
                 <dd>
-                    <h3 style="font-weight: 1; margin-top:10px; font-family:'Times New Roman'">Должность: Директор</h3>
+                    <h3 style="font-weight: 1; margin-top:10px; font-family:'Times New Roman'">Должность: @ViewBag.posit</h3>
                 </dd>
                 <dd>
                     <h3 style="font-weight: 1; margin-top:40px; margin-bottom:20px; font-family:'Times New Roman'">График работы</h3>
@@ -104,7 +104,7 @@
         element.style.display = 'block'
         var opt = {
             margin: [0.5, 1, 1, 1] ,
-            filename: 'myfile.pdf',
+            filename: 'График работы сотрудника.pdf',
             html2canvas: { scale: 2 },
             jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
         };

@@ -1,4 +1,5 @@
-﻿using Personal_Management.Models;
+﻿using Personal_Management.Hubs;
+using Personal_Management.Models;
 using Shifr;
 using System;
 using System.Data.Entity;
@@ -178,6 +179,18 @@ namespace Personal_Management.Controllers
             }
             //Получение графика работы сотрудника
             var wk = db.Work_Schedule.Where(p => p.Sotr_ID == id).OrderBy(p => p.DaysOfWeek.ID_Day).ToList();
+            //Получение данных штатного сотрудника
+            var pos = db.Posit_Responsibilities.Where(p => p.Sotr_ID == id).FirstOrDefault();
+            if (pos != null)
+            {
+                //Должность
+                ViewBag.posit = pos.Positions.Naim_Posit;
+            }
+            else
+            {
+                //Дефолтные значения
+                ViewBag.posit = "Не назначено";
+            }
             //Добавление в виртуальную таблицу
             ViewBag.wk = wk;
             return View(sotrs);
@@ -266,6 +279,7 @@ namespace Personal_Management.Controllers
                 db.Entry(sotrs).State = EntityState.Modified;
                 //Сохранение 
                 await db.SaveChangesAsync();
+                EmployeesHub.BroadcastData();
                 return RedirectToAction("Index");
             }
             else
@@ -427,6 +441,7 @@ namespace Personal_Management.Controllers
                         db.Sotrs.Add(sotrs);
                         //Сохранение 
                         db.SaveChanges();
+                        EmployeesHub.BroadcastData();
                         return Redirect(Session["perehod"].ToString());
 
                     }
@@ -448,6 +463,7 @@ namespace Personal_Management.Controllers
                         db.SaveChanges();
                         //Список аккаунтов
                         ViewBag.Login_Acc = new SelectList(db.Accounts.Where(a => a.Block == false), "Login", "Login", sotrs.Login_Acc);
+                        EmployeesHub.BroadcastData();
                         return Redirect(Session["perehod"].ToString());
                     }
                     catch

@@ -6,15 +6,15 @@
     Session["pred"] = "/Sotrs/Index";
 }
 
-    <div class="container">
-        <h2>Пользователи</h2>
-        <hr />
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"> @Html.ActionLink("Список прав доступа", "Index")</li>
-            <li class="breadcrumb-item"> @Html.ActionLink("Аккаунты", "Index", "Accounts")</li>
-        </ol>
-        <hr />
-        @*<p>
+<div class="container">
+    <h2>Пользователи</h2>
+    <hr />
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"> @Html.ActionLink("Список прав доступа", "Index")</li>
+        <li class="breadcrumb-item"> @Html.ActionLink("Аккаунты", "Index", "Accounts")</li>
+    </ol>
+    <hr />
+    @*<p>
             <a style="color:green" href="~/Sotrs/AddOrEdit">
                 <svg class="bi bi-plus-circle" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" d="M8 3.5a.5.5 0 01.5.5v4a.5.5 0 01-.5.5H4a.5.5 0 010-1h3.5V4a.5.5 0 01.5-.5z" clip-rule="evenodd" />
@@ -24,48 +24,49 @@
                 Добавить пользователя
             </a>
         </p>*@
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" id="home2-tab" data-toggle="tab" href="#home2" role="tab" aria-controls="home2" aria-selected="true">
-                    <svg class="bi bi-person-lines-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 100-6 3 3 0 000 6zm7 1.5a.5.5 0 01.5-.5h2a.5.5 0 010 1h-2a.5.5 0 01-.5-.5zm-2-3a.5.5 0 01.5-.5h4a.5.5 0 010 1h-4a.5.5 0 01-.5-.5zm0-3a.5.5 0 01.5-.5h4a.5.5 0 010 1h-4a.5.5 0 01-.5-.5zm2 9a.5.5 0 01.5-.5h2a.5.5 0 010 1h-2a.5.5 0 01-.5-.5z" clip-rule="evenodd" />
-                    </svg>
-                    Все пользователи
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link " id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">
-                    <svg class="bi bi-people-circle" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 008 15a6.987 6.987 0 005.468-2.63z" />
-                        <path fill-rule="evenodd" d="M8 9a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
-                        <path fill-rule="evenodd" d="M8 1a7 7 0 100 14A7 7 0 008 1zM0 8a8 8 0 1116 0A8 8 0 010 8z" clip-rule="evenodd" />
-                    </svg>
-                    Сотрудники
-                </a>
-            </li>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="home2-tab" data-toggle="tab" href="#home2" role="tab" aria-controls="home2" aria-selected="true">
+                <svg class="bi bi-person-lines-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 100-6 3 3 0 000 6zm7 1.5a.5.5 0 01.5-.5h2a.5.5 0 010 1h-2a.5.5 0 01-.5-.5zm-2-3a.5.5 0 01.5-.5h4a.5.5 0 010 1h-4a.5.5 0 01-.5-.5zm0-3a.5.5 0 01.5-.5h4a.5.5 0 010 1h-4a.5.5 0 01-.5-.5zm2 9a.5.5 0 01.5-.5h2a.5.5 0 010 1h-2a.5.5 0 01-.5-.5z" clip-rule="evenodd" />
+                </svg>
+                Все пользователи
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">
+                <svg class="bi bi-people-circle" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 008 15a6.987 6.987 0 005.468-2.63z" />
+                    <path fill-rule="evenodd" d="M8 9a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M8 1a7 7 0 100 14A7 7 0 008 1zM0 8a8 8 0 1116 0A8 8 0 010 8z" clip-rule="evenodd" />
+                </svg>
+                Сотрудники
+            </a>
+        </li>
 
-            <li class="nav-item">
-                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">
-                    <svg class="bi bi-people-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 100-6 3 3 0 000 6zm-5.784 6A2.238 2.238 0 015 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 005 9c-4 0-5 3-5 4s1 1 1 1h4.216zM4.5 8a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" clip-rule="evenodd" />
-                    </svg>
-                    Гости
-                </a>
-            </li>
-        </ul>
-        <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="home2" role="tabpanel" aria-labelledby="home2-tab">
-                @Html.Action("Vse")
-            </div>
-            <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
-                @Html.Action("Sotr")
-            </div>
-            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                @Html.Action("Polz")
+        <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">
+                <svg class="bi bi-people-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 100-6 3 3 0 000 6zm-5.784 6A2.238 2.238 0 015 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 005 9c-4 0-5 3-5 4s1 1 1 1h4.216zM4.5 8a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" clip-rule="evenodd" />
+                </svg>
+                Гости
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="home2" role="tabpanel" aria-labelledby="home2-tab">
+            <div id="dataModel">
             </div>
         </div>
-
+        <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+            @Html.Action("Sotr")
+        </div>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            @Html.Action("Polz")
+        </div>
     </div>
+
+</div>
 <br>
 
 
@@ -76,8 +77,24 @@
 {
     <script type="text/javascript">
 
+    </script>
+    <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="/signalr/hubs"></script>
+    <script type="text/javascript">
+
         $(function () {
             $.ajaxSetup({ cache: false });
+            
+            var hubNotify = $.connection.employeesHub;
+
+            $.connection.hub.start().done(function () {
+                getAll();
+            });
+
+            hubNotify.client.refreshEmployeeData = function () {
+                getAll();
+            };
             $(".compItem").click(function (e) {
 
                 e.preventDefault();
@@ -86,7 +103,18 @@
                     $('#modDialog').modal('show');
                 });
             });
-        })
+        });
+
+        function getAll() {
+            var model = $('#dataModel');
+            $.ajax({
+                url: '/Sotrs/Vse',
+                contentType: 'application/html ; charset:utf-8',
+                type: 'GET',
+                dataType: 'html',
+                success: function (result) { model.empty().append(result); }
+            });
+        }
     </script>
 }
 
